@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile — VIRASAT</title>
+  
+  <!-- Google Fonts: Cormorant Garamond, Plus Jakarta Sans, Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="assets/js/subscription.js"></script>
+  <style>
+    :root {
+      --bg-primary: #FBF9F5;
+      --bg-surface: #F4EFE6;
+      --bg-card: #FFFFFF;
+      --bg-dark: #1E1C1A;
+      
+      --text-main: #1F1D1B;
+      --text-muted: #6B655E;
+      --text-light: #948E85;
+
+      --accent-terracotta: #9E4733;
+      --accent-terracotta-hover: #853B29;
+      --accent-gold: #B5882D;
+      --accent-sage: #2d6a4f;
+
+      --border-light: #E7E1D7;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --shadow-sm: 0 2px 10px rgba(31, 29, 27, 0.04);
+      --shadow-md: 0 10px 30px rgba(31, 29, 27, 0.08);
+      --shadow-lg: 0 20px 40px rgba(31, 29, 27, 0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 80px;
+    }
+
+    /* ── Top Navigation Header ── */
+    .top-header-bar {
+      height: 68px;
+      padding: 0 32px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+    }
+
+    .logo-title {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 21px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #0f172a;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+    .logo-title:hover { opacity: 0.8; }
+
+    .nav-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 18px;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-full);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .nav-btn:hover {
+      border-color: var(--accent-terracotta);
+      color: var(--accent-terracotta);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ── Main Container ── */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-spacing {
+      padding: 3rem 0;
+    }
+
+    .editorial-tag {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      color: var(--accent-terracotta);
+    }
+
+    .editorial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .badge-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.2s ease;
+    }
+    .badge-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--accent-terracotta);
+    }
+
+    .favorite-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .favorite-card:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: var(--accent-terracotta);
+    }
+
+    .remove-fav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-light);
+      padding: 0.4rem;
+      transition: color 0.2s ease;
+    }
+    .remove-fav-btn:hover {
+      color: var(--accent-terracotta);
+    }
+
+    /* ── Floating AI Chatbot (Matches index.html Home Screen UI) ── */
+    .ai-chatbot-trigger {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      background: rgba(10, 12, 17, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ai-chatbot-trigger:hover {
+      transform: translateY(-3px) scale(1.02);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+    }
+
+    .ai-bot-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c9a84c, #967527);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .ai-bot-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .ai-trigger-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .ai-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .ai-chatbot-window, .ai-chatbot-window *, .ai-chatbot-trigger, .ai-chatbot-trigger * {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    }
+
+    .ai-chatbot-window {
+      position: fixed;
+      bottom: 84px;
+      right: 28px;
+      width: 410px;
+      max-width: calc(100vw - 40px);
+      height: 560px;
+      max-height: calc(100vh - 120px);
+      background: rgba(10, 12, 17, 0.97);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(25px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .ai-chatbot-window.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .ai-chat-header {
+      padding: 14px 20px;
+      background: rgba(20, 24, 34, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ai-chat-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .ai-chat-sub {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .ai-close-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 22px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .ai-close-btn:hover {
+      color: #ffffff;
+    }
+
+    .mitr-tabs-bar {
+      display: flex;
+      background: rgba(18, 22, 32, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .mitr-tab-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      background: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .mitr-tab-btn.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 2px solid #c9a84c;
+    }
+
+    .mitr-tab-content-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .mitr-tab-pane {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+    .mitr-tab-pane.active {
+      display: flex;
+    }
+
+    .ai-chat-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .chat-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 88%;
+    }
+
+    .chat-msg.bot {
+      align-self: flex-start;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      letter-spacing: 0.1px;
+    }
+
+    .msg-bubble strong {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .chat-msg.bot .msg-bubble {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #f1f5f9;
+      border-top-left-radius: 2px;
+    }
+
+    .chat-msg.user .msg-bubble {
+      background: rgba(201, 168, 76, 0.25);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      color: #fff;
+      border-top-right-radius: 2px;
+    }
+
+    .ai-chips-wrapper {
+      padding: 10px 14px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 10, 15, 0.7);
+      flex-shrink: 0;
+    }
+    .ai-chips-wrapper::-webkit-scrollbar { height: 3px; }
+    .ai-chips-wrapper::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); }
+
+    .ai-chip {
+      padding: 7px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      font-size: 12px;
+      font-weight: 500;
+      color: #f1f5f9;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .ai-chip:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .ai-chat-input-row {
+      padding: 12px 16px;
+      background: rgba(14, 16, 24, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-input-row input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .ai-chat-input-row input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .ai-send-btn {
+      background: #ffffff;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ai-send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header Bar -->
+  <header class="top-header-bar">
+    <a href="index.html?slide=profile" class="logo-title" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+      <div style="background:#0f172a; width:32px; height:32px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo" style="height:20px; width:auto; mix-blend-mode:screen; filter:brightness(1.3);">
+      </div>
+      <span>VIRASAT</span>
+    </a>
+
+    <nav class="nav-actions-group">
+      <a href="index.html?slide=profile" class="nav-btn">🏠 Home</a>
+      <button type="button" class="nav-btn" onclick="virasatLogout()" style="font-family: inherit; cursor: pointer;">🚪 Sign out</button>
+    </nav>
+  </header>
+
+  <!-- Main Profile Container -->
+  <main class="container section-spacing">
+    <!-- Profile Header Card -->
+    <div class="editorial-card" style="padding: 2.5rem; margin-bottom: 2.5rem; display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+      <div id="profAvatar" aria-hidden="true"
+        style="width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--border-light); background: linear-gradient(135deg, #9E4733, #c9a84c); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 2.6rem; font-weight: 700; letter-spacing: 1px; flex-shrink: 0;">
+        ?
+      </div>
+
+      <div style="flex: 1;">
+        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem;">
+          <h1 id="profName" style="font-family: var(--font-serif); font-size: 2.2rem; font-weight: 700; margin: 0;">Heritage Traveler</h1>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-terracotta)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        </div>
+        <span class="editorial-tag" style="font-size: 0.78rem;" id="profLevelTag">Culture Explorer • Level 1 Traveler</span>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0.4rem 0 0 0;" id="profEmail"></p>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0.4rem 0 0 0;">
+          Passionate about Indian craft preservation, regional handlooms, and ancient temple cartography.
+        </p>
+      </div>
+    </div>
+
+    <!-- Membership Plan Card -->
+    <div class="editorial-card" style="padding: 2rem 2.5rem; margin-bottom: 2.5rem; background: linear-gradient(135deg, #0f1420 0%, #171d2d 100%); color: #fff; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+      <div style="flex: 1; min-width: 260px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 700; color: #fbbf24; text-transform: uppercase; margin-bottom: 10px;">
+          👑 Virasat Royal Membership
+        </div>
+        <h3 style="font-family: var(--font-serif); font-size: 1.6rem; color: #fff; margin: 0 0 6px 0;" id="profPlanTitle">Current Status: Free Trial Member</h3>
+        <p style="font-size: 0.9rem; color: #94a3b8; margin: 0;" id="profPlanDesc">
+          You have 5 free AI Monument Scans on this account, and Virasat Mitr AI chat is free and unlimited. Upgrade to Royal Pass for unlimited scans & 360° VR tours!
+        </p>
+      </div>
+      <button onclick="window.VirasatSub && window.VirasatSub.showModal()" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0f172a; border: none; padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s ease; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+        Upgrade to Royal Pass →
+      </button>
+    </div>
+
+    <!-- Earned Badges -->
+    <div style="margin-bottom: 3rem;">
+      <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+        <span>Heritage Exploration Badges</span>
+      </h3>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+        <div class="badge-card">
+          <span style="font-size: 2.2rem;">🧵</span>
+          <div>
+            <h4 style="font-size: 0.98rem; margin: 0 0 0.2rem 0; font-weight: 700;">Silk Trail Patron</h4>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Discovered Varanasi Banarasi brocades</span>
+          </div>
+        </div>
+
+        <div class="badge-card">
+          <span style="font-size: 2.2rem;">🏺</span>
+          <div>
+            <h4 style="font-size: 0.98rem; margin: 0 0 0.2rem 0; font-weight: 700;">Desert Craftsman</h4>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Explored Jaipur Blue Pottery & Kutch Ajrakh</span>
+          </div>
+        </div>
+
+        <div class="badge-card">
+          <span style="font-size: 2.2rem;">🏛️</span>
+          <div>
+            <h4 style="font-size: 0.98rem; margin: 0 0 0.2rem 0; font-weight: 700;">Temple Cartographer</h4>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Scanned 3+ UNESCO Indian Monuments</span>
+          </div>
+        </div>
+
+        <div class="badge-card">
+          <span style="font-size: 2.2rem;">🗣️</span>
+          <div>
+            <h4 style="font-size: 0.98rem; margin: 0 0 0.2rem 0; font-weight: 700;">Linguistic Traveler</h4>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Mastered 5+ Marwari & Tamil phrases</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Saved Favorites Section -->
+    <div>
+      <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent-terracotta)" stroke="var(--accent-terracotta)" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+        <span>Saved Favorite Crafts (<span id="favCount">2</span>)</span>
+      </h3>
+
+      <div id="favoritesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+        <!-- Initial Sample Favorites -->
+        <div class="favorite-card" id="fav-1">
+          <img loading="lazy" decoding="async" 
+            src="assets/images/remote/Blue_Pottery_Jaipur_Collection_e28d5d.jpg" 
+            alt="Hand-Painted Blue Pottery Urn"
+            style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm);"
+          />
+          <div style="flex: 1;">
+            <h4 style="font-size: 0.95rem; margin: 0 0 0.2rem 0; font-weight: 700;">Hand-Painted Blue Pottery Urn</h4>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--accent-terracotta);">₹3,450</span>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Jaipur, Rajasthan</div>
+          </div>
+          <button class="remove-fav-btn" onclick="removeFavorite('fav-1')" title="Remove from favorites">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+          </button>
+        </div>
+
+        <div class="favorite-card" id="fav-2">
+          <img loading="lazy" decoding="async" 
+            src="assets/images/remote/_Sari__from_Varanasi__north-central_India__silk_and_gold-wrapped_silk_yarn_with__9b406e.jpg" 
+            alt="Zari Silk Banarasi Saree"
+            style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm);"
+          />
+          <div style="flex: 1;">
+            <h4 style="font-size: 0.95rem; margin: 0 0 0.2rem 0; font-weight: 700;">Zari Silk Banarasi Saree</h4>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--accent-terracotta);">₹14,800</span>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Varanasi, UP</div>
+          </div>
+          <button class="remove-fav-btn" onclick="removeFavorite('fav-2')" title="Remove from favorites">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="emptyFavMsg" style="display: none; background: var(--bg-surface); border: 1px dashed var(--border-light); border-radius: var(--radius-md); padding: 2rem; text-align: center; color: var(--text-muted);">
+        No saved favorite products yet. Visit the Marketplace to bookmark authentic artisan crafts!
+      </div>
+    </div>
+  </main>
+
+  <!-- Persistent Floating AI Chatbot (Bottom-Right Corner) -->
+  <div class="ai-chatbot-trigger" id="aiChatTrigger">
+    <div class="ai-bot-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 1 8 8c0 5.33-8 12-8 12S4 15.33 4 10a8 8 0 0 1 8-8z"/><circle cx="12" cy="10" r="2.5"/><path d="M9 18l-2 3"/><path d="M15 18l2 3"/></svg>
+    </div>
+    <span class="ai-trigger-label">VIRASAT MITR AI</span>
+    <div class="ai-pulse-dot"></div>
+  </div>
+
+  <!-- Chatbot Window -->
+  <div class="ai-chatbot-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <div class="ai-chat-title-group">
+        <div class="ai-bot-icon" style="width:28px;height:28px;">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M12 2a8 8 0 0 1 8 8c0 5.33-8 12-8 12S4 15.33 4 10a8 8 0 0 1 8-8z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        </div>
+        <div>
+          <div class="ai-chat-title">Virasat Mitr AI</div>
+          <div class="ai-chat-sub">Cultural Guide & Budget Planner</div>
+        </div>
+      </div>
+      <button class="ai-close-btn" id="aiChatClose">&times;</button>
+    </div>
+
+    <!-- Dual Tabs: Q&A vs Budget Planner -->
+    <div class="mitr-tabs-bar">
+      <button class="mitr-tab-btn active" id="tabBtnQA" onclick="switchMitrTab('qa')">
+        💬 Regional Q&A
+      </button>
+      <button class="mitr-tab-btn" id="tabBtnBudget" onclick="switchMitrTab('budget')">
+        🧮 Budget Planner
+      </button>
+    </div>
+
+    <div class="mitr-tab-content-container">
+      <!-- Tab 1: Q&A -->
+      <div class="mitr-tab-pane active" id="paneQA">
+        <div class="ai-chat-body" id="aiChatBody">
+          <div class="chat-msg bot">
+            <div class="msg-bubble">
+              Namaste <span class="prof-first-name">there</span>! Welcome back. I am your <strong>Virasat Mitr AI</strong>. Ask me anything about your saved crafts, badges, or travel recommendations!
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-chat-input-row">
+          <input type="text" id="aiUserInput" placeholder="Ask Virasat Mitr AI..." autocomplete="off">
+          <button class="ai-send-btn" id="aiSendBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let favItemsCount = 2;
+
+    function removeFavorite(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.remove();
+        favItemsCount--;
+        document.getElementById('favCount').textContent = favItemsCount;
+        if (favItemsCount <= 0) {
+          document.getElementById('emptyFavMsg').style.display = 'block';
+        }
+      }
+    }
+
+    /* ── AI Integration (Groq via the local proxy) ──
+       No API key here: the browser posts to server.js, which holds the
+       key server-side. Start it with: node server.js */
+    const AI_CONFIG = {
+      proxyEndpoints: [
+        "/api/chat",
+        "/api/chat"
+      ],
+      model: "openai/gpt-oss-120b"
+    };
+
+    async function getAiBotReply(userQuery) {
+      if (AI_CONFIG.proxyEndpoints.length) {
+        const sysPrompt = "You are Virasat Mitr AI (Virasat Mitra), an expert Indian cultural guide, heritage historian, and user profile travel consultant. Answer questions accurately about Indian monuments, crafts, badges, and culture using clean HTML formatting (<b> for bold, <br> for line breaks). Do NOT calculate trip budget allocations or money breakdowns in this Q&A chat; if the user asks about budget calculation or trip costs, briefly answer any cultural aspect and direct them to use the dedicated 'Budget Planner' tab in this window.";
+        const endpoints = AI_CONFIG.proxyEndpoints;
+
+        for (const url of endpoints) {
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+            const res = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                model: AI_CONFIG.model,
+                messages: [
+                  { role: "system", content: sysPrompt },
+                  { role: "user", content: userQuery }
+                ],
+                temperature: 0.6,
+                max_tokens: 1024
+              }),
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (res.ok) {
+              const data = await res.json();
+              if (data.choices && data.choices.length > 0) {
+                let text = data.choices[0].message.content;
+                return text.replace(/\n\n/g, "<br><br>").replace(/\n/g, "<br>").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+              }
+            }
+          } catch (err) {
+            console.warn("AI proxy endpoint attempt failed:", url, err);
+          }
+        }
+      }
+      return `<b>⚠️ Live AI is offline.</b> I only have stored answers right now, and none covers <b>${userQuery}</b>.<br><br>Run <code>node server.js</code> in the project folder (or start the site with <code>node static_server.js</code>, which launches it automatically), then ask again.`;
+    }
+
+    /* ── Virasat Mitr AI Controller ── */
+    const aiChatTrigger = document.getElementById('aiChatTrigger');
+    const aiChatWindow = document.getElementById('aiChatWindow');
+    const aiChatClose = document.getElementById('aiChatClose');
+    const aiChatBody = document.getElementById('aiChatBody');
+    const aiUserInput = document.getElementById('aiUserInput');
+    const aiSendBtn = document.getElementById('aiSendBtn');
+
+    if (aiChatTrigger && aiChatWindow) {
+      aiChatTrigger.addEventListener('click', () => {
+        aiChatWindow.classList.toggle('open');
+      });
+
+      aiChatClose.addEventListener('click', () => {
+        aiChatWindow.classList.remove('open');
+      });
+
+      async function sendUserMessage() {
+        const text = aiUserInput.value.trim();
+        if (!text) return;
+
+        appendChatMessage(text, 'user');
+        aiUserInput.value = '';
+
+        const typingId = 'typing_' + Date.now();
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'chat-msg bot';
+        typingDiv.id = typingId;
+        typingDiv.innerHTML = `<div class="msg-bubble" style="font-style:italic;color:rgba(201,168,76,0.8);">⚡ Virasat Mitr AI is thinking...</div>`;
+        aiChatBody.appendChild(typingDiv);
+        aiChatBody.scrollTop = aiChatBody.scrollHeight;
+
+        const botReply = await getAiBotReply(text);
+        document.getElementById(typingId)?.remove();
+        appendChatMessage(botReply, 'bot');
+      }
+
+      if (aiSendBtn) aiSendBtn.addEventListener('click', sendUserMessage);
+      if (aiUserInput) {
+        aiUserInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') sendUserMessage();
+        });
+      }
+    }
+
+    function appendChatMessage(htmlContent, sender) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `chat-msg ${sender}`;
+      msgDiv.innerHTML = `<div class="msg-bubble">${htmlContent}</div>`;
+      aiChatBody.appendChild(msgDiv);
+      aiChatBody.scrollTop = aiChatBody.scrollHeight;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.VirasatSub) {
+        const info = window.VirasatSub.getPlanInfo();
+        const profPlanTitle = document.getElementById('profPlanTitle');
+        const profPlanDesc = document.getElementById('profPlanDesc');
+        if (info.isSubscribed) {
+          if (profPlanTitle) profPlanTitle.textContent = `👑 Active Status: ${info.planType} Royal Pass`;
+          if (profPlanDesc) profPlanDesc.textContent = `Your Royal Pass is active until ${info.expiry}. Enjoy unlimited AI Scans and full 360° VR Monument Access!`;
+        } else {
+          if (profPlanTitle) profPlanTitle.textContent = `Current Status: Free Trial Member`;
+          if (profPlanDesc) profPlanDesc.textContent = `Scans Remaining: ${info.scansLeft} / ${info.scansTotal || 5} • Virasat Mitr AI chat is free and unlimited. Upgrade to Royal Pass for unlimited scans & 360° VR tours!`;
+        }
+      }
+    });
+  </script>
+<script>
+  /* ── Show the signed-in user, not a hard-coded one ──
+     Everything on this page used to be static copy for one person; anyone
+     who signed in saw "Sayed". Now the header, tag and greeting are filled
+     from the account the login page recorded, and a visitor who is not
+     signed in is sent to sign in first. */
+  (function hydrateProfile() {
+    const loggedIn = localStorage.getItem('virasat_user_logged_in') === 'true';
+    const email = (localStorage.getItem('virasat_user_email') || '').trim();
+    if (!loggedIn || !email) {
+      window.location.replace('login.html?next=profile.html');
+      return;
+    }
+
+    let users = {};
+    try { users = JSON.parse(localStorage.getItem('virasat_users') || '{}'); } catch (e) { users = {}; }
+    const record = users[email.toLowerCase()] || {};
+    const name = record.name || localStorage.getItem('virasat_user_name') ||
+      email.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, ch => ch.toUpperCase());
+    const role = record.role || localStorage.getItem('virasat_user_role') || 'tourist';
+    const firstName = name.split(' ')[0];
+    const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+
+    const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    set('profName', name);
+    set('profAvatar', initials);
+    set('profEmail', email);
+    document.title = name + ' — Virasat Profile';
+
+    // A light sense of progression from what this device has actually done.
+    let scans = 0, chats = 0;
+    try {
+      const sub = window.VirasatSub;
+      if (sub && typeof sub.getUsage === 'function') {
+        const u = sub.getUsage() || {};
+        scans = u.scans || 0; chats = u.chats || 0;
+      }
+    } catch (e) { /* subscription helper absent */ }
+    let favs = 0;
+    try { favs = (JSON.parse(localStorage.getItem('virasat_marketplace_favs') || '[]') || []).length; } catch (e) {}
+    const level = 1 + Math.min(4, Math.floor((scans + chats + favs) / 3));
+    const title = role === 'artisan' ? 'Verified Artisan' : (level >= 3 ? 'Master Culture Explorer' : 'Culture Explorer');
+    set('profLevelTag', title + ' • Level ' + level + ' Traveler');
+
+    document.querySelectorAll('.prof-first-name').forEach(el => { el.textContent = firstName; });
+  })();
+
+  function virasatLogout() {
+    ['virasat_user_logged_in', 'virasat_user_role', 'virasat_user_email', 'virasat_user_name']
+      .forEach(k => localStorage.removeItem(k));
+    window.location.href = 'login.html';
+  }
+</script>
+<script src="assets/js/guide.js" defer></script>
+</body>
+</html>
+

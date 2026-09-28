@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentic Heritage Marketplace — VIRASAT</title>
+
+  <!-- Google Fonts: Cormorant Garamond, Plus Jakarta Sans, Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <script src="assets/js/subscription.js"></script>
+  <script src="assets/js/budget-data.js"></script>
+  <style>
+    :root {
+      --bg-primary: #FBF9F5;
+      --bg-surface: #F4EFE6;
+      --bg-card: #FFFFFF;
+      --bg-dark: #1E1C1A;
+
+      --text-main: #1F1D1B;
+      --text-muted: #6B655E;
+      --text-light: #948E85;
+
+      --accent-terracotta: #9E4733;
+      --accent-terracotta-hover: #853B29;
+      --accent-gold: #B5882D;
+      --accent-gold-glow: rgba(181, 136, 45, 0.15);
+
+      --border-light: #E7E1D7;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 2px 10px rgba(31, 29, 27, 0.04);
+      --shadow-md: 0 10px 30px rgba(31, 29, 27, 0.08);
+      --shadow-lg: 0 20px 40px rgba(31, 29, 27, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 80px;
+    }
+
+    /* ── Top Navigation Header ── */
+    .top-header-bar {
+      height: 68px;
+      padding: 0 32px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .logo-title {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 21px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #0f172a;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .logo-title:hover {
+      opacity: 0.8;
+    }
+
+    .nav-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-full);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent-terracotta);
+      color: var(--accent-terracotta);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-btn.active {
+      background: var(--accent-terracotta);
+      color: #ffffff;
+      border-color: var(--accent-terracotta);
+    }
+
+    .wishlist-pill-count {
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-terracotta);
+    }
+
+    /* ── Main Container ── */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .editorial-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 3.5rem auto 2.5rem auto;
+    }
+
+    .editorial-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-terracotta);
+      background: rgba(158, 71, 51, 0.08);
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      margin-bottom: 12px;
+    }
+
+    .editorial-header h1 {
+      font-family: var(--font-serif);
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .text-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* Filter Pills */
+    .filter-pills-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .filter-btn {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-light);
+      padding: 9px 20px;
+      border-radius: var(--radius-full);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent-terracotta);
+      color: var(--accent-terracotta);
+    }
+
+    .filter-btn.active {
+      background: var(--accent-terracotta);
+      color: #FFFFFF;
+      border-color: var(--accent-terracotta);
+      box-shadow: 0 4px 14px rgba(158, 71, 51, 0.25);
+    }
+
+    /* ── Product Grid ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .product-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(158, 71, 51, 0.3);
+    }
+
+    .product-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      background: var(--bg-surface);
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-img {
+      transform: scale(1.05);
+    }
+
+    .fav-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+
+    .fav-btn:hover {
+      transform: scale(1.1);
+      background: #ffffff;
+    }
+
+    .fav-btn svg {
+      width: 20px;
+      height: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .region-badge {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .product-body {
+      padding: 1.4rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .artisan-name {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-terracotta);
+      margin-bottom: 4px;
+    }
+
+    .product-title {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .rating-summary {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 1rem;
+      font-size: 13.5px;
+    }
+
+    .star-icon {
+      color: var(--accent-gold);
+      fill: var(--accent-gold);
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+    }
+
+    .current-price {
+      font-family: var(--font-serif);
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .original-price {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      text-decoration: line-through;
+    }
+
+    .card-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      color: var(--text-main);
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-terracotta);
+      color: var(--accent-terracotta);
+    }
+
+    /* ── Modals ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      max-width: 620px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-backdrop.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--bg-surface);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 18px;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .story-box {
+      background: var(--bg-surface);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      margin-top: 1.2rem;
+    }
+
+    .story-box h4 {
+      color: var(--accent-terracotta);
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .story-box p {
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: var(--text-main);
+    }
+
+    /* Write Review Form */
+    .review-form {
+      background: var(--bg-surface);
+      padding: 1.2rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      margin: 1.2rem 0;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      background: #ffffff;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent-terracotta);
+      box-shadow: 0 0 0 3px rgba(158, 71, 51, 0.1);
+    }
+
+    .btn-submit-review {
+      background: var(--accent-terracotta);
+      color: #ffffff;
+      border: none;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease;
+    }
+
+    .btn-submit-review:hover {
+      background: var(--accent-terracotta-hover);
+    }
+
+    .reviews-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .review-item {
+      padding: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .review-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    /* ── Floating AI Chatbot (Matches index.html Home Screen UI - Right Side) ── */
+    .ai-chatbot-trigger {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      background: rgba(10, 12, 17, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ai-chatbot-trigger:hover {
+      transform: translateY(-3px) scale(1.02);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+    }
+
+    .ai-bot-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c9a84c, #967527);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .ai-bot-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .ai-trigger-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .ai-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .ai-chatbot-window,
+    .ai-chatbot-window *,
+    .ai-chatbot-trigger,
+    .ai-chatbot-trigger * {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    }
+
+    .ai-chatbot-window {
+      position: fixed;
+      bottom: 84px;
+      right: 28px;
+      width: 410px;
+      max-width: calc(100vw - 40px);
+      height: 560px;
+      max-height: calc(100vh - 120px);
+      background: rgba(10, 12, 17, 0.97);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(25px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .ai-chatbot-window.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .ai-chat-header {
+      padding: 14px 20px;
+      background: rgba(20, 24, 34, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ai-chat-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .ai-chat-sub {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .ai-close-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 22px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .ai-close-btn:hover {
+      color: #ffffff;
+    }
+
+    .mitr-tabs-bar {
+      display: flex;
+      background: rgba(18, 22, 32, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .mitr-tab-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      background: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .mitr-tab-btn.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 2px solid #c9a84c;
+    }
+
+    .mitr-tab-content-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .mitr-tab-pane {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .mitr-tab-pane.active {
+      display: flex;
+    }
+
+    .ai-chat-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .chat-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 88%;
+    }
+
+    .chat-msg.bot {
+      align-self: flex-start;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      letter-spacing: 0.1px;
+    }
+
+    .msg-bubble strong {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .chat-msg.bot .msg-bubble {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #f1f5f9;
+      border-top-left-radius: 2px;
+    }
+
+    .chat-msg.user .msg-bubble {
+      background: rgba(201, 168, 76, 0.25);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      color: #fff;
+      border-top-right-radius: 2px;
+    }
+
+    .ai-chips-wrapper {
+      padding: 10px 14px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 10, 15, 0.7);
+      flex-shrink: 0;
+    }
+
+    .ai-chips-wrapper::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    .ai-chips-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .ai-chip {
+      padding: 7px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      font-size: 12px;
+      font-weight: 500;
+      color: #f1f5f9;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .ai-chip:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .ai-chat-input-row {
+      padding: 12px 16px;
+      background: rgba(14, 16, 24, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-input-row input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .ai-chat-input-row input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .ai-send-btn {
+      background: #ffffff;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ai-send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="top-header-bar">
+    <a href="index.html?slide=marketplace" class="logo-title" style="display:inline-flex; align-items:center; gap:10px;">
+      <div style="background:#0f172a; width:32px; height:32px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo" style="height:20px; width:auto; mix-blend-mode:screen; filter:brightness(1.3);">
+      </div>
+      <span>VIRASAT</span>
+    </a>
+
+    <nav class="nav-actions-group">
+      <button type="button" class="nav-btn" id="wishlistHeaderBtn" onclick="toggleWishlistView()" aria-pressed="false" title="Show saved items">
+        ❤️ Wishlist <span class="wishlist-pill-count" id="wishlistCount">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main Editorial Content -->
+  <main class="container">
+    <div class="editorial-header">
+      <span class="editorial-tag">Direct Master Craftsmen Platform</span>
+      <h1>Authentic Heritage Marketplace</h1>
+      <p class="text-lead">
+        Every piece carries centuries of inherited skill. Buy directly from verified Indian master artisans, read the
+        origin story of each technique, add to favorites, and post honest community reviews.
+      </p>
+
+      <!-- Region Filter Pills -->
+      <div class="filter-pills-row" id="filterPillsContainer">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="products-grid" id="productsGridContainer">
+      <!-- Rendered via JS -->
+    </div>
+  </main>
+
+  <!-- MODAL 1: Origin Story Modal -->
+  <div class="modal-backdrop" id="originStoryModalBackdrop">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="closeStoryModalX">✕</button>
+
+      <span class="editorial-tag">Ancestral Heritage Technique</span>
+      <h2 style="font-family:var(--font-serif); font-size:1.8rem; margin:6px 0 16px 0;" id="storyModalTitle">Product
+        Name</h2>
+
+      <div style="display:flex; gap:18px; align-items:center; margin-bottom:16px;">
+        <img loading="lazy" decoding="async" id="storyModalImage" src="" alt=""
+          style="width:130px; height:130px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+        <div>
+          <p style="font-size:13.5px; color:var(--text-muted); margin-bottom:6px;">
+            <strong>Artisan Workshop:</strong> <span id="storyModalArtisan" style="color:var(--text-main);">--</span>
+          </p>
+          <p style="font-size:13.5px; color:var(--text-muted);">
+            <strong>Geographical Indication (GI):</strong> <span id="storyModalRegion"
+              style="color:var(--text-main);">--</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="story-box">
+        <h4>Origin & Crafting Process</h4>
+        <p id="storyModalOriginText">--</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Reviews & Add Review Modal -->
+  <div class="modal-backdrop" id="reviewsModalBackdrop">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="closeReviewsModalX">✕</button>
+
+      <span class="editorial-tag">Community Feedback</span>
+      <h2 style="font-family:var(--font-serif); font-size:1.8rem; margin:6px 0 6px 0;" id="reviewModalTitle">Reviews
+      </h2>
+
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+        <span style="color:var(--accent-gold); font-size:18px;">★</span>
+        <strong style="font-size:1.1rem;" id="reviewModalRatingText">5.0 out of 5</strong>
+        <span style="color:var(--text-muted); font-size:13.5px;" id="reviewModalCountText">(0 customer reviews)</span>
+      </div>
+
+      <!-- Write a Review Form -->
+      <form class="review-form" id="writeReviewForm">
+        <h4 style="font-size:14.5px; margin-bottom:10px; font-weight:700;">Write a Review</h4>
+        <div class="form-row-2">
+          <input type="text" id="reviewNameInput" class="form-input" placeholder="Your Name" required>
+          <select id="reviewRatingSelect" class="form-select">
+            <option value="5">5 Stars (Exceptional)</option>
+            <option value="4">4 Stars (Very Good)</option>
+            <option value="3">3 Stars (Good)</option>
+            <option value="2">2 Stars (Fair)</option>
+            <option value="1">1 Star (Poor)</option>
+          </select>
+        </div>
+        <textarea id="reviewCommentInput" class="form-textarea"
+          placeholder="Share your experience with this artisan product..." rows="3" required
+          style="margin-bottom:10px;"></textarea>
+        <button type="submit" class="btn-submit-review">
+          ➕ Submit Review
+        </button>
+      </form>
+
+      <!-- Customer Reviews List -->
+      <div class="reviews-list-container" id="reviewsListContainer">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Persistent Floating AI Chatbot (Bottom-Left Corner - Matches index.html) -->
+  <div class="ai-chatbot-trigger" id="aiChatTrigger">
+    <div class="ai-bot-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2a8 8 0 0 1 8 8c0 5.33-8 12-8 12S4 15.33 4 10a8 8 0 0 1 8-8z" />
+        <circle cx="12" cy="10" r="2.5" />
+        <path d="M9 18l-2 3" />
+        <path d="M15 18l2 3" />
+      </svg>
+    </div>
+    <span class="ai-trigger-label">VIRASAT MITR AI</span>
+    <div class="ai-pulse-dot"></div>
+  </div>
+
+  <!-- Chatbot Window (Matches index.html) -->
+  <div class="ai-chatbot-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <div class="ai-chat-title-group">
+        <div class="ai-bot-icon" style="width:28px;height:28px;">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;">
+            <path d="M12 2a8 8 0 0 1 8 8c0 5.33-8 12-8 12S4 15.33 4 10a8 8 0 0 1 8-8z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+        </div>
+        <div>
+          <div class="ai-chat-title">Virasat Mitr AI</div>
+          <div class="ai-chat-sub">Cultural Guide & Budget Planner</div>
+        </div>
+      </div>
+      <button class="ai-close-btn" id="aiChatClose">&times;</button>
+    </div>
+
+    <!-- Dual Tabs: Q&A vs Budget Planner -->
+    <div class="mitr-tabs-bar">
+      <button class="mitr-tab-btn active" id="tabBtnQA" onclick="switchMitrTab('qa')">
+        💬 Regional Q&A
+      </button>
+      <button class="mitr-tab-btn" id="tabBtnBudget" onclick="switchMitrTab('budget')">
+        🧮 Budget Planner
+      </button>
+    </div>
+
+    <div class="mitr-tab-content-container">
+      <!-- Tab 1: Q&A -->
+      <div class="mitr-tab-pane active" id="paneQA">
+        <div class="ai-chat-body" id="aiChatBody">
+          <div class="chat-msg bot">
+            <div class="msg-bubble">
+              Namaste! I am your <strong>Virasat Mitr AI</strong>. Ask me anything about Indian heritage places, GI-tagged crafts, and master artisans!
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Action Chips -->
+        <div class="ai-chips-wrapper">
+          <div class="ai-chip" onclick="askAiQuestion('Tell me about Jaipur Blue Pottery history')">🏺 Blue Pottery</div>
+          <div class="ai-chip" onclick="askAiQuestion('Tell me about Banarasi Kadwa Silk Sarees')">✨ Banarasi Silk</div>
+          <div class="ai-chip" onclick="askAiQuestion('Kashmiri Pashmina Sozni embroidery guide')">🧶 Pashmina Shawls</div>
+          <div class="ai-chip" onclick="askAiQuestion('Kutch Mirrorwork Abhla Bharat technique')">🪞 Kutchi Craft</div>
+        </div>
+
+        <div class="ai-chat-input-row">
+          <input type="text" id="aiUserInput" placeholder="Ask about master artisans, crafts, or history..." autocomplete="off">
+          <button class="ai-send-btn" id="aiSendBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Budget Planner -->
+      <div class="mitr-tab-pane" id="paneBudget">
+        <div class="budget-planner-pane">
+          <div class="budget-form-row">
+            <div class="budget-field-group" style="flex:1;">
+              <label for="userBudgetInput">Your Budget (₹):</label>
+              <input type="number" id="userBudgetInput" value="10500" step="500" min="1000">
+            </div>
+            <div class="budget-field-group" style="width:90px;">
+              <label for="budgetDaysInput">Days:</label>
+              <input type="number" id="budgetDaysInput" value="3" min="1" max="30">
+            </div>
+          </div>
+
+          <div class="budget-field-group">
+            <label for="budgetCitySelect">Destination City:</label>
+            <select id="budgetCitySelect">
+              <!-- populated from assets/js/budget-data.js: every state & major UT -->
+              <option value="jaipur" selected>Jaipur (Rajasthan)</option>
+            </select>
+          </div>
+
+          <div class="budget-field-group">
+            <label for="budgetStyleSelect">Travel Style Preference:</label>
+            <select id="budgetStyleSelect">
+              <option value="Heritage Explorer" selected>Heritage Explorer (Balanced)</option>
+              <option value="Backpacker">Backpacker (Economical)</option>
+              <option value="Royal Luxury">Royal Luxury (Premium Stay & Dining)</option>
+            </select>
+          </div>
+
+          <button class="calc-budget-btn" onclick="calculateCulturalBudget()">
+            <span>✨</span>
+            <span>Plan Around My Budget</span>
+          </button>
+
+          <div id="budgetResultOutput"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ── MARKETPLACE DATA SOURCE ── */
+    const MARKETPLACE_PRODUCTS = [
+      {
+        id: "prod-1",
+        name: "Royal Peacock Blue Pottery Vase (Hand-carved)",
+        price: 3400,
+        originalPrice: 4200,
+        region: "Jaipur, Rajasthan",
+        cityId: "jaipur",
+        artisanName: "Master Kirpal Singh Shekhawat Studio",
+        artisanId: "art-1",
+        rating: 4.9,
+        reviewsCount: 28,
+        image: "assets/images/remote/Blue_Pottery_Jaipur_Collection_763200.jpg",
+        originStory: "Crafted without clay using quartz stone powder, natural cobalt blue and copper oxide pigments, fired in wood furnaces for 36 hours. Each floral swirl represents Jaipur court art.",
+        reviews: [
+          { user: "Ananya Sharma", rating: 5, comment: "Exquisite craftsmanship! The blue glaze is so vibrant and authentic.", date: "2026-07-12" },
+          { user: "David Miller", rating: 5, comment: "Shipped with extreme care. Proud to hold a piece of royal Marwari heritage.", date: "2026-06-28" }
+        ]
+      },
+      {
+        id: "prod-2",
+        name: "Heritage Banarasi Kadwa Silk Saree (Gold Zari)",
+        price: 18500,
+        originalPrice: 22000,
+        region: "Varanasi, Uttar Pradesh",
+        cityId: "varanasi",
+        artisanName: "Ustad Mukhtar Ansari & Family",
+        artisanId: "art-3",
+        rating: 5.0,
+        reviewsCount: 41,
+        image: "assets/images/remote/_Sari__from_Varanasi__north-central_India__silk_and_gold-wrapped_silk_yarn_with__d4dd8f.jpg",
+        originStory: "Woven on pit-looms using pure mulberry silk and silver-gold electroplated Zari thread. Kadwa technique requires separate hand-shuttles for each motif so there are no loose threads behind.",
+        reviews: [
+          { user: "Priya V.", rating: 5, comment: "Wore this for my sister's wedding. The sheen and gold thread work is legendary.", date: "2026-08-01" }
+        ]
+      },
+      {
+        id: "prod-3",
+        name: "Hand-needle Embroidered Pashmina Stole",
+        price: 12800,
+        originalPrice: 15000,
+        region: "Srinagar, Jammu & Kashmir",
+        cityId: "srinagar",
+        artisanName: "Ghulam Nabi & Sons",
+        artisanId: "art-4",
+        rating: 4.8,
+        reviewsCount: 19,
+        image: "assets/images/remote/Embroidered-pashmina-shawl_306f70.jpg",
+        originStory: "Harvested from high-altitude Changthangi mountain goats in Ladakh, hand-spun on wooden charkhas and stitched with single-needle Sozni thread embroidery over 5 months.",
+        reviews: [
+          { user: "Sunita Roy", rating: 5, comment: "So soft it easily passes through a wedding ring. Truly divine Kashmir work.", date: "2026-07-20" }
+        ]
+      },
+      {
+        id: "prod-4",
+        name: "Kutchi Mirror Embroidery Wall Hanging Tapestry",
+        price: 2900,
+        originalPrice: 3500,
+        region: "Rann of Kutch, Gujarat",
+        cityId: "kutch",
+        artisanName: "Dr. Ismail Khatri Ajrakh Studio",
+        artisanId: "art-6",
+        rating: 4.9,
+        reviewsCount: 15,
+        image: "assets/images/remote/Shawl_from_India__Rabari_culture__Honolulu_Museum_of_Art_6794.1_369366.JPG",
+        originStory: "Embroidered by Rabari tribal women incorporating hundreds of small circular glass mirrors bound by silk chain-stitch borders.",
+        reviews: [
+          { user: "Rohan Kapoor", rating: 5, comment: "Transformed my living room wall with authentic Kutchi desert warmth.", date: "2026-06-15" }
+        ]
+      },
+      {
+        id: "prod-5",
+        name: "Madurai Sungudi Tie-Dye Cotton Dupatta",
+        price: 1450,
+        originalPrice: 1800,
+        region: "Madurai, Tamil Nadu",
+        cityId: "madurai",
+        artisanName: "S. K. Ramanathan Weaver Collective",
+        artisanId: "art-5",
+        rating: 4.7,
+        reviewsCount: 22,
+        image: "assets/images/remote/Bandhani_pagadi_tie_and_dye_work_on_cloth_jaipur_rajasthan_India_7416a3.jpg",
+        originStory: "Hand-knotted with thousands of micro threads creating cosmic constellation dots dyed in organic pomegranate rind and indigo.",
+        reviews: [
+          { user: "Meenakshi K.", rating: 5, comment: "Breathable pure cotton, beautiful traditional Sungudi dots.", date: "2026-07-04" }
+        ]
+      }
+    ];
+
+    const REGIONS_LIST = [
+      { id: 'all', label: 'All Regions' },
+      { id: 'jaipur', label: 'Jaipur (Blue Pottery & Prints)' },
+      { id: 'varanasi', label: 'Varanasi (Banarasi Silk)' },
+      { id: 'srinagar', label: 'Srinagar (Pashmina Shawls)' },
+      { id: 'kutch', label: 'Rann of Kutch (Mirrorwork & Ajrakh)' },
+      { id: 'madurai', label: 'Madurai (Sungudi Cotton)' }
+    ];
+
+    // State Variables
+    let selectedRegion = 'all';
+    let showingWishlist = false;
+    let artisanPostedProducts = JSON.parse(localStorage.getItem('virasat_artisan_products') || '[]');
+    let products = [...artisanPostedProducts, ...MARKETPLACE_PRODUCTS];
+    let favorites = JSON.parse(localStorage.getItem('virasat_marketplace_favs') || '[]');
+    let activeStoryModalProduct = null;
+    let activeReviewModalProduct = null;
+
+    /* ── Render Region Filter Pills ── */
+    function renderFilterPills() {
+      const container = document.getElementById('filterPillsContainer');
+      container.innerHTML = REGIONS_LIST.map(r => `
+        <button 
+          class="filter-btn ${selectedRegion === r.id ? 'active' : ''}" 
+          onclick="selectRegion('${r.id}')"
+        >
+          ${r.label}
+        </button>
+      `).join('');
+    }
+
+    function selectRegion(regionId) {
+      selectedRegion = regionId;
+      renderFilterPills();
+      renderProductsGrid();
+    }
+
+    /* ── Render Product Cards Grid ── */
+    function renderProductsGrid() {
+      const container = document.getElementById('productsGridContainer');
+      let filtered = selectedRegion === 'all'
+        ? products
+        : products.filter(p => p.cityId === selectedRegion);
+      if (showingWishlist) filtered = filtered.filter(p => favorites.includes(p.id));
+
+      if (filtered.length === 0) {
+        const wishlistEmpty = showingWishlist
+          ? (favorites.length === 0
+              ? `<h3 style="font-family:var(--font-serif); font-size:1.5rem; color:var(--text-muted);">Your wishlist is empty</h3>
+                 <p style="color:var(--text-muted); font-size:14px; margin-top:8px;">Tap the ♡ on any product to save it here. Saved items stay on this device.</p>
+                 <button class="btn-secondary" style="margin-top:16px;" onclick="toggleWishlistView()">Browse products</button>`
+              : `<h3 style="font-family:var(--font-serif); font-size:1.5rem; color:var(--text-muted);">Nothing saved from this region</h3>
+                 <p style="color:var(--text-muted); font-size:14px; margin-top:8px;">You have ${favorites.length} saved item${favorites.length === 1 ? '' : 's'} in other regions.</p>
+                 <button class="btn-secondary" style="margin-top:16px;" onclick="selectRegion('all')">Show all saved items</button>`)
+          : `<h3 style="font-family:var(--font-serif); font-size:1.5rem; color:var(--text-muted);">No Products Listed Yet</h3>
+             <p style="color:var(--text-muted); font-size:14px; margin-top:8px;">New artisan batches from this region will be onboarded soon.</p>`;
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align:center; padding: 4rem 2rem; background: #ffffff; border: 1px dashed var(--border-light); border-radius: var(--radius-md);">
+            ${wishlistEmpty}
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(product => {
+        const isFav = favorites.some(id => id === product.id);
+        const heartFill = isFav ? '#9E4733' : 'none';
+        const heartStroke = isFav ? '#9E4733' : '#1F1D1B';
+
+        return `
+          <div class="product-card">
+            <div class="product-img-wrap">
+              <img loading="lazy" decoding="async" src="${product.image}" alt="${product.name}" class="product-img">
+              <button class="fav-btn" onclick="toggleFavorite('${product.id}')" title="${isFav ? 'Remove from Favorites' : 'Add to Favorites'}">
+                <svg viewBox="0 0 24 24" fill="${heartFill}" stroke="${heartStroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <span class="region-badge">${product.isArtisanPosted ? '🔥 Artisan Direct • ' + product.region : product.region}</span>
+            </div>
+
+            <div class="product-body">
+              <div>
+                <div class="artisan-name">${product.artisanName}</div>
+                <h3 class="product-title">${product.name}</h3>
+                
+                <div class="rating-summary">
+                  <span class="star-icon">★</span>
+                  <strong>${product.rating}</strong>
+                  <span style="color:var(--text-muted);">(${product.reviewsCount} reviews)</span>
+                </div>
+              </div>
+
+              <div>
+                <div class="price-row">
+                  <span class="current-price">₹${product.price.toLocaleString('en-IN')}</span>
+                  <span class="original-price">₹${product.originalPrice.toLocaleString('en-IN')}</span>
+                </div>
+
+                <div class="card-actions-grid">
+                  <button class="btn-secondary" onclick="openStoryModal('${product.id}')">
+                    📖 Origin Story
+                  </button>
+                  <button class="btn-secondary" onclick="openReviewsModal('${product.id}')">
+                    💬 Reviews
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ── Wishlist ── */
+    function toggleFavorite(productId) {
+      if (favorites.includes(productId)) {
+        favorites = favorites.filter(id => id !== productId);
+      } else {
+        favorites.push(productId);
+      }
+      try { localStorage.setItem('virasat_marketplace_favs', JSON.stringify(favorites)); } catch (e) { /* private mode */ }
+      updateWishlistHeader();
+      renderProductsGrid();
+    }
+
+    function updateWishlistHeader() {
+      const btn = document.getElementById('wishlistHeaderBtn');
+      const count = document.getElementById('wishlistCount');
+      if (count) count.textContent = favorites.length;
+      if (btn) {
+        btn.classList.toggle('active', showingWishlist);
+        btn.setAttribute('aria-pressed', String(showingWishlist));
+        btn.title = showingWishlist ? 'Back to all products' : 'Show saved items';
+      }
+    }
+
+    /* Header button: view only the saved items. Nothing used to happen here —
+       hearts could be toggled, but there was no way to see what you'd saved. */
+    function toggleWishlistView() {
+      showingWishlist = !showingWishlist;
+      updateWishlistHeader();
+      renderProductsGrid();
+      const heading = document.getElementById('productsSectionHeading');
+      if (heading) heading.textContent = showingWishlist ? 'Your Wishlist' : heading.dataset.defaultText || heading.textContent;
+      const grid = document.getElementById('productsGridContainer');
+      if (grid && showingWishlist) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* ── Origin Story Modal Handlers ── */
+    function openStoryModal(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      activeStoryModalProduct = product;
+      document.getElementById('storyModalTitle').textContent = product.name;
+      document.getElementById('storyModalImage').src = product.image;
+      document.getElementById('storyModalArtisan').textContent = product.artisanName;
+      document.getElementById('storyModalRegion').textContent = product.region;
+      document.getElementById('storyModalOriginText').textContent = product.originStory;
+
+      document.getElementById('originStoryModalBackdrop').classList.add('active');
+    }
+
+    document.getElementById('closeStoryModalX').addEventListener('click', () => {
+      document.getElementById('originStoryModalBackdrop').classList.remove('active');
+    });
+
+    /* ── Reviews Modal Handlers ── */
+    function openReviewsModal(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      activeReviewModalProduct = product;
+      renderReviewsModal();
+      document.getElementById('reviewsModalBackdrop').classList.add('active');
+    }
+
+    function renderReviewsModal() {
+      if (!activeReviewModalProduct) return;
+      const p = activeReviewModalProduct;
+
+      document.getElementById('reviewModalTitle').textContent = `Reviews for ${p.name}`;
+      document.getElementById('reviewModalRatingText').textContent = `${p.rating} out of 5`;
+      document.getElementById('reviewModalCountText').textContent = `(${p.reviews.length} customer reviews)`;
+
+      const listContainer = document.getElementById('reviewsListContainer');
+      listContainer.innerHTML = p.reviews.map(rev => `
+        <div class="review-item">
+          <div class="review-item-header">
+            <strong style="font-size:13.5px;">${rev.user}</strong>
+            <span style="font-size:11.5px; color:var(--text-light);">${rev.date}</span>
+          </div>
+          <div style="color:var(--accent-gold); font-size:12px; margin-bottom:4px;">
+            ${'★'.repeat(rev.rating)}${'☆'.repeat(5 - rev.rating)}
+          </div>
+          <p style="font-size:13px; color:var(--text-muted); margin:0; line-height:1.4;">${rev.comment}</p>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('writeReviewForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!activeReviewModalProduct) return;
+
+      const userName = document.getElementById('reviewNameInput').value.trim();
+      const rating = Number(document.getElementById('reviewRatingSelect').value);
+      const comment = document.getElementById('reviewCommentInput').value.trim();
+
+      if (!userName || !comment) return;
+
+      const newReview = {
+        user: userName,
+        rating: rating,
+        comment: comment,
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      // Update product in array
+      const productObj = products.find(p => p.id === activeReviewModalProduct.id);
+      if (productObj) {
+        productObj.reviews.unshift(newReview);
+        productObj.reviewsCount = productObj.reviews.length;
+        const totalRating = productObj.reviews.reduce((acc, r) => acc + r.rating, 0);
+        productObj.rating = Number((totalRating / productObj.reviewsCount).toFixed(1));
+
+        activeReviewModalProduct = productObj;
+      }
+
+      // Reset Form & Re-render
+      document.getElementById('reviewNameInput').value = '';
+      document.getElementById('reviewCommentInput').value = '';
+
+      renderReviewsModal();
+      renderProductsGrid();
+    });
+
+    document.getElementById('closeReviewsModalX').addEventListener('click', () => {
+      document.getElementById('reviewsModalBackdrop').classList.remove('active');
+    });
+
+    /* Backdrop Click Closes Modals */
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+          backdrop.classList.remove('active');
+        }
+      });
+    });
+
+    /* ── Virasat Mitr AI Controller ── */
+    const aiChatTrigger = document.getElementById('aiChatTrigger');
+    const aiChatWindow = document.getElementById('aiChatWindow');
+    const aiChatClose = document.getElementById('aiChatClose');
+    const aiChatBody = document.getElementById('aiChatBody');
+    const aiUserInput = document.getElementById('aiUserInput');
+    const aiSendBtn = document.getElementById('aiSendBtn');
+
+    if (aiChatTrigger && aiChatWindow) {
+      aiChatTrigger.addEventListener('click', () => {
+        aiChatWindow.classList.toggle('open');
+      });
+
+      aiChatClose.addEventListener('click', () => {
+        aiChatWindow.classList.remove('open');
+      });
+
+      window.switchMitrTab = function (tabName) {
+        document.getElementById('tabBtnQA')?.classList.toggle('active', tabName === 'qa');
+        document.getElementById('tabBtnBudget')?.classList.toggle('active', tabName === 'budget');
+
+        document.getElementById('paneQA')?.classList.toggle('active', tabName === 'qa');
+        document.getElementById('paneBudget')?.classList.toggle('active', tabName === 'budget');
+      };
+
+      /* ── AI Integration (Groq via the local proxy) ──
+         No API key here: the browser posts to server.js, which holds the
+         key server-side. Start it with: node server.js */
+      const AI_CONFIG = {
+        proxyEndpoints: [
+          "/api/chat",
+          "/api/chat"
+        ],
+        model: "openai/gpt-oss-120b"
+      };
+
+      async function getAiBotReply(userQuery) {
+        if (AI_CONFIG.proxyEndpoints.length) {
+          const sysPrompt = "You are Virasat Mitr AI (Virasat Mitra), an expert Indian cultural guide, heritage historian, and artisan craft consultant. Answer questions accurately about GI-tagged Indian crafts, artisan techniques, monuments, and culture using clean HTML formatting (<b> for bold, <br> for line breaks). Do NOT calculate trip budget allocations or money breakdowns in this Q&A chat; if the user asks about budget calculation or trip costs, briefly answer any craft/cultural aspect and direct them to use the dedicated 'Budget Planner' tab in this window.";
+          const endpoints = AI_CONFIG.proxyEndpoints;
+
+          for (const url of endpoints) {
+            try {
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 10000);
+              const res = await fetch(url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  model: AI_CONFIG.model,
+                  messages: [
+                    { role: "system", content: sysPrompt },
+                    { role: "user", content: userQuery }
+                  ],
+                  temperature: 0.6,
+                  max_tokens: 1024
+                }),
+                signal: controller.signal
+              });
+              clearTimeout(timeoutId);
+              if (res.ok) {
+                const data = await res.json();
+                if (data.choices && data.choices.length > 0) {
+                  let text = data.choices[0].message.content;
+                  return text.replace(/\n\n/g, "<br><br>").replace(/\n/g, "<br>").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+                }
+              }
+            } catch (err) {
+              console.warn("AI proxy endpoint attempt failed:", url, err);
+            }
+          }
+        }
+        return generateAiResponse(userQuery);
+      }
+
+      async function sendUserMessage() {
+        const text = aiUserInput.value.trim();
+        if (!text) return;
+
+        appendChatMessage(text, 'user');
+        aiUserInput.value = '';
+
+        const typingId = 'typing_' + Date.now();
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'chat-msg bot';
+        typingDiv.id = typingId;
+        typingDiv.innerHTML = `<div class="msg-bubble" style="font-style:italic;color:rgba(181,136,45,0.8);">⚡ Virasat Mitr AI is thinking...</div>`;
+        aiChatBody.appendChild(typingDiv);
+        aiChatBody.scrollTop = aiChatBody.scrollHeight;
+
+        const botReply = await getAiBotReply(text);
+        document.getElementById(typingId)?.remove();
+        appendChatMessage(botReply, 'bot');
+      }
+
+      if (aiSendBtn) aiSendBtn.addEventListener('click', sendUserMessage);
+      if (aiUserInput) {
+        aiUserInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') sendUserMessage();
+        });
+      }
+
+      function appendChatMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-msg ${sender}`;
+        msgDiv.innerHTML = `<div class="msg-bubble">${text}</div>`;
+        aiChatBody.appendChild(msgDiv);
+        aiChatBody.scrollTop = aiChatBody.scrollHeight;
+      }
+
+      function generateAiResponse(query) {
+        const q = query.toLowerCase();
+        if (q.includes('blue pottery') || q.includes('jaipur')) {
+          return "Jaipur Blue Pottery is crafted from ground quartz stone powder, natural cobalt blue, and copper oxide. Master Kirpal Singh Shekhawat Studio is world-renowned for preserving this royal Marwari court craft!";
+        } else if (q.includes('banarasi') || q.includes('silk') || q.includes('saree') || q.includes('varanasi')) {
+          return "Banarasi Kadwa Silk Sarees are handwoven on pit looms using pure mulberry silk and silver-gold electroplated Zari thread. Ustad Mukhtar Ansari's workshop creates timeless heirlooms in Madanpura, Varanasi!";
+        } else if (q.includes('pashmina') || q.includes('shawl') || q.includes('srinagar')) {
+          return "Kashmiri Pashmina is hand-spun from Changthangi mountain goat fleece and hand-stitched with single-needle Sozni embroidery over 5+ months by artisans like Ghulam Nabi & Sons.";
+        } else if (q.includes('kutch') || q.includes('mirror') || q.includes('tapestry')) {
+          return "Kutchi Mirrorwork (Abhla Bharat) incorporates circular glass mirrors bound by silk chain-stitching. Created by Rabari tribal women in the salt marshes of Gujarat.";
+        } else if (q.includes('madurai') || q.includes('sungudi') || q.includes('cotton')) {
+          return "Madurai Sungudi sarees are crafted using micro tie-and-dye ring dots dyed in natural indigo and pomegranate rind by Saurashtrian weaver collectives.";
+        }
+        return `<b>⚠️ Live AI is offline.</b> I only have stored answers right now, and none covers <b>${query}</b>.<br><br>Run <code>node server.js</code> in the project folder (or start the site with <code>node static_server.js</code>, which launches it automatically), then ask again.`;
+      }
+
+      /* Budget Calculation Logic */
+      function calculateCulturalBudget() {
+        const budgetInput = document.getElementById('userBudgetInput');
+        const daysInput = document.getElementById('budgetDaysInput');
+        const styleSelect = document.getElementById('budgetStyleSelect');
+        const citySelect = document.getElementById('budgetCitySelect');
+        const container = document.getElementById('budgetBreakdownResult');
+
+        if (!budgetInput || !container) return;
+
+        const totalBudget = parseFloat(budgetInput.value) || 15000;
+        const days = parseInt(daysInput.value) || 3;
+        const style = styleSelect.value;
+        const cityKey = citySelect ? citySelect.value : 'jaipur';
+
+        let stayPct = 0.40, craftPct = 0.30, foodPct = 0.18, transitPct = 0.12;
+
+        if (style === 'crafts') {
+          stayPct = 0.30; craftPct = 0.45; foodPct = 0.15; transitPct = 0.10;
+        } else if (style === 'heritage') {
+          stayPct = 0.52; craftPct = 0.22; foodPct = 0.16; transitPct = 0.10;
+        }
+
+        const stayAmt = Math.round(totalBudget * stayPct);
+        const craftAmt = Math.round(totalBudget * craftPct);
+        const foodAmt = Math.round(totalBudget * foodPct);
+        const transitAmt = Math.round(totalBudget * transitPct);
+
+        const cityName = citySelect ? citySelect.options[citySelect.selectedIndex].text : 'Jaipur';
+
+        container.innerHTML = `
+          <div style="font-size:12px;font-weight:700;color:var(--accent-terracotta);margin-bottom:6px;">ESTIMATED ALLOCATION FOR ${cityName.toUpperCase()} (${days} DAYS)</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">
+            <div style="background:#f8fafc;padding:6px 8px;border-radius:6px;">🏠 Stays: <strong>₹${stayAmt.toLocaleString('en-IN')}</strong></div>
+            <div style="background:#f8fafc;padding:6px 8px;border-radius:6px;">🎨 Crafts: <strong>₹${craftAmt.toLocaleString('en-IN')}</strong></div>
+            <div style="background:#f8fafc;padding:6px 8px;border-radius:6px;">🍲 Dining: <strong>₹${foodAmt.toLocaleString('en-IN')}</strong></div>
+            <div style="background:#f8fafc;padding:6px 8px;border-radius:6px;">🚕 Transit: <strong>₹${transitAmt.toLocaleString('en-IN')}</strong></div>
+          </div>
+        `;
+      }
+
+      if (document.getElementById('userBudgetInput')) {
+        calculateCulturalBudget();
+        document.getElementById('userBudgetInput').addEventListener('input', calculateCulturalBudget);
+        document.getElementById('budgetDaysInput').addEventListener('input', calculateCulturalBudget);
+        document.getElementById('budgetStyleSelect').addEventListener('change', calculateCulturalBudget);
+        if (document.getElementById('budgetCitySelect')) {
+          document.getElementById('budgetCitySelect').addEventListener('change', calculateCulturalBudget);
+        }
+      }
+    }
+
+    /* Initial Page Load */
+    document.addEventListener('DOMContentLoaded', () => {
+      updateWishlistHeader();
+      renderFilterPills();
+      renderProductsGrid();
+    });
+  </script>
+<script src="assets/js/guide.js" defer></script>
+</body>
+
+</html>

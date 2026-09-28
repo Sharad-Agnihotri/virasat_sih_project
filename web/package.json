@@ -1,0 +1,17 @@
+{
+  "name": "virasat-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Virasat — Indian cultural heritage platform. Static site plus a Groq AI proxy.",
+  "scripts": {
+    "start": "node static_server.js",
+    "serve": "node static_server.js",
+    "proxy": "node server.js",
+    "serve:no-ai": "NO_AI=1 node static_server.js",
+    "health": "node -e \"require('http').get('http://localhost:3005/api/health',r=>r.pipe(process.stdout))\""
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VIRASAT VR — 360° Virtual Monument Explorer</title>
+  
+  <!-- A-Frame for 360/VR -->
+  <!-- A-Frame is served locally: the 1.4 MB CDN copy was the single point of
+       failure on slow networks (every VR script needs window.AFRAME). The CDN
+       is only a fallback if the local file is missing. -->
+  <script src="VR/vendor/aframe.min.js"></script>
+  <script>if (!window.AFRAME) document.write('<script src="https://aframe.io/releases/1.6.0/aframe.min.js"><\/script>');</script>
+  <!-- Custom Shaders & Raycasting (must be loaded before a-scene) -->
+  <script src="VR/js/shaders.js"></script>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- VR CSS -->
+  <link rel="stylesheet" href="VR/css/styles.css">
+  
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/font/lucide.min.css" rel="stylesheet">
+
+  <style>
+    /* Custom Virasat Top Nav Styling for VR */
+    .virasat-home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+    .virasat-home-link:hover {
+      background: #ffffff;
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+<body>
+
+  <!-- ================= LOADING SCREEN ================= -->
+  <div id="loading-screen">
+    <div class="loading-monument-icon">🏛️</div>
+    <h1 class="loading-title" data-i18n="appTitle">VIRASAT VR EXPLORER</h1>
+    <p class="loading-subtitle" data-i18n="loading">Loading 360° Heritage Experience...</p>
+    
+    <div class="loading-bar-container">
+      <div class="loading-bar"></div>
+    </div>
+    
+    <button class="loading-enter-btn" data-i18n="enterExperience">Enter Experience</button>
+  </div>
+
+  <!-- ================= 3D SCENE ================= -->
+  <div id="scene-container">
+    <a-scene 
+      vr-mode-ui="enabled: true" 
+      loading-screen="enabled: false"
+      device-orientation-permission-ui="enabled: true"
+      renderer="antialias: auto; colorManagement: true; highRefreshRate: true"
+    >
+      <!-- Panorama textures are loaded straight into the shader's uniforms by
+           panorama.js, so there is no <a-assets> preload to keep in sync. -->
+
+      <!-- The 360 image mapped to a large sphere -->
+      <a-sky id="panorama-sky" 
+             segments-width="64" 
+             segments-height="48" 
+             rotation="0 -90 0"></a-sky>
+
+      <!-- Hotspots live in WORLD space. They used to be children of the camera,
+           which glued them to the viewport instead of to the monument. -->
+      <a-entity id="hotspots-container"></a-entity>
+
+      <!-- Camera. The cursor component is what turns pointer input into click
+           events on entities — without it hotspots were never clickable. -->
+      <a-camera 
+        id="main-camera" 
+        fov="80" 
+        look-controls="reverseMouseDrag: true; touchEnabled: true; magicWindowTrackingEnabled: true" 
+        wasd-controls="enabled: false"
+        cursor="rayOrigin: mouse; fuse: false"
+        raycaster="objects: .hotspot-clickable; interval: 90"
+      >
+      </a-camera>
+    </a-scene>
+    
+    <!-- Transition overlay (fade to black) -->
+    <div id="panorama-transition"></div>
+  </div>
+
+  <!-- ================= UI LAYER ================= -->
+  
+  <!-- Top Bar -->
+  <header id="top-bar" class="glass">
+    <div class="top-bar-left">
+      <a href="index.html?slide=vr" class="virasat-home-link">
+        🏠 Home
+      </a>
+      <div class="top-bar-brand" style="margin-left: 8px; display:inline-flex; align-items:center; gap:8px;">
+        <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo" style="height:24px; width:auto; mix-blend-mode:screen; filter:brightness(1.2);">
+        <div>
+          <span class="top-bar-title" data-i18n="appTitle">VIRASAT VR</span>
+          <span class="top-bar-subtitle" data-i18n="appSubtitle">Virtual Heritage Tours</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="top-bar-right">
+      <button id="voice-btn" class="icon-btn" data-i18n-title="voiceGuideTitle">
+        🎙️
+      </button>
+      <button id="lang-btn" class="icon-btn" data-i18n-title="language">
+        <i class="icon-globe">🌐</i>
+      </button>
+      <button id="audio-btn" class="icon-btn" data-i18n-title="audioOff">
+        <div class="audio-indicator muted">
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+        </div>
+      </button>
+      <button id="fullscreen-btn" class="icon-btn" data-i18n-title="fullscreen">⛶</button>
+      <button id="info-btn" class="icon-btn" data-i18n-title="infoTitle">ℹ️</button>
+      <button id="help-btn" class="icon-btn" data-i18n-title="help">❓</button>
+    </div>
+  </header>
+
+  <!-- Language Dropdown -->
+  <div id="language-dropdown"></div>
+
+  <!-- Viewpoint Info Bar -->
+  <div id="viewpoint-bar">
+    <div class="viewpoint-name">Main Gateway</div>
+    <div class="viewpoint-separator"></div>
+    <div class="viewpoint-desc">The main entrance to the complex.</div>
+  </div>
+
+  <!-- Viewpoint Dots (Right side) -->
+  <div id="viewpoint-dots"></div>
+
+  <!-- Navigation Controls (Bottom Left) -->
+  <div id="nav-controls">
+    <button class="nav-btn" id="nav-up">▲</button>
+    <div class="nav-row">
+      <button class="nav-btn" id="nav-left">◀</button>
+      <button class="nav-btn" id="nav-down">▼</button>
+      <button class="nav-btn" id="nav-right">▶</button>
+    </div>
+  </div>
+
+  <!-- Zoom Controls (Bottom Right-ish) -->
+  <div id="zoom-controls">
+    <button class="zoom-btn" id="zoom-in-btn" data-i18n-title="zoomIn">+</button>
+    <button class="zoom-btn" id="zoom-out-btn" data-i18n-title="zoomOut">-</button>
+  </div>
+
+  <!-- Side Controls (Bottom Right) -->
+  <div id="right-controls">
+    <button id="chat-toggle-btn" class="control-fab" data-i18n-title="chatTitle">
+      💬
+      <div class="badge"></div>
+    </button>
+  </div>
+    <div class="time-travel-era" data-i18n="presentDay">Off</div>
+  </div>
+
+  <!-- Historical Info Overlay -->
+  <div id="historical-overlay"></div>
+
+  <!-- Monument Selector (Bottom Bar) -->
+  <div id="monument-selector">
+    <div class="monument-selector-inner">
+      <!-- Cards injected by JS -->
+    </div>
+  </div>
+
+  <!-- ================= MODALS & PANELS ================= -->
+
+  <!-- Chat Panel -->
+  <div id="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">🤖</div>
+        <div>
+          <div class="chat-header-title" data-i18n="chatTitle">AI Heritage Guide</div>
+          <div class="chat-header-status">Online</div>
+        </div>
+      </div>
+      <button class="chat-close-btn" id="chat-close-btn">×</button>
+    </div>
+    
+    <div class="chat-messages">
+      <!-- Messages injected by JS -->
+    </div>
+    
+    <div class="chat-quick-replies">
+      <!-- Quick replies injected by JS -->
+    </div>
+    
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" class="chat-input" data-i18n="chatPlaceholder" placeholder="Ask me anything...">
+      <button id="chat-send-btn" class="chat-send-btn" data-i18n-title="chatSend">➤</button>
+    </div>
+  </div>
+
+  <!-- Monument Info Modal -->
+  <div id="info-backdrop"></div>
+  <div id="info-panel">
+    <div class="info-panel-header">
+      <h2 class="info-panel-title">Monument Name</h2>
+      <button class="info-panel-close" id="info-panel-close">×</button>
+    </div>
+    <div class="info-panel-body">
+      Description goes here.
+    </div>
+    <div class="info-panel-meta">
+      <!-- Meta details injected by JS -->
+    </div>
+  </div>
+
+  <!-- Hotspot Info Popup -->
+  <div id="hotspot-info-popup" class="monument-info-popup">
+    <div class="monument-info-popup-close">×</div>
+    <div class="monument-info-popup-title">Title</div>
+    <div class="monument-info-popup-body">Info goes here.</div>
+  </div>
+
+  <!-- Help Overlay -->
+  <div id="help-overlay">
+    <div class="help-card">
+      <h2 data-i18n="help">Help & Navigation</h2>
+      <div class="help-instructions">
+        <div class="help-item">
+          <div class="help-item-icon">🖱️</div>
+          <div class="help-item-text"><strong>Look around:</strong> Click and drag to pan the camera 360 degrees.</div>
+        </div>
+        <div class="help-item">
+          <div class="help-item-icon">🔍</div>
+          <div class="help-item-text"><strong>Zoom:</strong> Use mouse scroll or pinch on touchscreens.</div>
+        </div>
+        <div class="help-item">
+          <div class="help-item-icon">⭕</div>
+          <div class="help-item-text"><strong>Hotspots:</strong> Click glowing rings in the scene to navigate or read information.</div>
+        </div>
+        <div class="help-item">
+          <div class="help-item-icon">⏳</div>
+          <div class="help-item-text"><strong>Time Travel:</strong> Toggle the switch on the left to see historical context.</div>
+        </div>
+      </div>
+      <button class="help-close-btn" data-i18n="close">Close</button>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts (Load order matters) -->
+  <script src="VR/js/monuments.js"></script>
+  <script src="VR/js/i18n.js"></script>
+  <script src="VR/js/voice-guide.js"></script>
+  <script src="VR/js/audio.js"></script>
+  <script src="VR/js/chatbot.js"></script>
+  <script src="VR/js/panorama.js"></script>
+  <script src="VR/js/hotspots.js"></script>
+  <script src="VR/js/gaze-narrator.js"></script>
+  <script src="assets/js/subscription.js"></script>
+  <script src="VR/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.VirasatSub && !window.VirasatSub.canAccessVR()) {
+        setTimeout(() => {
+          window.VirasatSub.showModal('vr');
+        }, 500);
+      }
+    });
+  </script>
+</body>
+</html>
+

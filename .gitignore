@@ -1,0 +1,60 @@
+# ─── Secrets ──────────────────────────────────────────────────────────
+.env
+.env.local
+*.local
+key.properties
+*.jks
+*.keystore
+
+# ─── Node ─────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.npm/
+dist/
+.vite/
+
+# ─── Flutter / Dart ───────────────────────────────────────────────────
+mobile/build/
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/.pub-cache/
+mobile/.pub/
+*.dill
+*.so
+
+# ─── Android ──────────────────────────────────────────────────────────
+mobile/android/.gradle/
+mobile/android/.kotlin/
+mobile/android/local.properties
+mobile/android/captures/
+mobile/android/app/release/
+mobile/android/app/debug/
+
+# ─── iOS ──────────────────────────────────────────────────────────────
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/ios/Flutter/Flutter.framework/
+mobile/ios/Flutter/Flutter.podspec
+mobile/ios/Flutter/Generated.xcconfig
+mobile/ios/Flutter/flutter_export_environment.sh
+
+# ─── IDE ──────────────────────────────────────────────────────────────
+.idea/
+*.iml
+*.iws
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# ─── Build output kept out of git (attach to GitHub Releases instead) ─
+release/
+*.apk
+*.aab
+
+# ─── OS cruft ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

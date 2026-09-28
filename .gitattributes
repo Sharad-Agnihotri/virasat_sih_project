@@ -1,0 +1,29 @@
+# Normalise line endings so the repo is identical on Windows, macOS and Linux.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF
+*.bat        text eol=crlf
+*.cmd        text eol=crlf
+
+# Never munge binaries
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.webp       binary
+*.gif        binary
+*.ico        binary
+*.mp3        binary
+*.wav        binary
+*.ttf        binary
+*.woff       binary
+*.woff2      binary
+*.apk        binary
+*.jar        binary
+*.so         binary
+*.keystore   binary
+*.jks        binary
+
+# Vendored + generated files: exclude from language stats and diffs
+web/VR/vendor/*      linguist-vendored
+web/assets/frames/*  linguist-generated
+archive/**           linguist-vendored

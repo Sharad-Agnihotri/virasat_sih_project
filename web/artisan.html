@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Artisan Studio — VIRASAT</title>
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="assets/js/subscription.js"></script>
+  <script src="assets/js/image-picker.js"></script>
+
+  <style>
+    :root {
+      --bg-canvas: #F7F4EE;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFEBE4;
+      --bg-dark: #1A1715;
+      
+      --text-main: #2C2623;
+      --text-muted: #6B625b;
+      --text-light: #F7F4EE;
+
+      --accent-copper: #B85D3B;
+      --accent-gold: #C9A84C;
+      --border-warm: #E2DACD;
+      
+      --shadow-soft: 0 10px 30px rgba(44, 38, 35, 0.06);
+      --shadow-lift: 0 15px 35px rgba(44, 38, 35, 0.12);
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    /* ── VINTAGE HERITAGE HEADER ── */
+    .top-header {
+      background: var(--bg-dark);
+      color: var(--text-light);
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--accent-gold);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: var(--text-light);
+    }
+
+    .brand-logo-disc {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #0f1420;
+      border: 1px solid var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo-disc img {
+      height: 22px;
+      width: auto;
+      mix-blend-mode: screen;
+      filter: brightness(1.3);
+    }
+
+    .brand-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .artisan-badge {
+      background: rgba(201, 168, 76, 0.2);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      color: var(--text-light);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-copper);
+      border-color: var(--accent-copper);
+      color: #fff;
+    }
+
+    /* ── MAIN STUDIO CONTAINER ── */
+    .studio-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 40px auto;
+      padding: 0 32px;
+      flex: 1;
+    }
+
+    /* Editorial Section Header */
+    .studio-header {
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border-warm);
+      padding-bottom: 24px;
+    }
+
+    .tag-line {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-copper);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .studio-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .studio-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 650px;
+    }
+
+    /* Studio Tabs: Post Craft vs My Listings */
+    .studio-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .tab-btn {
+      padding: 12px 24px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-warm);
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn.active {
+      background: var(--bg-dark);
+      color: var(--text-light);
+      border-color: var(--bg-dark);
+      box-shadow: var(--shadow-lift);
+    }
+
+    /* ── SPLIT WORKSPACE: FORM vs LIVE PREVIEW ── */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* Craft Listing Form Card */
+    .form-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-warm);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .form-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--bg-muted);
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-warm);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--accent-copper);
+      background: #fff;
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Sample Image Selector */
+    .image-picker-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-top: 8px;
+    }
+
+    .img-option {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .img-option.selected {
+      border-color: var(--accent-copper);
+      transform: scale(1.05);
+    }
+
+    .publish-submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent-copper);
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 25px rgba(184, 93, 59, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .publish-submit-btn:hover {
+      background: #a24b2b;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(184, 93, 59, 0.45);
+    }
+
+    /* ── LIVE PREVIEW CARD (Matches Marketplace UI) ── */
+    .preview-panel {
+      position: sticky;
+      top: 40px;
+    }
+
+    .preview-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent-gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .product-preview-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-warm);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lift);
+      transition: transform 0.3s ease;
+    }
+
+    .card-img-wrap {
+      width: 100%;
+      height: 240px;
+      position: relative;
+      overflow: hidden;
+      background: #e2e8f0;
+    }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .live-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(18, 23, 37, 0.85);
+      color: #fbbf24;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .card-region {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-copper);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-artisan {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .card-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--bg-muted);
+      padding-top: 14px;
+    }
+
+    .card-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .mock-buy-btn {
+      padding: 8px 16px;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ── INVENTORY TABLE VIEW ── */
+    .inventory-section {
+      display: none;
+    }
+
+    .inventory-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-warm);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .inventory-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .inventory-table th, .inventory-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-warm);
+      font-size: 13.5px;
+    }
+
+    .inventory-table th {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      background: var(--bg-canvas);
+    }
+
+    .status-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      background: rgba(34, 197, 94, 0.12);
+      color: #16a34a;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Toast Notification */
+    .toast-msg {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      border: 1px solid var(--accent-gold);
+      padding: 14px 24px;
+      border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 9999;
+    }
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+
+<body>
+
+  <!-- Top Vintage Header -->
+  <header class="top-header">
+    <a href="marketplace.html" class="brand-group">
+      <div class="brand-logo-disc">
+        <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo">
+      </div>
+      <div>
+        <span class="brand-name">Virasat</span>
+      </div>
+      <span class="artisan-badge">Master Artisan Portal</span>
+    </a>
+
+    <div class="nav-actions">
+      <a href="marketplace.html" class="nav-btn">
+        <span>🛍️ View Live Marketplace</span>
+      </a>
+      <button onclick="artisanLogout()" class="nav-btn" style="background:none; cursor:pointer;">
+        <span>🚪 Switch Account / Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Studio Container -->
+  <main class="studio-container">
+
+    <!-- Studio Header -->
+    <div class="studio-header">
+      <span class="tag-line">Direct Craftsmen Platform</span>
+      <h1 class="studio-title">Master Artisan Publishing Studio</h1>
+      <p class="studio-desc">
+        List your handcrafted creations directly for heritage travelers around the world. Products published here automatically sync in real-time to the main Virasat Marketplace catalog.
+      </p>
+    </div>
+
+    <!-- Workspace Tabs -->
+    <div class="studio-tabs">
+      <button class="tab-btn active" id="tabPostBtn" onclick="switchStudioTab('post')">
+        <span>✨ List New Craft Product</span>
+      </button>
+      <button class="tab-btn" id="tabInventoryBtn" onclick="switchStudioTab('inventory')">
+        <span>📦 My Published Craft Catalog (<span id="inventoryCountBadge">0</span>)</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: POST NEW PRODUCT FORM & LIVE PREVIEW -->
+    <div class="workspace-grid" id="panePost">
+
+      <!-- Form Card -->
+      <div class="form-card">
+        <h2 class="form-section-title">Craft Product Specification</h2>
+
+        <form id="artisanProductForm" onsubmit="handleProductPublish(event)">
+          
+          <!-- Product Title -->
+          <div class="form-group">
+            <label class="form-label" for="inpTitle">Craft Product Title</label>
+            <input type="text" class="form-input" id="inpTitle" placeholder="e.g. Handmade Jaipur Blue Pottery Lotus Vase" required oninput="updateLivePreview()">
+          </div>
+
+          <!-- Price & Region -->
+          <div class="two-col-grid">
+            <div class="form-group">
+              <label class="form-label" for="inpPrice">Price (₹)</label>
+              <input type="number" class="form-input" id="inpPrice" placeholder="3200" required oninput="updateLivePreview()">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="inpRegion">Craft Origin Region</label>
+              <input type="text" class="form-input" id="inpRegion" placeholder="e.g. Jaipur, Rajasthan" required oninput="updateLivePreview()">
+            </div>
+          </div>
+
+          <!-- Artisan / Workshop Name -->
+          <div class="form-group">
+            <label class="form-label" for="inpArtisan">Master Craftsman / Workshop Name</label>
+            <input type="text" class="form-input" id="inpArtisan" placeholder="e.g. Master Ustad Rahim Artisan Studio" required oninput="updateLivePreview()">
+          </div>
+
+          <!-- Craft Category & GI Tag Status -->
+          <div class="two-col-grid">
+            <div class="form-group">
+              <label class="form-label" for="selectCategory">Craft Discipline</label>
+              <select class="form-select" id="selectCategory" onchange="updateLivePreview()">
+                <option value="Pottery">Ceramics & Blue Pottery</option>
+                <option value="Handloom" selected>Handloom & Silk Weaving</option>
+                <option value="Metalwork">Metalwork & Bidricraft</option>
+                <option value="Painting">Heritage Miniature Painting</option>
+                <option value="Woodcraft">Carved Wood & Toys</option>
+                <option value="Embroidery">Heritage Embroidery (Zardozi/Ajrakh)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="selectGI">Geographical Indication (GI Tag)</label>
+              <select class="form-select" id="selectGI">
+                <option value="Certified GI Tagged" selected>Verified GI Tagged Item</option>
+                <option value="Authentic Heritage Craft">Ancestral Family Technique</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Craft Origin Story & Materials -->
+          <div class="form-group">
+            <label class="form-label" for="inpStory">Craft Technique & Heritage Story</label>
+            <textarea class="form-textarea" id="inpStory" placeholder="Describe the materials, ancestral techniques, wood-fired kilns, or handloom looms used to create this masterpiece..." required></textarea>
+          </div>
+
+          <!-- Product Image URL Selector -->
+          <div class="form-group">
+            <label class="form-label">Product Photo</label>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
+              <button type="button" onclick="document.getElementById('inpImageFile').click()"
+                style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; border:1px dashed var(--accent-terracotta, #9E4733); background:#fff7f3; color:var(--accent-terracotta, #9E4733); font-family:inherit; font-size:0.86rem; font-weight:800; cursor:pointer;">
+                📁 Browse from device
+              </button>
+              <input type="file" id="inpImageFile" accept="image/*" style="display:none;">
+              <span id="inpImageFileNote" style="font-size:0.76rem; color:var(--text-muted, #6b655e);">Your own photo of the piece · JPG, PNG or WebP</span>
+            </div>
+            <label class="form-label" style="margin-top:6px;">…or a sample photo / image URL</label>
+            <input type="text" class="form-input" id="inpImage" placeholder="https://..." oninput="updateLivePreview()">
+            
+            <div class="image-picker-row">
+              <img loading="lazy" decoding="async" src="assets/images/remote/Blue_Pottery_Jaipur_Collection_e28d5d.jpg" class="img-option selected" onclick="selectSampleImage(this)">
+              <img loading="lazy" decoding="async" src="assets/images/remote/_Sari__from_Varanasi__north-central_India__silk_and_gold-wrapped_silk_yarn_with__9b406e.jpg" class="img-option" onclick="selectSampleImage(this)">
+              <img loading="lazy" decoding="async" src="assets/images/remote/Woman_doing_Block_Printing_at_Bagru_village__Jaipur__India_3bffd0.jpg" class="img-option" onclick="selectSampleImage(this)">
+              <img loading="lazy" decoding="async" src="assets/images/remote/Shawl_from_India__Rabari_culture__Honolulu_Museum_of_Art_6794.1_34b4a8.JPG" class="img-option" onclick="selectSampleImage(this)">
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="publish-submit-btn">
+            <span>✨ Publish Live to Marketplace</span>
+          </button>
+
+        </form>
+      </div>
+
+      <!-- Live Preview Panel -->
+      <div class="preview-panel">
+        <div class="preview-label">
+          <span>👁️ Real-Time Marketplace Card Preview</span>
+        </div>
+
+        <div class="product-preview-card">
+          <div class="card-img-wrap">
+            <span class="live-badge">🔥 Artisan Direct</span>
+            <img loading="lazy" decoding="async" id="prevImg" src="assets/images/remote/Blue_Pottery_Jaipur_Collection_e28d5d.jpg" alt="Preview Image">
+          </div>
+
+          <div class="card-body">
+            <div class="card-region" id="prevRegion">Jaipur, Rajasthan</div>
+            <h3 class="card-title" id="prevTitle">Handmade Jaipur Blue Pottery Lotus Vase</h3>
+            <div class="card-artisan" id="prevArtisan">Master Craftsman Studio</div>
+
+            <div class="card-price-row">
+              <div class="card-price" id="prevPrice">₹3,200</div>
+              <div class="mock-buy-btn">View Craft</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: INVENTORY TABLE -->
+    <div class="inventory-section" id="paneInventory">
+      <div class="inventory-card">
+        <h2 class="form-section-title">Published Craft Catalog</h2>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:16px;">
+          Products listed here are instantly accessible to tourists on the Marketplace page.
+        </p>
+
+        <table class="inventory-table">
+          <thead>
+            <tr>
+              <th>Craft Image</th>
+              <th>Product Title</th>
+              <th>Origin Region</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody">
+            <!-- Dynamic items rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast-msg" id="toastMsg">
+    <span>✨</span>
+    <span id="toastText">Product Published Live to Marketplace!</span>
+  </div>
+
+  <script>
+    const STORAGE_ARTISAN_KEY = 'virasat_artisan_products';
+    let selectedImageSrc = 'assets/images/remote/Blue_Pottery_Jaipur_Collection_e28d5d.jpg';
+
+    function getArtisanProducts() {
+      return JSON.parse(localStorage.getItem(STORAGE_ARTISAN_KEY) || '[]');
+    }
+
+    function saveArtisanProducts(arr) {
+      localStorage.setItem(STORAGE_ARTISAN_KEY, JSON.stringify(arr));
+      renderInventoryTable();
+    }
+
+    /* ── Live Preview Sync ── */
+    function updateLivePreview() {
+      const title = document.getElementById('inpTitle').value.trim() || 'Handcrafted Heritage Masterpiece';
+      const price = parseInt(document.getElementById('inpPrice').value) || 3200;
+      const region = document.getElementById('inpRegion').value.trim() || 'Rajasthan, India';
+      const artisan = document.getElementById('inpArtisan').value.trim() || 'Master Craftsman Studio';
+      const customImg = document.getElementById('inpImage').value.trim();
+
+      const finalImg = customImg || selectedImageSrc;
+
+      document.getElementById('prevTitle').textContent = title;
+      document.getElementById('prevPrice').textContent = `₹${price.toLocaleString('en-IN')}`;
+      document.getElementById('prevRegion').textContent = region;
+      document.getElementById('prevArtisan').textContent = artisan;
+      document.getElementById('prevImg').src = finalImg;
+    }
+
+    function selectSampleImage(el) {
+      document.querySelectorAll('.img-option').forEach(img => img.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedImageSrc = el.src;
+      document.getElementById('inpImage').value = '';
+      const note = document.getElementById('inpImageFileNote');
+      if (note) note.textContent = 'Your own photo of the piece · JPG, PNG or WebP';
+      updateLivePreview();
+    }
+
+    /* Browse from device: the resized photo goes into the same field the URL
+       option uses, so preview and publishing need no special case. */
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('inpImageFile');
+      if (!input || !window.VirasatImagePicker) return;
+      VirasatImagePicker.attach({
+        input,
+        maxEdge: 1200,
+        quality: 0.85,
+        onStart: () => { const n = document.getElementById('inpImageFileNote'); if (n) n.textContent = 'Preparing photo…'; },
+        onImage: (dataUrl, file) => {
+          document.getElementById('inpImage').value = dataUrl;
+          document.querySelectorAll('.img-option').forEach(img => img.classList.remove('selected'));
+          const n = document.getElementById('inpImageFileNote');
+          if (n) n.textContent = `✅ ${file.name} · ${Math.round(dataUrl.length * 0.75 / 1024)} KB`;
+          updateLivePreview();
+        },
+        onError: msg => alert(msg)
+      });
+    });
+
+    /* ── Form Submission ── */
+    function handleFormSubmit(e) {
+      // prevent default if triggered
+    }
+
+    function handleProductPublish(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('inpTitle').value.trim();
+      const price = parseInt(document.getElementById('inpPrice').value) || 2500;
+      const region = document.getElementById('inpRegion').value.trim();
+      const artisan = document.getElementById('inpArtisan').value.trim();
+      const category = document.getElementById('selectCategory').value;
+      const giStatus = document.getElementById('selectGI').value;
+      const story = document.getElementById('inpStory').value.trim();
+      const customImg = document.getElementById('inpImage').value.trim();
+
+      const newProduct = {
+        id: 'art-prod-' + Date.now(),
+        name: title,
+        price: price,
+        originalPrice: Math.round(price * 1.25),
+        region: region,
+        cityId: 'jaipur',
+        artisanName: artisan,
+        giStatus: giStatus,
+        category: category,
+        rating: 5.0,
+        reviewsCount: 1,
+        image: customImg || selectedImageSrc,
+        originStory: story,
+        isArtisanPosted: true,
+        postedDate: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+      };
+
+      const existing = getArtisanProducts();
+      const isSubscribed = localStorage.getItem('virasat_artisan_subscribed') === 'true';
+
+      if (existing.length >= 3 && !isSubscribed) {
+        showArtisanPaymentModal();
+        return;
+      }
+
+      existing.unshift(newProduct);
+      saveArtisanProducts(existing);
+
+      showToast(`" ${title} " published live to Marketplace!`);
+
+      // Reset form
+      document.getElementById('artisanProductForm').reset();
+      updateLivePreview();
+
+      // Switch to Inventory View to see item
+      switchStudioTab('inventory');
+    }
+
+    /* ── Studio Tabs Switcher ── */
+    function switchStudioTab(tab) {
+      document.getElementById('tabPostBtn').classList.toggle('active', tab === 'post');
+      document.getElementById('tabInventoryBtn').classList.toggle('active', tab === 'inventory');
+
+      document.getElementById('panePost').style.display = tab === 'post' ? 'grid' : 'none';
+      document.getElementById('paneInventory').style.display = tab === 'inventory' ? 'block' : 'none';
+    }
+
+    /* ── Render Inventory Table ── */
+    function renderInventoryTable() {
+      const items = getArtisanProducts();
+      const tbody = document.getElementById('inventoryTableBody');
+      document.getElementById('inventoryCountBadge').textContent = items.length;
+
+      if (items.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding:30px; color:var(--text-muted);">
+              No artisan products published yet. Click "List New Craft Product" to start selling directly!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = items.map((item, idx) => `
+        <tr>
+          <td>
+            <img loading="lazy" decoding="async" src="${item.image}" style="width:48px; height:48px; object-fit:cover; border-radius:8px;">
+          </td>
+          <td>
+            <strong>${item.name}</strong><br>
+            <span style="font-size:11px; color:var(--text-muted);">${item.artisanName}</span>
+          </td>
+          <td>${item.region}</td>
+          <td><strong>₹${item.price.toLocaleString('en-IN')}</strong></td>
+          <td><span class="status-active">● Live on Marketplace</span></td>
+          <td>
+            <button onclick="deleteProduct(${idx})" style="background:none; border:1px solid #ef4444; color:#ef4444; padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer;">
+              Remove
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function deleteProduct(index) {
+      if (confirm("Are you sure you want to remove this product from the Marketplace?")) {
+        const items = getArtisanProducts();
+        items.splice(index, 1);
+        saveArtisanProducts(items);
+        showToast("Product removed from catalog.");
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastMsg');
+      document.getElementById('toastText').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    /* ── ARTISAN MASTER MERCHANT PAYMENT MODAL (₹299/mo) ── */
+    function showArtisanPaymentModal() {
+      let overlay = document.getElementById('artisanPayOverlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'artisanPayOverlay';
+        overlay.style.cssText = `
+          position: fixed; inset: 0; z-index: 99999;
+          background: rgba(14, 12, 10, 0.88);
+          backdrop-filter: blur(20px);
+          display: flex; align-items: center; justify-content: center;
+          padding: 20px; opacity: 0; transition: opacity 0.3s ease;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+        `;
+        document.body.appendChild(overlay);
+      }
+
+      overlay.innerHTML = `
+        <div style="background: linear-gradient(145deg, #1C1917, #12100E); border: 1px solid #C9A84C; border-radius: 28px; max-width: 500px; width: 100%; padding: 36px 32px; box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 40px rgba(201, 168, 76, 0.15); position: relative; color: #F7F4EE;">
+          <button onclick="document.getElementById('artisanPayOverlay').style.opacity=0; setTimeout(()=>document.getElementById('artisanPayOverlay').remove(),300);" style="position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#aaa; font-size:16px; cursor:pointer;">✕</button>
+
+          <div style="display:inline-flex; align-items:center; gap:8px; padding:4px 14px; background:rgba(201, 168, 76, 0.15); border:1px solid #C9A84C; border-radius:999px; font-size:11px; font-weight:700; color:#C9A84C; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:14px;">
+            📜 Master Artisan Guild Pass
+          </div>
+
+          <h2 style="font-family:'Cormorant Garamond', serif; font-size:32px; font-weight:700; color:#FFF; margin-bottom:8px; line-height:1.2;">
+            Unlock Unlimited Craft Listings
+          </h2>
+          
+          <p style="font-size:14px; color:#A8A29E; margin-bottom:24px; line-height:1.5;">
+            You have listed your <strong style="color:#C9A84C;">3 Free Craft Products</strong>. Upgrade to the Master Merchant Pass to publish unlimited handcrafted items live to travelers across India.
+          </p>
+
+          <!-- Pricing Card -->
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(201, 168, 76, 0.4); border-radius:20px; padding:20px; margin-bottom:24px; text-align:center;">
+            <div style="font-size:12px; color:#A8A29E; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Master Merchant Plan</div>
+            <div style="font-family:'Outfit', sans-serif; font-size:36px; font-weight:800; color:#FFF;">₹299 <span style="font-size:14px; font-weight:400; color:#A8A29E;">/ month</span></div>
+            <div style="font-size:11px; color:#B85D3B; font-weight:700; margin-top:4px;">✨ 0% Platform Commission • 100% Direct Payouts</div>
+          </div>
+
+          <!-- Feature Perks -->
+          <div style="background:rgba(0,0,0,0.3); border-radius:16px; padding:16px; margin-bottom:24px; border:1px solid rgba(255,255,255,0.05);">
+            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:#E7E5E4; margin-bottom:8px;">
+              <span style="color:#C9A84C; font-weight:bold;">✓</span> <span><strong>Unlimited Craft Listings</strong> on Virasat Marketplace</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:#E7E5E4; margin-bottom:8px;">
+              <span style="color:#C9A84C; font-weight:bold;">✓</span> <span><strong>Verified GI-Tagged Artisan Badge</strong> on product cards</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:#E7E5E4;">
+              <span style="color:#C9A84C; font-weight:bold;">✓</span> <span><strong>Priority Placement</strong> at the top of tourist search results</span>
+            </div>
+          </div>
+
+          <button id="artisanPayBtn" onclick="triggerArtisanPayment()" style="width:100%; padding:16px; border:none; border-radius:14px; background:linear-gradient(135deg, #B85D3B, #9E4733); color:#FFF; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer; box-shadow:0 10px 30px rgba(184, 93, 59, 0.4); transition:all 0.2s ease;">
+            Subscribe for ₹299 / month →
+          </button>
+        </div>
+      `;
+
+      setTimeout(() => overlay.style.opacity = 1, 20);
+    }
+
+    window.triggerArtisanPayment = function () {
+      const btn = document.getElementById('artisanPayBtn');
+      btn.disabled = true;
+      btn.textContent = 'Activating Master Merchant Pass...';
+
+      setTimeout(() => {
+        localStorage.setItem('virasat_artisan_subscribed', 'true');
+        const overlay = document.getElementById('artisanPayOverlay');
+        if (overlay) {
+          overlay.innerHTML = `
+            <div style="background:#1C1917; border:1px solid #C9A84C; border-radius:24px; padding:36px; text-align:center; max-width:420px; width:100%; color:#FFF;">
+              <div style="font-size:48px; margin-bottom:12px;">📜</div>
+              <h3 style="font-family:'Cormorant Garamond', serif; font-size:26px; color:#FFF; margin-bottom:8px;">Welcome to Master Guild!</h3>
+              <p style="font-size:13.5px; color:#A8A29E; margin-bottom:20px;">Your Master Merchant Pass is active. You can now publish unlimited craft products to travelers across India.</p>
+              <button onclick="document.getElementById('artisanPayOverlay').remove(); window.location.reload();" style="width:100%; padding:14px; background:#B85D3B; color:#FFF; border:none; border-radius:12px; font-weight:700; cursor:pointer;">Continue to Studio</button>
+            </div>
+          `;
+        }
+      }, 1000);
+    };
+
+    window.artisanLogout = function () {
+      localStorage.removeItem('virasat_user_logged_in');
+      localStorage.removeItem('virasat_user_role');
+      window.location.href = 'login.html';
+    };
+
+    // Initialize Inventory on Load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderInventoryTable();
+    });
+  </script>
+<script src="assets/js/guide.js" defer></script>
+</body>
+
+</html>
+

@@ -1,0 +1,3945 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virasat Community — Cultural Social Feed</title>
+
+  <!-- Google Fonts: Cormorant Garamond, Plus Jakarta Sans, Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <script src="assets/js/subscription.js"></script>
+  <script src="assets/js/image-picker.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #F7F4EE;
+      --bg-surface: #EFE9DE;
+      --bg-card: #FFFFFF;
+      --bg-dark: #1C1917;
+
+      --text-main: #1C1917;
+      --text-muted: #665F55;
+      --text-light: #948C80;
+      --text-inverse: #FDFBF7;
+
+      --accent-terracotta: #9E4733;
+      --accent-terracotta-hover: #823827;
+      --accent-terracotta-soft: rgba(158, 71, 51, 0.08);
+      --accent-gold: #B5882D;
+      --accent-gold-soft: rgba(181, 136, 45, 0.12);
+      --accent-sage: #2D6A4F;
+      --accent-sage-soft: rgba(45, 106, 79, 0.1);
+
+      --border-light: #E7E0D3;
+      --border-medium: #D8CEBD;
+
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-display: 'Outfit', sans-serif;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 3px rgba(28, 25, 23, 0.04), 0 1px 2px rgba(28, 25, 23, 0.02);
+      --shadow-md: 0 4px 16px rgba(28, 25, 23, 0.06);
+      --shadow-lg: 0 14px 34px rgba(28, 25, 23, 0.09);
+      --shadow-modal: 0 24px 60px rgba(18, 16, 14, 0.22);
+
+      --transition-fast: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-smooth: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── GLOBAL NAVBAR ── */
+    .global-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 120;
+      background: rgba(247, 244, 238, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-light);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-crest {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--border-medium);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-surface);
+    }
+
+    .logo-crest img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .logo-titles h1 {
+      font-family: var(--font-serif);
+      font-size: 1.38rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--text-main);
+    }
+
+    .logo-titles span {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-terracotta);
+      display: block;
+      font-weight: 700;
+    }
+
+    .global-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .global-nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: var(--transition-fast);
+      position: relative;
+      padding: 6px 2px;
+    }
+
+    .global-nav-links a:hover,
+    .global-nav-links a.active {
+      color: var(--accent-terracotta);
+    }
+
+    .global-nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent-terracotta);
+      border-radius: var(--radius-full);
+    }
+
+    .nav-user-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-search-bar {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-search-bar input {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-full);
+      padding: 7px 14px 7px 34px;
+      font-size: 0.82rem;
+      font-family: var(--font-sans);
+      width: 210px;
+      transition: var(--transition-smooth);
+      outline: none;
+    }
+
+    .nav-search-bar input:focus {
+      width: 260px;
+      border-color: var(--accent-terracotta);
+      box-shadow: 0 0 0 3px var(--accent-terracotta-soft);
+    }
+
+    .nav-search-bar svg {
+      position: absolute;
+      left: 11px;
+      width: 15px;
+      height: 15px;
+      fill: var(--text-light);
+      pointer-events: none;
+    }
+
+    .user-avatar-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent-gold);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+
+    .user-avatar-btn:hover {
+      transform: scale(1.06);
+    }
+
+    .user-avatar-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── 3-COLUMN SOCIAL LAYOUT ── */
+    .social-app-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 24px 28px 60px;
+      display: grid;
+      grid-template-columns: 240px 1fr 310px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── LEFT SIDEBAR ── */
+    .left-sidebar {
+      position: sticky;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar-menu-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: var(--transition-fast);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+
+    .sidebar-nav-item svg {
+      width: 19px;
+      height: 19px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    .sidebar-nav-item:hover {
+      background: var(--bg-surface);
+      color: var(--text-main);
+    }
+
+    .sidebar-nav-item.active {
+      background: var(--accent-terracotta-soft);
+      color: var(--accent-terracotta);
+    }
+
+    .badge-count {
+      margin-left: auto;
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .sidebar-nav-item.active .badge-count {
+      background: var(--accent-terracotta);
+      color: #FFF;
+    }
+
+    .btn-create-post-primary {
+      width: 100%;
+      background: var(--accent-terracotta);
+      color: #FFF;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 12px 20px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      font-family: var(--font-sans);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(158, 71, 51, 0.28);
+      transition: var(--transition-smooth);
+    }
+
+    .btn-create-post-primary:hover {
+      background: var(--accent-terracotta-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(158, 71, 51, 0.38);
+    }
+
+    .btn-create-post-primary svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    /* Communities / Topics list */
+    .sidebar-topics-box {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-topics-box h4 {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .topic-pill-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .topic-pill-link:hover {
+      background: var(--bg-surface);
+      color: var(--accent-terracotta);
+    }
+
+    .topic-pill-link span.symbol {
+      color: var(--accent-gold);
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    /* Mini user profile chip */
+    .sidebar-user-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .sidebar-user-chip:hover {
+      border-color: var(--border-medium);
+      background: #FFF;
+    }
+
+    .sidebar-user-chip img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .user-chip-texts h5 {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .user-chip-texts span {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    /* ── CENTER COLUMN: MAIN SOCIAL FEED ── */
+    .center-feed-column {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    /* Compact Community Header */
+    .feed-header-compact {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .feed-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .feed-header-titles h2 {
+      font-family: var(--font-serif);
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .feed-header-titles p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Feed Filter Tabs */
+    .feed-tabs-row {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .feed-tabs-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .feed-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .feed-tab-btn:hover {
+      background: var(--bg-surface);
+      color: var(--text-main);
+    }
+
+    .feed-tab-btn.active {
+      background: var(--text-main);
+      color: #FFF;
+    }
+
+    /* Stories Tray (Temporary Social Updates) */
+    .stories-tray-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .stories-tray-card::-webkit-scrollbar {
+      display: none;
+    }
+
+    .story-bubble-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+      text-align: center;
+      width: 72px;
+    }
+
+    .story-ring-wrap {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      padding: 2px;
+      background: linear-gradient(135deg, var(--accent-terracotta) 0%, var(--accent-gold) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: var(--transition-fast);
+    }
+
+    .story-ring-wrap.your-story {
+      background: var(--border-medium);
+    }
+
+    .story-bubble-item:hover .story-ring-wrap {
+      transform: scale(1.05);
+    }
+
+    .story-ring-wrap img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #FFF;
+    }
+
+    .add-story-plus {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-terracotta);
+      color: #FFF;
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #FFF;
+    }
+
+    .story-username-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-main);
+      max-width: 70px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Inline Social Composer */
+    .inline-composer-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .composer-input-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .composer-user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border-medium);
+      flex-shrink: 0;
+    }
+
+    .composer-trigger-btn {
+      flex-grow: 1;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-full);
+      padding: 10px 18px;
+      font-size: 0.88rem;
+      color: var(--text-light);
+      font-family: var(--font-sans);
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .composer-trigger-btn:hover {
+      background: #FFF;
+      border-color: var(--accent-terracotta);
+      color: var(--text-muted);
+    }
+
+    .composer-actions-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .composer-quick-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .composer-tool-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .composer-tool-btn:hover {
+      background: var(--bg-surface);
+      color: var(--accent-terracotta);
+    }
+
+    .composer-tool-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .btn-quick-post {
+      background: var(--accent-terracotta);
+      color: #FFF;
+      border: none;
+      padding: 7px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .btn-quick-post:hover {
+      background: var(--accent-terracotta-hover);
+    }
+
+    /* ── POST CARDS ── */
+    .post-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-smooth);
+    }
+
+    .post-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-medium);
+    }
+
+    .post-header {
+      padding: 16px 20px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .post-author-group {
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .post-author-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border-medium);
+      flex-shrink: 0;
+    }
+
+    .post-author-meta h4 {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      line-height: 1.2;
+    }
+
+    .verified-icon {
+      width: 14px;
+      height: 14px;
+      fill: var(--accent-gold);
+    }
+
+    .post-location-time {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .post-location-time a {
+      color: var(--accent-terracotta);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .post-location-time a:hover {
+      text-decoration: underline;
+    }
+
+    .post-more-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+      transition: var(--transition-fast);
+    }
+
+    .post-more-btn:hover {
+      color: var(--text-main);
+      background: var(--bg-surface);
+    }
+
+    /* Post Text Content */
+    .post-content-body {
+      padding: 0 20px 14px;
+      font-size: 0.92rem;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .post-content-body p {
+      margin-bottom: 8px;
+    }
+
+    .post-cultural-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .social-tag {
+      font-size: 0.78rem;
+      color: var(--accent-terracotta);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .social-tag:hover {
+      text-decoration: underline;
+    }
+
+    /* Attached Context Pill (Virasat Entity Link) */
+    .entity-context-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 10px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .entity-context-chip:hover {
+      background: #FFF;
+      border-color: var(--accent-gold);
+      color: var(--text-main);
+    }
+
+    /* ── POST MEDIA LAYOUTS ── */
+    .post-media-wrap {
+      position: relative;
+      background: #181614;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* Single Image */
+    .post-media-wrap.single-img {
+      max-height: 480px;
+    }
+
+    .post-media-wrap.single-img img {
+      width: 100%;
+      height: 100%;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+    }
+
+    /* 2-Column Grid */
+    .post-media-wrap.two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      max-height: 380px;
+    }
+
+    .post-media-wrap.two-col-grid img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    /* 3-Image Collage */
+    .post-media-wrap.three-img-collage {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-rows: 190px 190px;
+      gap: 2px;
+    }
+
+    .post-media-wrap.three-img-collage img:first-child {
+      grid-row: span 2;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .post-media-wrap.three-img-collage img:nth-child(2),
+    .post-media-wrap.three-img-collage img:nth-child(3) {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    /* Video Post */
+    .post-video-container {
+      position: relative;
+      background: #000;
+      max-height: 460px;
+    }
+
+    .post-video-container video {
+      width: 100%;
+      max-height: 460px;
+      display: block;
+    }
+
+    .video-overlay-play-btn {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+    }
+
+    .video-overlay-play-btn svg {
+      width: 54px;
+      height: 54px;
+      fill: #FFF;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+      transition: var(--transition-fast);
+    }
+
+    .video-overlay-play-btn:hover svg {
+      transform: scale(1.1);
+    }
+
+    /* Interactive Poll Card */
+    .poll-box-container {
+      background: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      margin: 4px 20px 14px;
+      border: 1px solid var(--border-medium);
+    }
+
+    .poll-question-title {
+      font-weight: 700;
+      font-size: 0.94rem;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .poll-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .poll-option-btn {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      text-align: left;
+      font-family: var(--font-sans);
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition-fast);
+    }
+
+    .poll-option-btn:hover {
+      border-color: var(--accent-terracotta);
+    }
+
+    .poll-progress-bar {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background: var(--accent-terracotta-soft);
+      border-right: 2px solid var(--accent-terracotta);
+      z-index: 1;
+      transition: width 0.4s ease;
+    }
+
+    .poll-option-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    .poll-percentage {
+      position: relative;
+      z-index: 2;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-terracotta);
+    }
+
+    .poll-meta-foot {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    /* Post Action Bar */
+    .post-actions-bar {
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .post-actions-left {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .action-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+    }
+
+    .action-icon-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .action-icon-btn:hover {
+      color: var(--accent-terracotta);
+    }
+
+    .action-icon-btn.liked {
+      color: var(--accent-terracotta);
+    }
+
+    .action-icon-btn.liked svg {
+      fill: var(--accent-terracotta);
+      animation: heartPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes heartPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+
+    .action-icon-btn.saved {
+      color: var(--accent-gold);
+    }
+
+    .action-icon-btn.saved svg {
+      fill: var(--accent-gold);
+    }
+
+    /* Long-form Read More strip */
+    .longform-read-strip {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-light);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+    }
+
+    .btn-read-deep-story {
+      color: var(--accent-terracotta);
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .btn-read-deep-story:hover {
+      text-decoration: underline;
+    }
+
+    /* Post Comments Drawer */
+    .post-comments-drawer {
+      border-top: 1px solid var(--border-light);
+      padding: 16px 20px;
+      background: #FAF8F5;
+      display: none;
+    }
+
+    .post-comments-drawer.open {
+      display: block;
+    }
+
+    .comments-sort-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.76rem;
+      color: var(--text-light);
+    }
+
+    .comments-sort-row select {
+      background: transparent;
+      border: none;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .comment-item-block {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .comment-bubble-content {
+      background: #FFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      flex-grow: 1;
+    }
+
+    .comment-author-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .comment-time {
+      font-size: 0.7rem;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+
+    .comment-text {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      line-height: 1.45;
+    }
+
+    .comment-actions-micro {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+      font-size: 0.72rem;
+      color: var(--text-light);
+      cursor: pointer;
+    }
+
+    .comment-actions-micro span:hover {
+      color: var(--accent-terracotta);
+    }
+
+    .comment-input-inline-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .comment-input-inline-form input {
+      flex-grow: 1;
+      padding: 9px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-medium);
+      background: #FFF;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      outline: none;
+    }
+
+    .comment-input-inline-form input:focus {
+      border-color: var(--accent-terracotta);
+    }
+
+    .comment-input-inline-form button {
+      background: var(--accent-terracotta);
+      color: #FFF;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ── RIGHT SIDEBAR: CONTEXTUAL DISCOVERY ── */
+    .right-sidebar {
+      position: sticky;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .discovery-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .discovery-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .discovery-card-header h4 {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .trending-topic-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .trending-topic-row:last-child {
+      border-bottom: none;
+    }
+
+    .trending-topic-row:hover .topic-name {
+      color: var(--accent-terracotta);
+    }
+
+    .topic-name {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .topic-posts-count {
+      font-size: 0.74rem;
+      color: var(--text-light);
+    }
+
+    /* People to follow */
+    .follow-suggestion-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .follow-suggestion-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .suggest-user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border-medium);
+      cursor: pointer;
+    }
+
+    .suggest-user-texts {
+      flex-grow: 1;
+      cursor: pointer;
+    }
+
+    .suggest-user-texts h5 {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .suggest-user-texts span {
+      font-size: 0.72rem;
+      color: var(--text-light);
+      display: block;
+    }
+
+    .btn-follow-small {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      color: var(--text-main);
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .btn-follow-small:hover {
+      background: var(--accent-terracotta);
+      border-color: var(--accent-terracotta);
+      color: #FFF;
+    }
+
+    .btn-follow-small.following {
+      background: var(--bg-dark);
+      border-color: var(--bg-dark);
+      color: #FFF;
+    }
+
+    /* ── MODALS ── */
+    .social-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 16, 14, 0.72);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .social-modal-overlay.active {
+      display: flex;
+    }
+
+    /* Composer Modal Box */
+    .composer-modal-box {
+      background: #FFF;
+      width: 100%;
+      max-width: 580px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-medium);
+      box-shadow: var(--shadow-modal);
+      overflow: hidden;
+      animation: modalScaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      /* Header and footer stay put; only the body scrolls. Without this a
+         tall composer (alert + photo) pushed the Post button off-screen. */
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 40px);
+      max-height: calc(100dvh - 40px);
+    }
+    .composer-modal-header, .composer-modal-footer { flex-shrink: 0; }
+
+    @keyframes modalScaleUp {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .composer-modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .composer-modal-header h3 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .close-modal-x {
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
+      color: var(--text-light);
+      cursor: pointer;
+    }
+
+    .close-modal-x:hover {
+      color: var(--text-main);
+    }
+
+    .composer-modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1 1 auto;
+      min-height: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-author-identity {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .modal-author-identity img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .privacy-tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .modal-textarea-input {
+      width: 100%;
+      border: none;
+      resize: none;
+      font-family: var(--font-sans);
+      font-size: 0.94rem;
+      color: var(--text-main);
+      outline: none;
+      min-height: 110px;
+    }
+
+    .modal-textarea-input::placeholder {
+      color: var(--text-light);
+    }
+
+    /* Modal attachments inputs */
+    .composer-addons-panel {
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      background: var(--bg-primary);
+      margin-top: 10px;
+      display: none;
+    }
+
+    .composer-addons-panel.open {
+      display: block;
+    }
+
+    .addon-input-field {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-medium);
+      background: #FFF;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      outline: none;
+      margin-bottom: 8px;
+    }
+
+    .browse-image-row {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 6px 0 10px;
+    }
+    .browse-image-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 10px;
+      border: 1px dashed var(--accent-terracotta); background: #fff7f3; color: var(--accent-terracotta);
+      font-family: inherit; font-size: 0.84rem; font-weight: 800; cursor: pointer; transition: all .15s ease;
+    }
+    .browse-image-btn:hover { background: var(--accent-terracotta); color: #fff; }
+    .browse-image-note { font-size: 0.74rem; color: var(--text-muted); }
+    .browse-image-preview {
+      display: none; position: relative; margin-top: 8px; border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--border-light); background: var(--bg-surface); max-height: 220px;
+    }
+    .browse-image-preview.show { display: block; }
+    .browse-image-preview img { width: 100%; max-height: 220px; object-fit: cover; display: block; }
+    .browse-image-preview .remove-browse-img {
+      position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 50%; border: none;
+      background: rgba(0,0,0,.6); color: #fff; font-size: 16px; cursor: pointer; line-height: 30px; text-align: center;
+    }
+    .preset-images-picker {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .preset-thumb {
+      height: 55px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .preset-thumb.selected {
+      border-color: var(--accent-terracotta);
+    }
+
+    .preset-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── Post type switch (Post / Travel Alert) ── */
+    .composer-type-switch {
+      display: flex; gap: 6px; padding: 4px; margin-bottom: 14px;
+      background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 12px;
+    }
+    .composer-type-btn {
+      flex: 1; padding: 9px 10px; border: none; border-radius: 9px; background: transparent;
+      font-family: inherit; font-size: 0.84rem; font-weight: 700; color: var(--text-muted);
+      cursor: pointer; transition: all .18s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .composer-type-btn.active { background: #fff; color: var(--text-main); box-shadow: var(--shadow-sm); }
+    .composer-type-btn.active.alert { background: #7c2d12; color: #fff; }
+    .composer-alert-panel { display: none; }
+    .composer-alert-panel.open { display: block; }
+    .alert-field { margin-bottom: 10px; }
+    .alert-field label { display: block; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: 5px; }
+    .alert-field select, .alert-field input {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 10px;
+      font-family: inherit; font-size: 0.9rem; background: #fff; color: var(--text-main);
+    }
+    .alert-kind-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .alert-kind-btn {
+      padding: 8px 6px; border: 1px solid var(--border-light); border-radius: 10px; background: #fff;
+      font-family: inherit; font-size: 0.78rem; font-weight: 700; color: var(--text-main); cursor: pointer; text-align: center;
+    }
+    .alert-kind-btn.active { background: #fff7ed; border-color: #ea580c; color: #9a3412; }
+    .gps-verify-box {
+      margin-top: 10px; padding: 12px 14px; border-radius: 12px; border: 1px dashed #ea580c; background: #fff7ed;
+      display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    }
+    .gps-verify-box .gps-status { font-size: 0.82rem; color: #7c2d12; line-height: 1.4; flex: 1; min-width: 180px; }
+    .gps-verify-btn {
+      padding: 9px 14px; border-radius: 999px; border: none; background: #ea580c; color: #fff;
+      font-family: inherit; font-size: 0.82rem; font-weight: 800; cursor: pointer; white-space: nowrap;
+    }
+    .gps-verify-btn[disabled] { opacity: .55; cursor: not-allowed; }
+    .gps-verify-box.ok { border-style: solid; border-color: #16a34a; background: #f0fdf4; }
+    .gps-verify-box.ok .gps-status { color: #14532d; }
+    .gps-verify-box.fail { border-style: solid; border-color: #dc2626; background: #fef2f2; }
+    .gps-verify-box.fail .gps-status { color: #7f1d1d; }
+
+    /* ── Travel alert card ── */
+    .post-card.alert-card { border-left: 4px solid #ea580c; background: linear-gradient(180deg, #fffaf5 0%, #ffffff 90px); }
+    .alert-banner {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 10px 14px; margin: 0 0 4px; background: #7c2d12; color: #fff;
+      font-size: 0.78rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+    }
+    .alert-banner .alert-kind { background: rgba(255,255,255,.18); padding: 3px 9px; border-radius: 999px; }
+    .alert-banner .alert-dest { text-transform: none; letter-spacing: 0; font-weight: 600; opacity: .95; }
+    .alert-verified-stamp {
+      display: inline-flex; align-items: center; gap: 6px; margin: 6px 16px 10px; padding: 5px 10px; border-radius: 999px;
+      background: #f0fdf4; border: 1px solid #16a34a; color: #14532d; font-size: 0.76rem; font-weight: 800;
+    }
+    .feed-tab-btn.alerts-tab.active { background: #7c2d12; color: #fff; border-color: #7c2d12; }
+
+    .composer-modal-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FAF8F5;
+    }
+
+    /* ── STORIES VIEWER MODAL ── */
+    .story-viewer-modal-box {
+      width: 100%;
+      max-width: 420px;
+      height: 720px;
+      max-height: 92vh;
+      background: #12100E;
+      border-radius: var(--radius-lg);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-modal);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .story-progress-bar-wrap {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: var(--radius-full);
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .story-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #FFF;
+      transition: width 5s linear;
+    }
+
+    .story-viewer-header {
+      position: absolute;
+      top: 24px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      color: #FFF;
+    }
+
+    .story-viewer-author {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .story-viewer-author img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #FFF;
+      object-fit: cover;
+    }
+
+    .story-viewer-media {
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .story-viewer-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      color: #FFF;
+      font-size: 0.92rem;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+      z-index: 10;
+    }
+
+    /* ── REPORT / MODERATION MODAL ── */
+    .report-modal-box {
+      background: #FFF;
+      width: 100%;
+      max-width: 440px;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow-modal);
+    }
+
+    .report-reasons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0 20px;
+    }
+
+    .report-reason-btn {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-medium);
+      background: var(--bg-primary);
+      text-align: left;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .report-reason-btn:hover {
+      border-color: var(--accent-terracotta);
+      color: var(--accent-terracotta);
+      background: #FFF;
+    }
+
+    /* ── USER PROFILE QUICK DRAWER ── */
+    .profile-modal-box {
+      background: #FFF;
+      width: 100%;
+      max-width: 520px;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-modal);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+    }
+
+    /* ── My Profile (Instagram-style) ── */
+    .me-modal-box {
+      background: #FFF; width: 100%; max-width: 640px; border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-modal); display: flex; flex-direction: column;
+      max-height: calc(100vh - 40px); max-height: calc(100dvh - 40px); overflow: hidden;
+      animation: modalScaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .me-head { padding: 22px 24px 0; flex-shrink: 0; }
+    .me-top { display: flex; gap: 20px; align-items: center; }
+    .me-avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border-light); flex-shrink: 0; }
+    .me-name { font-family: var(--font-serif); font-size: 1.45rem; font-weight: 700; line-height: 1.1; }
+    .me-handle { font-size: 0.82rem; color: var(--accent-terracotta); font-weight: 700; margin-top: 2px; }
+    .me-stats { display: flex; gap: 6px; margin-top: 12px; }
+    .me-stat { flex: 1; text-align: center; padding: 8px 6px; border-radius: 10px; background: var(--bg-surface); cursor: pointer; border: 1px solid transparent; }
+    .me-stat:hover, .me-stat.active { border-color: var(--accent-terracotta); background: #fff7f3; }
+    .me-stat strong { display: block; font-size: 1.15rem; }
+    .me-stat span { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+    .me-bio { margin-top: 12px; font-size: 0.9rem; color: var(--text-main); line-height: 1.5; }
+    .me-bio-edit { width: 100%; margin-top: 8px; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 10px; font-family: inherit; font-size: 0.88rem; resize: vertical; min-height: 60px; }
+    .me-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .me-tabs { display: flex; border-bottom: 1px solid var(--border-light); margin-top: 16px; }
+    .me-tab { flex: 1; padding: 11px 6px; text-align: center; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; }
+    .me-tab.active { color: var(--text-main); border-bottom-color: var(--text-main); }
+    .me-body { padding: 16px 24px 24px; overflow-y: auto; flex: 1 1 auto; min-height: 0; }
+    .me-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .me-grid-item { position: relative; aspect-ratio: 1; background: var(--bg-surface); border-radius: 6px; overflow: hidden; cursor: pointer; }
+    .me-grid-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .me-grid-item .me-grid-text { padding: 10px; font-size: 0.78rem; line-height: 1.4; color: var(--text-main); height: 100%; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; }
+    .me-grid-item .me-grid-alert { position: absolute; top: 6px; left: 6px; background: #7c2d12; color: #fff; font-size: 0.62rem; font-weight: 800; padding: 3px 7px; border-radius: 999px; text-transform: uppercase; }
+    .me-grid-item .me-grid-likes { position: absolute; bottom: 6px; right: 8px; background: rgba(0,0,0,.55); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; }
+    .me-people { display: flex; flex-direction: column; gap: 6px; }
+    .me-person { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 12px; border: 1px solid var(--border-light); }
+    .me-person img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+    .me-person .me-person-meta { flex: 1; min-width: 0; }
+    .me-person h5 { font-size: 0.92rem; font-weight: 700; margin: 0; }
+    .me-person span { font-size: 0.76rem; color: var(--text-muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .me-person button { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border-medium); background: #fff; font-family: inherit; font-size: 0.78rem; font-weight: 800; cursor: pointer; }
+    .me-person button.following { background: var(--bg-surface); color: var(--text-muted); }
+    .me-person button.primary { background: var(--accent-terracotta); color: #fff; border-color: var(--accent-terracotta); }
+    .me-empty { text-align: center; padding: 36px 12px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+    .me-empty strong { display: block; color: var(--text-main); font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 4px; }
+
+    /* Owner menu on your own posts */
+    .own-menu-box { background: #fff; width: 100%; max-width: 360px; border-radius: var(--radius-lg); padding: 10px; box-shadow: var(--shadow-modal); }
+    .own-menu-box button { width: 100%; padding: 14px; border: none; background: none; font-family: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; border-radius: 10px; text-align: left; display: flex; gap: 10px; align-items: center; }
+    .own-menu-box button:hover { background: var(--bg-surface); }
+    .own-menu-box button.danger { color: #b91c1c; }
+    .post-edited-tag { font-size: 0.72rem; color: var(--text-muted); font-style: italic; }
+
+    .profile-banner-avatar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .profile-large-avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--bg-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .profile-quick-stats {
+      display: flex;
+      gap: 20px;
+      margin: 16px 0;
+      font-size: 0.84rem;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      padding: 10px 0;
+    }
+
+    .profile-quick-stats strong {
+      color: var(--text-main);
+    }
+
+    /* Toast */
+    .social-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg-dark);
+      color: #FFF;
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      font-size: 0.84rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .social-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Floating Virasat Mitr AI Button */
+    .virasat-ai-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-dark);
+      color: #FFF;
+      border: 1px solid var(--accent-gold);
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      z-index: 100;
+      transition: var(--transition-smooth);
+    }
+
+    .virasat-ai-btn:hover {
+      transform: translateY(-2px);
+      background: #282420;
+    }
+
+    .ai-chat-window {
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 360px;
+      height: 480px;
+      background: var(--bg-dark);
+      border: 1px solid rgba(181, 136, 45, 0.3);
+      border-radius: 18px;
+      display: none;
+      flex-direction: column;
+      box-shadow: var(--shadow-modal);
+      z-index: 110;
+      overflow: hidden;
+      color: #E2DCD2;
+    }
+
+    .ai-chat-window.active {
+      display: flex;
+    }
+
+    .ai-chat-header {
+      padding: 14px 18px;
+      background: #25221F;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ai-chat-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-msg {
+      max-width: 84%;
+      padding: 9px 13px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: var(--accent-terracotta);
+      color: #FFF;
+    }
+
+    .chat-msg.bot {
+      align-self: flex-start;
+      background: #282420;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #E2DCD2;
+    }
+
+    .ai-chat-input-row {
+      padding: 10px 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: #25221F;
+      display: flex;
+      gap: 8px;
+    }
+
+    .ai-chat-input-row input {
+      flex: 1;
+      background: #181614;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 8px 12px;
+      color: #FFF;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    .ai-chat-input-row button {
+      background: var(--accent-terracotta);
+      border: none;
+      color: #FFF;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ── RESPONSIVENESS ── */
+    @media (max-width: 1100px) {
+      .social-app-container {
+        grid-template-columns: 220px 1fr;
+      }
+      .right-sidebar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .global-navbar {
+        padding: 10px 16px;
+      }
+      .global-nav-links {
+        display: none;
+      }
+      .social-app-container {
+        grid-template-columns: 1fr;
+        padding: 16px 12px 60px;
+      }
+      .left-sidebar {
+        display: none;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+
+<body>
+
+  <!-- ── 1. GLOBAL NAVBAR (Standard Virasat Application Header) ── -->
+  <header class="global-navbar">
+    <a href="index.html" class="brand-logo-link">
+      <div class="logo-crest">
+        <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo">
+      </div>
+      <div class="logo-titles">
+        <h1>VIRASAT</h1>
+        <span>AI HERITAGE &amp; TOURISM</span>
+      </div>
+    </a>
+
+    <nav class="global-nav-links">
+      <a href="index.html">Home</a>
+      <a href="explore.html">Explore</a>
+      <a href="scan.html">Scan &amp; Detect</a>
+      <a href="community.html" class="active">Community</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="events.html">Events</a>
+      <a href="language.html">Audio Guide</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+
+    <div class="nav-user-controls">
+      <div class="nav-search-bar">
+        <svg viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+        </svg>
+        <input type="text" id="globalCommunitySearch" placeholder="Search people, crafts, #tags..." oninput="handleSocialSearch(this.value)">
+      </div>
+
+      <div class="user-avatar-btn" onclick="openMyProfile()" title="My profile">
+        <img loading="lazy" decoding="async" data-me-avatar src="" alt="Your Profile">
+      </div>
+    </div>
+  </header>
+
+  <!-- ── 2. MAIN 3-COLUMN SOCIAL APP EXPERIENCE ── -->
+  <main class="social-app-container">
+
+    <!-- ── LEFT SIDEBAR: COMMUNITY NAVIGATION ── -->
+    <aside class="left-sidebar">
+      <button class="btn-create-post-primary" onclick="openComposerModal()">
+        <svg viewBox="0 0 24 24">
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        </svg>
+        <span>Create Post</span>
+      </button>
+
+      <div class="sidebar-menu-card">
+        <button class="sidebar-nav-item active" id="sideNavForYou" onclick="switchFeedTab('for_you')">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z" />
+          </svg>
+          <span>For You</span>
+        </button>
+
+        <button class="sidebar-nav-item" id="sideNavFollowing" onclick="switchFeedTab('following')">
+          <svg viewBox="0 0 24 24">
+            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+          </svg>
+          <span>Following</span>
+        </button>
+
+        <button class="sidebar-nav-item" id="sideNavTrending" onclick="switchFeedTab('trending')">
+          <svg viewBox="0 0 24 24">
+            <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
+          </svg>
+          <span>Trending</span>
+        </button>
+
+        <button class="sidebar-nav-item" id="sideNavNearby" onclick="switchFeedTab('nearby')">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+          </svg>
+          <span>Nearby</span>
+        </button>
+
+        <button class="sidebar-nav-item" id="sideNavSaved" onclick="switchFeedTab('saved')">
+          <svg viewBox="0 0 24 24">
+            <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+          </svg>
+          <span>Saved</span>
+          <span class="badge-count" id="leftSavedBadge">0</span>
+        </button>
+
+        <button class="sidebar-nav-item" id="sideNavMe" onclick="openMyProfile()">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+          </svg>
+          <span>My Profile</span>
+        </button>
+
+        <button class="sidebar-nav-item" id="sideNavAlerts" onclick="switchFeedTab('alerts')">
+          <svg viewBox="0 0 24 24">
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+          </svg>
+          <span>Travel Alerts</span>
+          <span class="badge-count" id="leftAlertsBadge">0</span>
+        </button>
+      </div>
+
+      <!-- Communities / Topics -->
+      <div class="sidebar-topics-box">
+        <h4>Cultural Circles</h4>
+        <div class="topic-pill-link" onclick="filterByTagDirect('#BlockPrinting')">
+          <div><span class="symbol">#</span>BlockPrinting</div>
+          <span class="topic-posts-count">2.4k</span>
+        </div>
+        <div class="topic-pill-link" onclick="filterByTagDirect('#HeirloomFood')">
+          <div><span class="symbol">#</span>HeirloomFood</div>
+          <span class="topic-posts-count">1.8k</span>
+        </div>
+        <div class="topic-pill-link" onclick="filterByTagDirect('#SacredGroves')">
+          <div><span class="symbol">#</span>SacredGroves</div>
+          <span class="topic-posts-count">940</span>
+        </div>
+        <div class="topic-pill-link" onclick="filterByTagDirect('#FolkMusic')">
+          <div><span class="symbol">#</span>FolkMusic</div>
+          <span class="topic-posts-count">1.2k</span>
+        </div>
+        <div class="topic-pill-link" onclick="filterByTagDirect('#TribalCrafts')">
+          <div><span class="symbol">#</span>TribalCrafts</div>
+          <span class="topic-posts-count">870</span>
+        </div>
+      </div>
+
+      <!-- Mini Profile Chip -->
+      <div class="sidebar-user-chip" onclick="openMyProfile()">
+        <img loading="lazy" decoding="async" data-me-avatar src="" alt="You">
+        <div class="user-chip-texts">
+          <h5 data-me-name>You</h5>
+          <span data-me-handle>@you</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── CENTER COLUMN: MAIN SOCIAL FEED ── -->
+    <section class="center-feed-column">
+
+      <!-- Compact Header -->
+      <div class="feed-header-compact">
+        <div class="feed-header-top">
+          <div class="feed-header-titles">
+            <h2>Community</h2>
+            <p>Discover what the Virasat community is seeing, experiencing and preserving.</p>
+          </div>
+        </div>
+
+        <div class="feed-tabs-row">
+          <button class="feed-tab-btn active" id="feedTabForYou" onclick="switchFeedTab('for_you')">For You</button>
+          <button class="feed-tab-btn" id="feedTabFollowing" onclick="switchFeedTab('following')">Following</button>
+          <button class="feed-tab-btn" id="feedTabTrending" onclick="switchFeedTab('trending')">Trending</button>
+          <button class="feed-tab-btn" id="feedTabNearby" onclick="switchFeedTab('nearby')">Nearby</button>
+          <button class="feed-tab-btn alerts-tab" id="feedTabAlerts" onclick="switchFeedTab('alerts')">⚠️ Alerts</button>
+        </div>
+      </div>
+
+      <!-- Stories Row (Temporary Cultural Moments) -->
+      <div class="stories-tray-card">
+        <div class="story-bubble-item" onclick="openStoryViewer('story_your')">
+          <div class="story-ring-wrap your-story">
+            <img loading="lazy" decoding="async" data-me-avatar src="" alt="Your Story">
+            <div class="add-story-plus">+</div>
+          </div>
+          <span class="story-username-label">Your Story</span>
+        </div>
+
+        <div class="story-bubble-item" onclick="openStoryViewer('story_aditi')">
+          <div class="story-ring-wrap">
+            <img loading="lazy" decoding="async" src="assets/images/remote/unsplash_photo-1544005313-94ddf0286df2_bc88bb.jpg" alt="Aditi">
+          </div>
+          <span class="story-username-label">Aditi Sen</span>
+        </div>
+
+        <div class="story-bubble-item" onclick="openStoryViewer('story_rahul')">
+          <div class="story-ring-wrap">
+            <img loading="lazy" decoding="async" src="assets/images/remote/unsplash_photo-1507003211169-0a1dd7228f2d_2f8df5.jpg" alt="Rahul">
+          </div>
+          <span class="story-username-label">Rahul M.</span>
+        </div>
+
+        <div class="story-bubble-item" onclick="openStoryViewer('story_meera')">
+          <div class="story-ring-wrap">
+            <img loading="lazy" decoding="async" src="assets/images/remote/unsplash_photo-1573496359142-b8d87734a5a2_2507cf.jpg" alt="Meera">
+          </div>
+          <span class="story-username-label">Meera Shah</span>
+        </div>
+
+        <div class="story-bubble-item" onclick="openStoryViewer('story_arjun')">
+          <div class="story-ring-wrap">
+            <img loading="lazy" decoding="async" src="assets/images/remote/unsplash_photo-1500648767791-00dcc994a43e_433696.jpg" alt="Arjun">
+          </div>
+          <span class="story-username-label">Arjun K.</span>
+        </div>
+      </div>
+
+      <!-- Inline Social Composer Card -->
+      <div class="inline-composer-card">
+        <div class="composer-input-row">
+          <img loading="lazy" decoding="async" data-me-avatar src="" alt="You" class="composer-user-avatar">
+          <button class="composer-trigger-btn" onclick="openComposerModal()">
+            Share a discovery, craft encounter, or photo from your journey...
+          </button>
+        </div>
+
+        <div class="composer-actions-row">
+          <div class="composer-quick-actions">
+            <button class="composer-tool-btn" onclick="openComposerWithAddon('photo')">
+              <svg viewBox="0 0 24 24">
+                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+              </svg>
+              <span>Photo</span>
+            </button>
+            <button class="composer-tool-btn" onclick="openComposerWithAddon('video')">
+              <svg viewBox="0 0 24 24">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
+              </svg>
+              <span>Video</span>
+            </button>
+            <button class="composer-tool-btn" onclick="openComposerWithAddon('location')">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+              </svg>
+              <span>Location</span>
+            </button>
+            <button class="composer-tool-btn" onclick="openComposerWithAddon('poll')">
+              <svg viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4h2v4zm0-6h-2V7h2v4zm6 6h-2V9h2v8zm-12 0H4v-2h2v2z" />
+              </svg>
+              <span>Poll</span>
+            </button>
+            <button class="composer-tool-btn" onclick="openAlertComposer()" title="Warn travellers about a road block, closure or hazard" style="color:#9a3412;">
+              <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" /></svg>
+              <span>Travel Alert</span>
+            </button>
+          </div>
+
+          <button class="btn-quick-post" onclick="openComposerModal()">Post</button>
+        </div>
+      </div>
+
+      <!-- Feed Stream Container -->
+      <div id="socialFeedPostsContainer" style="display: flex; flex-direction: column; gap: 18px;">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+
+    </section>
+
+    <!-- ── RIGHT SIDEBAR: CONTEXTUAL DISCOVERY ── -->
+    <aside class="right-sidebar">
+
+      <!-- Trending in Virasat -->
+      <div class="discovery-card">
+        <div class="discovery-card-header">
+          <h4>Trending in Virasat</h4>
+          <span style="font-size: 0.72rem; color: var(--accent-terracotta); font-weight: 700;">🔥 LIVE</span>
+        </div>
+
+        <div class="trending-topic-row" onclick="filterByTagDirect('#Rajasthan')">
+          <div>
+            <div class="topic-name">#Rajasthan</div>
+            <div class="topic-posts-count">2,410 dispatches</div>
+          </div>
+          <span style="color: var(--accent-terracotta); font-size: 0.8rem;">↗</span>
+        </div>
+
+        <div class="trending-topic-row" onclick="filterByTagDirect('#IndianCrafts')">
+          <div>
+            <div class="topic-name">#IndianCrafts</div>
+            <div class="topic-posts-count">1,820 dispatches</div>
+          </div>
+          <span style="color: var(--accent-terracotta); font-size: 0.8rem;">↗</span>
+        </div>
+
+        <div class="trending-topic-row" onclick="filterByTagDirect('#FolkMusic')">
+          <div>
+            <div class="topic-name">#FolkMusic</div>
+            <div class="topic-posts-count">1,240 dispatches</div>
+          </div>
+          <span style="color: var(--accent-terracotta); font-size: 0.8rem;">↗</span>
+        </div>
+
+        <div class="trending-topic-row" onclick="filterByTagDirect('#TempleArchitecture')">
+          <div>
+            <div class="topic-name">#TempleArchitecture</div>
+            <div class="topic-posts-count">980 dispatches</div>
+          </div>
+          <span style="color: var(--accent-terracotta); font-size: 0.8rem;">↗</span>
+        </div>
+      </div>
+
+      <!-- People to Follow -->
+      <div class="discovery-card">
+        <div class="discovery-card-header">
+          <h4>Storytellers to Follow</h4>
+        </div>
+
+        <div class="follow-suggestion-item">
+          <img loading="lazy" decoding="async" src="assets/images/remote/unsplash_photo-1544005313-94ddf0286df2_bc88bb.jpg" alt="Aditi" class="suggest-user-avatar" onclick="openProfileModal('aditi')">
+          <div class="suggest-user-texts" onclick="openProfileModal('aditi')">
+            <h5>Aditi Sen <svg class="verified-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg></h5>
+            <span>Jaipur • Indigo researcher</span>
+          </div>
+          <button class="btn-follow-small" id="followBtn_aditi" onclick="toggleFollowCreator('aditi', this)">Follow</button>
+        </div>
+
+        <div class="follow-suggestion-item">
+          <img loading="lazy" decoding="async" src="assets/images/remote/unsplash_photo-1507003211169-0a1dd7228f2d_2f8df5.jpg" alt="Rahul" class="suggest-user-avatar" onclick="openProfileModal('rahul')">
+          <div class="suggest-user-texts" onclick="openProfileModal('rahul')">
+            <h5>Rahul Mehta</h5>
+            <span>Patna • Culinary chronicler</span>
+          </div>
+          <button class="btn-follow-small" id="followBtn_rahul" onclick="toggleFollowCreator('rahul', this)">Follow</button>
+        </div>
+
+        <div class="follow-suggestion-item">
+          <img loading="lazy" decoding="async" src="assets/images/remote/unsplash_photo-1573496359142-b8d87734a5a2_2507cf.jpg" alt="Meera" class="suggest-user-avatar" onclick="openProfileModal('meera')">
+          <div class="suggest-user-texts" onclick="openProfileModal('meera')">
+            <h5>Meera Shah</h5>
+            <span>Bastar • Bell-metal explorer</span>
+          </div>
+          <button class="btn-follow-small" id="followBtn_meera" onclick="toggleFollowCreator('meera', this)">Follow</button>
+        </div>
+      </div>
+
+      <!-- Suggested Cultural Topics -->
+      <div class="discovery-card">
+        <div class="discovery-card-header">
+          <h4>Suggested Topics</h4>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="social-tag" style="background: var(--bg-surface); padding: 4px 10px; border-radius: 999px;" onclick="filterByTagDirect('#TraditionalFood')">#TraditionalFood</span>
+          <span class="social-tag" style="background: var(--bg-surface); padding: 4px 10px; border-radius: 999px;" onclick="filterByTagDirect('#Textiles')">#Textiles</span>
+          <span class="social-tag" style="background: var(--bg-surface); padding: 4px 10px; border-radius: 999px;" onclick="filterByTagDirect('#VillageLife')">#VillageLife</span>
+          <span class="social-tag" style="background: var(--bg-surface); padding: 4px 10px; border-radius: 999px;" onclick="filterByTagDirect('#Festivals')">#Festivals</span>
+          <span class="social-tag" style="background: var(--bg-surface); padding: 4px 10px; border-radius: 999px;" onclick="filterByTagDirect('#Stepwells')">#Stepwells</span>
+        </div>
+      </div>
+
+      <!-- Social Ethics Snippet -->
+      <div style="font-size: 0.74rem; color: var(--text-light); line-height: 1.5; padding: 0 4px;">
+        Virasat Community values ethical storytelling, respectful elder consent, and preservation of indigenous traditions over algorithmic noise.
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- ── 3. RICH COMPOSER MODAL ── -->
+  <div class="social-modal-overlay" id="composerModal">
+    <div class="composer-modal-box">
+      <div class="composer-modal-header">
+        <h3>Create Post</h3>
+        <button class="close-modal-x" onclick="closeComposerModal()">✕</button>
+      </div>
+
+      <div class="composer-modal-body">
+        <div class="modal-author-identity">
+          <img loading="lazy" decoding="async" id="composerAuthorAvatar" src="" alt="You">
+          <div>
+            <div style="font-size: 0.88rem; font-weight: 700;" id="composerAuthorName">You</div>
+            <div class="privacy-tag-pill">
+              <span>🌐 Public (Virasat Community)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post type: a normal dispatch, or a GPS-verified travel alert -->
+        <div class="composer-type-switch" role="tablist">
+          <button type="button" class="composer-type-btn active" id="typeBtnPost" onclick="setComposerType('post')" role="tab">📸 Post</button>
+          <button type="button" class="composer-type-btn" id="typeBtnAlert" onclick="setComposerType('alert')" role="tab">⚠️ Travel Alert</button>
+        </div>
+
+        <textarea class="modal-textarea-input" id="composerTextInput" placeholder="What cultural discovery or journey experience would you like to share?"></textarea>
+
+        <!-- Travel alert details (only for alert posts) -->
+        <div class="composer-alert-panel" id="composerAlertPanel">
+          <div class="alert-field">
+            <label>What's the problem?</label>
+            <div class="alert-kind-grid" id="alertKindGrid">
+              <button type="button" class="alert-kind-btn active" data-kind="Road blockage" onclick="setAlertKind(this)">🚧 Road blockage</button>
+              <button type="button" class="alert-kind-btn" data-kind="Closure" onclick="setAlertKind(this)">🔒 Closed / no entry</button>
+              <button type="button" class="alert-kind-btn" data-kind="Weather" onclick="setAlertKind(this)">🌧️ Weather</button>
+              <button type="button" class="alert-kind-btn" data-kind="Safety" onclick="setAlertKind(this)">⚠️ Safety hazard</button>
+              <button type="button" class="alert-kind-btn" data-kind="Crowd / long queue" onclick="setAlertKind(this)">👥 Crowd / queue</button>
+              <button type="button" class="alert-kind-btn" data-kind="Scam / overcharging" onclick="setAlertKind(this)">💸 Scam alert</button>
+            </div>
+          </div>
+          <div class="alert-field">
+            <label for="alertDestinationSelect">Destination this affects</label>
+            <select id="alertDestinationSelect" onchange="resetAlertGps()"></select>
+          </div>
+          <div class="gps-verify-box" id="alertGpsBox">
+            <div class="gps-status" id="alertGpsStatus">
+              <strong>Verify you're actually there.</strong> Alerts publish only when your live location is near the destination — so the community can trust them. Your location is requested only when you tap Verify.
+            </div>
+            <button type="button" class="gps-verify-btn" id="alertGpsBtn" onclick="verifyAlertLocation()">📍 Verify my location</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Addons Panel (Photo, Location, Poll, Tag) -->
+        <div class="composer-addons-panel" id="composerAddonsPanel">
+          <!-- Addon Photo -->
+          <div id="addonSectionPhoto" style="display: none;">
+            <label style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted);">ADD A PHOTO:</label>
+            <div class="browse-image-row">
+              <button type="button" class="browse-image-btn" onclick="document.getElementById('composerFileInput').click()">📁 Browse from device</button>
+              <input type="file" id="composerFileInput" accept="image/*" style="display:none;">
+              <span class="browse-image-note" id="composerFileNote">JPG, PNG or WebP · resized automatically</span>
+            </div>
+            <div class="browse-image-preview" id="composerFilePreview">
+              <img loading="lazy" decoding="async" id="composerFilePreviewImg" alt="Your photo">
+              <button type="button" class="remove-browse-img" onclick="clearComposerFile()" title="Remove photo">✕</button>
+            </div>
+            <label style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); display:block; margin-top:8px;">…OR PASTE AN IMAGE URL / PICK A PRESET:</label>
+            <input type="text" class="addon-input-field" id="composerImageUrl" placeholder="https://images.unsplash.com/..." value="assets/images/remote/Woman_doing_Block_Printing_at_Bagru_village__Jaipur__India_c2c663.jpg">
+            <div class="preset-images-picker">
+              <div class="preset-thumb selected" onclick="selectComposerPresetImg('assets/images/remote/Woman_doing_Block_Printing_at_Bagru_village__Jaipur__India_c2c663.jpg', this)">
+                <img loading="lazy" decoding="async" src="assets/images/remote/Woman_doing_Block_Printing_at_Bagru_village__Jaipur__India_c2c663.jpg" alt="Clay">
+              </div>
+              <div class="preset-thumb" onclick="selectComposerPresetImg('assets/images/remote/Looms_at_Rehwa_society__Maheshwari_handloom_sarees_weavers_society__Maheshwar.jp_af7e8a.jpg', this)">
+                <img loading="lazy" decoding="async" src="assets/images/remote/Looms_at_Rehwa_society__Maheshwari_handloom_sarees_weavers_society__Maheshwar.jp_af7e8a.jpg" alt="Loom">
+              </div>
+              <div class="preset-thumb" onclick="selectComposerPresetImg('assets/images/remote/Abhaneri-Chand_Baori-17a-Stufenbrunnen-2018-gje_73d846.jpg', this)">
+                <img loading="lazy" decoding="async" src="assets/images/remote/Abhaneri-Chand_Baori-17a-Stufenbrunnen-2018-gje_73d846.jpg" alt="Stepwell">
+              </div>
+              <div class="preset-thumb" onclick="selectComposerPresetImg('assets/images/remote/Living_root_bridge__Maghalaya__India1_5aed9a.jpg', this)">
+                <img loading="lazy" decoding="async" src="assets/images/remote/Living_root_bridge__Maghalaya__India1_5aed9a.jpg" alt="Bridges">
+              </div>
+            </div>
+          </div>
+
+          <!-- Addon Location -->
+          <div id="addonSectionLocation" style="display: none; margin-top: 8px;">
+            <label style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted);">LOCATION (VILLAGE, HERITAGE CLUSTER):</label>
+            <input type="text" class="addon-input-field" id="composerLocationInput" placeholder="e.g. Bagru, Rajasthan" value="Bagru, Rajasthan">
+          </div>
+
+          <!-- Addon Cultural Tags -->
+          <div id="addonSectionTags" style="display: none; margin-top: 8px;">
+            <label style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted);">CULTURAL TAGS:</label>
+            <input type="text" class="addon-input-field" id="composerTagsInput" placeholder="#BlockPrinting, #Rajasthan, #Craft" value="#BlockPrinting, #Rajasthan, #Craft">
+          </div>
+
+          <!-- Addon Poll -->
+          <div id="addonSectionPoll" style="display: none; margin-top: 8px;">
+            <label style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted);">POLL QUESTION &amp; OPTIONS:</label>
+            <input type="text" class="addon-input-field" id="composerPollQ" placeholder="Poll question...">
+            <input type="text" class="addon-input-field" id="composerPollOpt1" placeholder="Option 1">
+            <input type="text" class="addon-input-field" id="composerPollOpt2" placeholder="Option 2">
+          </div>
+        </div>
+      </div>
+
+      <div class="composer-modal-footer">
+        <div class="composer-quick-actions">
+          <button class="composer-tool-btn" onclick="toggleComposerAddon('photo')" title="Attach Photo">📷</button>
+          <button class="composer-tool-btn" onclick="toggleComposerAddon('location')" title="Add Location">📍</button>
+          <button class="composer-tool-btn" onclick="toggleComposerAddon('tags')" title="Tag Culture">🏷️</button>
+          <button class="composer-tool-btn" onclick="toggleComposerAddon('poll')" title="Create Poll">📊</button>
+        </div>
+
+        <button class="btn-quick-post" id="composerSubmitBtn" onclick="submitComposerPost()">Post to Feed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. STORY VIEWER MODAL ── -->
+  <div class="social-modal-overlay" id="storyViewerModal" onclick="closeStoryViewer(event)">
+    <div class="story-viewer-modal-box" onclick="event.stopPropagation()">
+      <div class="story-progress-bar-wrap">
+        <div class="story-progress-fill" id="storyProgressFill"></div>
+      </div>
+      <div class="story-viewer-header">
+        <div class="story-viewer-author">
+          <img loading="lazy" decoding="async" id="storyViewerAvatar" src="" alt="">
+          <div>
+            <div id="storyViewerName" style="font-weight: 700; font-size: 0.88rem;">Author</div>
+            <div id="storyViewerTime" style="font-size: 0.7rem; opacity: 0.8;">2h ago</div>
+          </div>
+        </div>
+        <button class="close-modal-x" style="color: #FFF;" onclick="closeStoryViewer()">✕</button>
+      </div>
+      <img loading="lazy" decoding="async" id="storyViewerImg" class="story-viewer-media" src="" alt="Story">
+      <div class="story-viewer-caption" id="storyViewerCaption">
+        Caption here...
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. SOCIAL PROFILE QUICK MODAL ── -->
+  <div class="social-modal-overlay" id="profileQuickModal">
+    <div class="profile-modal-box">
+      <div class="profile-banner-avatar-row">
+        <img loading="lazy" decoding="async" id="modalProfileAvatar" src="" alt="Avatar" class="profile-large-avatar">
+        <button class="close-modal-x" onclick="closeProfileModal()">✕</button>
+      </div>
+      <h3 id="modalProfileName" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700;">Name</h3>
+      <div id="modalProfileHandle" style="font-size: 0.82rem; color: var(--accent-terracotta); font-weight: 600;">@handle</div>
+      <p id="modalProfileBio" style="font-size: 0.88rem; color: var(--text-muted); margin-top: 8px;">Bio description...</p>
+      
+      <div class="profile-quick-stats">
+        <div><strong id="modalProfilePostsCount">42</strong> Posts</div>
+        <div><strong id="modalProfileFollowersCount">1.2K</strong> Followers</div>
+        <div><strong id="modalProfileFollowingCount">386</strong> Following</div>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-create-post-primary" id="modalProfileFollowBtn" style="padding: 8px 18px; font-size: 0.84rem;">+ Follow</button>
+        <button class="composer-tool-btn" style="border: 1px solid var(--border-medium); padding: 8px 16px;" onclick="showSocialToast('Direct messages coming soon!')">Message</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MY PROFILE (Instagram-style) ── -->
+  <div class="social-modal-overlay" id="meProfileModal">
+    <div class="me-modal-box">
+      <div class="me-head">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div class="me-top">
+            <img loading="lazy" decoding="async" id="meAvatar" class="me-avatar" src="" alt="You">
+            <div>
+              <div class="me-name" id="meName">You</div>
+              <div class="me-handle" id="meHandle">@you</div>
+              <div id="meEmail" style="font-size:0.76rem; color:var(--text-muted); margin-top:2px;"></div>
+            </div>
+          </div>
+          <button class="close-modal-x" onclick="closeMyProfile()">✕</button>
+        </div>
+        <div class="me-stats">
+          <div class="me-stat" id="meStatPosts" onclick="setMyProfileTab('posts')"><strong id="mePostsCount">0</strong><span>Posts</span></div>
+          <div class="me-stat" id="meStatFollowers" onclick="setMyProfileTab('followers')"><strong id="meFollowersCount">0</strong><span>Followers</span></div>
+          <div class="me-stat" id="meStatFollowing" onclick="setMyProfileTab('following')"><strong id="meFollowingCount">0</strong><span>Following</span></div>
+        </div>
+        <div class="me-bio" id="meBio"></div>
+        <textarea class="me-bio-edit" id="meBioEdit" style="display:none;" maxlength="160" placeholder="Tell fellow explorers about yourself (160 characters)"></textarea>
+        <div class="me-actions">
+          <button class="composer-tool-btn" style="border:1px solid var(--border-medium); padding:8px 14px;" id="meEditBioBtn" onclick="toggleEditBio()">✏️ Edit bio</button>
+          <button class="composer-tool-btn" style="border:1px solid var(--border-medium); padding:8px 14px;" onclick="closeMyProfile(); openComposerModal();">＋ New post</button>
+          <button class="composer-tool-btn" style="border:1px solid var(--border-medium); padding:8px 14px; color:#9a3412;" onclick="closeMyProfile(); openAlertComposer();">⚠️ Travel alert</button>
+        </div>
+        <div class="me-tabs">
+          <button class="me-tab active" id="meTabPosts" onclick="setMyProfileTab('posts')">▦ Posts</button>
+          <button class="me-tab" id="meTabFollowers" onclick="setMyProfileTab('followers')">Followers</button>
+          <button class="me-tab" id="meTabFollowing" onclick="setMyProfileTab('following')">Following</button>
+        </div>
+      </div>
+      <div class="me-body" id="meBody"></div>
+    </div>
+  </div>
+
+  <!-- ── OWNER MENU (your own posts) ── -->
+  <div class="social-modal-overlay" id="ownPostModal" onclick="if (event.target === this) closeOwnPostMenu()">
+    <div class="own-menu-box">
+      <button onclick="editOwnPost()">✏️ <span>Edit post</span></button>
+      <button class="danger" onclick="deleteOwnPost()">🗑️ <span>Delete post</span></button>
+      <button onclick="closeOwnPostMenu()">✕ <span>Cancel</span></button>
+    </div>
+  </div>
+
+  <!-- ── 6. POST MORE / REPORT MODAL ── -->
+  <div class="social-modal-overlay" id="reportModal">
+    <div class="report-modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem; font-weight: 700;">Report Post</h3>
+        <button class="close-modal-x" onclick="closeReportModal()">✕</button>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">
+        Help protect the cultural dignity and accuracy of the Virasat community.
+      </p>
+      <div class="report-reasons-list">
+        <button class="report-reason-btn" onclick="submitReport('Cultural Misrepresentation')">Cultural Misrepresentation or Sacred Sanctum Violation</button>
+        <button class="report-reason-btn" onclick="submitReport('Misinformation')">Historical Misinformation / False Attribution</button>
+        <button class="report-reason-btn" onclick="submitReport('Spam')">Commercial Spam or Unrelated Advertising</button>
+        <button class="report-reason-btn" onclick="submitReport('Harassment')">Harassment or Inappropriate Content</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 7. LONG-FORM STORY READER MODAL ── -->
+  <div class="social-modal-overlay" id="deepReaderModal">
+    <div class="composer-modal-box" style="max-width: 760px; max-height: 88vh; overflow-y: auto; padding: 24px 32px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <span style="font-size: 0.74rem; font-weight: 700; color: var(--accent-terracotta); text-transform: uppercase;">DEEP CULTURAL DISPATCH</span>
+        <button class="close-modal-x" onclick="closeDeepReader()">✕</button>
+      </div>
+      <h2 id="deepReaderTitle" style="font-family: var(--font-serif); font-size: 2.1rem; line-height: 1.2; margin-bottom: 14px;">Title</h2>
+      <div id="deepReaderMeta" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;"></div>
+      <img loading="lazy" decoding="async" id="deepReaderImg" src="" alt="" style="width: 100%; height: 320px; object-fit: cover; border-radius: var(--radius-sm); margin-bottom: 20px;">
+      <div id="deepReaderContent" style="font-size: 1rem; line-height: 1.8; color: #2C2926;"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notice -->
+  <div class="social-toast" id="socialToast">Action performed</div>
+
+  <!-- Floating Virasat Mitr AI Chatbot -->
+  <button class="virasat-ai-btn" onclick="toggleAiChat()">
+    <span style="color: var(--accent-gold);">✨</span>
+    <span style="font-size: 0.82rem; font-weight: 700;">Virasat Mitr AI</span>
+  </button>
+
+  <div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="width: 26px; height: 26px; border-radius: 50%; background: var(--accent-gold); color: #12100E; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem;">V</div>
+        <div style="font-weight: 700; font-size: 0.84rem;">Virasat Mitr (Social Context AI)</div>
+      </div>
+      <button class="close-modal-x" style="color: #FFF;" onclick="toggleAiChat()">✕</button>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+      <div class="chat-msg bot">
+        Namaste! I am your cultural companion. Ask me about crafts, locations, or artisans mentioned in any post you see on the feed!
+      </div>
+    </div>
+    <div class="ai-chat-input-row">
+      <input type="text" id="aiInputText" placeholder="Ask about a post, craft or village...">
+      <button onclick="sendAiChatMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- ── 8. JAVASCRIPT APPLICATION LOGIC ── -->
+  <script>
+    // --- Seed Social Posts ---
+    const SEED_SOCIAL_POSTS = [
+      {
+        id: "post_aditi_bagru",
+        author: {
+          id: "aditi",
+          name: "Aditi Sen",
+          handle: "@aditisen",
+          avatar: "assets/images/remote/unsplash_photo-1544005313-94ddf0286df2_bc88bb.jpg",
+          verified: true,
+          bio: "Heritage Explorer & Indigo Researcher • Jaipur"
+        },
+        time: "2h ago",
+        location: "Bagru, Rajasthan",
+        region: "West",
+        content: "Found this tiny, fifth-generation block printing workshop tucked behind the old bazaar in Bagru today. The master artisan Ramji showed us how every wooden block is aligned purely by hand and natural eye-measurement. No machines, only indigo ferments and river mud.",
+        tags: ["#BlockPrinting", "#Rajasthan", "#CraftRevival", "#NaturalDyes"],
+        entity: { type: "Artisan", name: "Ramji Chippa • Master Printer", link: "artisan.html" },
+        mediaType: "single",
+        images: ["assets/images/remote/Woman_doing_Block_Printing_at_Bagru_village__Jaipur__India_c2c663.jpg"],
+        likes: 421,
+        comments: [
+          { name: "Riya Sharma", time: "1h ago", avatar: "assets/images/remote/unsplash_photo-1494790108377-be9c29b29330_633bf4.jpg", text: "I visited Bagru last winter! The smell of fermented jaggery and iron water in the dabu vats is unforgettable." },
+          { name: "Aditi Sen", time: "45m ago", avatar: "assets/images/remote/unsplash_photo-1544005313-94ddf0286df2_909f05.jpg", text: "Yes! Ramji's family has maintained the same fermentation barrel for over 80 years." }
+        ]
+      },
+      {
+        id: "post_rahul_patna",
+        author: {
+          id: "rahul",
+          name: "Rahul Mehta",
+          handle: "@rahul_voyager",
+          avatar: "assets/images/remote/unsplash_photo-1507003211169-0a1dd7228f2d_2f8df5.jpg",
+          verified: false,
+          bio: "Culinary Genealogist & Regional Food Chronicler"
+        },
+        time: "4h ago",
+        location: "Patna, Bihar",
+        region: "East",
+        content: "Has anyone else tried this authentic rural version of Litti Chokha roasted directly over dried cow-dung patties? My host's grandmother stuffed the sattu with pickled red chili masala and roasted garlic. It completely changes the smokiness profile compared to urban gas-stove versions.",
+        tags: ["#HeirloomFood", "#BiharHeritage", "#LittiChokha", "#CulinaryRoots"],
+        mediaType: "two_col",
+        images: [
+          "assets/images/remote/Dokra_from_tribes_of_Bastar_DSCN1172_03_98e9a7.jpg",
+          "assets/images/remote/Woman_doing_Block_Printing_at_Bagru_village__Jaipur__India_c2c663.jpg"
+        ],
+        likes: 218,
+        comments: [
+          { name: "Kunal Kashyap", time: "3h ago", avatar: "assets/images/remote/unsplash_photo-1500648767791-00dcc994a43e_078070.jpg", text: "Upale ki aag (dung embers) gives that unmistakable crust. Pure comfort." }
+        ]
+      },
+      {
+        id: "post_meera_bastar",
+        author: {
+          id: "meera",
+          name: "Meera Shah",
+          handle: "@meerashah",
+          avatar: "assets/images/remote/unsplash_photo-1573496359142-b8d87734a5a2_2507cf.jpg",
+          verified: true,
+          bio: "Tribal Arts Documentarian • Bastar & Central India"
+        },
+        time: "6h ago",
+        location: "Bastar, Chhattisgarh",
+        region: "Central",
+        content: "I met a fourth-generation bell-metal (Dhokra) artisan today in Kondagaon. Here are three captures from the workshop: the beeswax coil preparation, the alluvial clay wrapping, and the final bronze piece after breaking open the hot crucible.",
+        tags: ["#Dhokra", "#Bastar", "#TribalCrafts", "#LostWaxBronze"],
+        mediaType: "three_col",
+        images: [
+          "assets/images/remote/Looms_at_Rehwa_society__Maheshwari_handloom_sarees_weavers_society__Maheshwar.jp_af7e8a.jpg",
+          "assets/images/remote/Woman_doing_Block_Printing_at_Bagru_village__Jaipur__India_c2c663.jpg",
+          "assets/images/remote/Abhaneri-Chand_Baori-17a-Stufenbrunnen-2018-gje_73d846.jpg"
+        ],
+        likes: 682,
+        comments: []
+      },
+      {
+        id: "post_arjun_poll",
+        author: {
+          id: "arjun",
+          name: "Arjun Kapoor",
+          handle: "@arjunkapoor",
+          avatar: "assets/images/remote/unsplash_photo-1500648767791-00dcc994a43e_433696.jpg",
+          verified: true,
+          bio: "Cultural Filmmaker & Community Lead"
+        },
+        time: "8h ago",
+        location: "New Delhi",
+        region: "North",
+        content: "Community poll time! Our next documentary crew travels in October. Which endangered regional craft should we document next in depth?",
+        tags: ["#CommunityPoll", "#CraftPreservation", "#VirasatFilm"],
+        isPoll: true,
+        poll: {
+          question: "Which craft should Virasat film next?",
+          options: [
+            { text: "Kalamkari (Bamboo reed & organic milk dyes)", votes: 142 },
+            { text: "Dhokra Lost-Wax (Bastar bronze castings)", votes: 98 },
+            { text: "Chamba Rumal (Double-sided silk needlework)", votes: 76 },
+            { text: "Patan Patola (Double ikat geometric weaves)", votes: 110 }
+          ],
+          totalVotes: 426
+        },
+        likes: 184,
+        comments: [
+          { name: "Priya V.", time: "6h ago", avatar: "assets/images/remote/unsplash_photo-1494790108377-be9c29b29330_633bf4.jpg", text: "Voted Patan Patola! Only three master weaving families remain in Gujarat." }
+        ]
+      },
+      {
+        id: "post_deep_ananya",
+        author: {
+          id: "ananya",
+          name: "Dr. Ananya Roy",
+          handle: "@ananya_roy",
+          avatar: "assets/images/remote/unsplash_photo-1573496359142-b8d87734a5a2_2507cf.jpg",
+          verified: true,
+          bio: "Senior Ethnobotanist • Meghalaya & Assam"
+        },
+        time: "1d ago",
+        location: "Nongriat, Meghalaya",
+        region: "NorthEast",
+        content: "I spent the last five days documenting the 500-year-old Jingkieng Jri (Living Root Bridges) of the War-Khasi people. While concrete bridges degrade in monsoon floods, these ficus elastica spans actually grow stronger with each passing year.",
+        tags: ["#LivingBridges", "#Meghalaya", "#IndigenousArchitecture"],
+        isLongForm: true,
+        longFormStory: {
+          title: "Where Trees Learn to Walk: The 500-Year Khasi Craft of Living Root Architecture",
+          fullText: "Deep within the mist-shrouded valleys of Meghalaya's southern slopes, human infrastructure takes on an extraordinary form. Bridges are not built out of iron cables; they are grown over decades using aerial roots directed across river gorges inside betel nut hollows..."
+        },
+        mediaType: "single",
+        images: ["assets/images/remote/Living_root_bridge__Maghalaya__India1_5aed9a.jpg"],
+        likes: 542,
+        comments: []
+      }
+    ];
+
+    // --- State Variables ---
+    let socialPosts = [];
+    let likedPostIds = new Set();
+    let savedPostIds = new Set();
+    let followedUserIds = new Set(['aditi']);
+    let votedPollIds = new Set();
+    let currentFeedTab = 'for_you';
+    let activeFilterTag = null;
+    let reportingPostId = null;
+
+    /* ── Travel alerts ─────────────────────────────────────────────────
+       A second kind of post: a heads-up about a problem on the way to a
+       destination (road block, closure, hazard…). To keep them trustworthy,
+       an alert is published only after the browser's live GPS fix lands
+       within ALERT_RADIUS_KM of the chosen destination. Location is asked
+       for only when the user taps Verify on an alert — never for normal
+       posts and never on page load. */
+    const ALERT_RADIUS_KM = 30;
+
+    const ALERT_DESTINATIONS = {
+      "Taj Mahal, Agra":                 { lat: 27.1751, lng: 78.0421 },
+      "Agra Fort, Agra":                 { lat: 27.1795, lng: 78.0211 },
+      "Red Fort, Delhi":                 { lat: 28.6562, lng: 77.2410 },
+      "Qutub Minar, Delhi":              { lat: 28.5244, lng: 77.1855 },
+      "Humayun's Tomb, Delhi":           { lat: 28.5933, lng: 77.2507 },
+      "Hawa Mahal, Jaipur":              { lat: 26.9239, lng: 75.8267 },
+      "Amber Fort, Jaipur":              { lat: 26.9855, lng: 75.8513 },
+      "Mehrangarh Fort, Jodhpur":        { lat: 26.2978, lng: 73.0186 },
+      "City Palace, Udaipur":            { lat: 24.5764, lng: 73.6835 },
+      "Hampi Ruins, Karnataka":          { lat: 15.3350, lng: 76.4600 },
+      "Mysore Palace, Mysuru":           { lat: 12.3052, lng: 76.6552 },
+      "Gateway of India, Mumbai":        { lat: 18.9220, lng: 72.8347 },
+      "Ajanta Caves, Maharashtra":       { lat: 20.5519, lng: 75.7033 },
+      "Ellora Caves, Maharashtra":       { lat: 20.0268, lng: 75.1790 },
+      "Konark Sun Temple, Odisha":       { lat: 19.8876, lng: 86.0945 },
+      "Jagannath Temple, Puri":          { lat: 19.8050, lng: 85.8179 },
+      "Meenakshi Temple, Madurai":       { lat: 9.9195,  lng: 78.1193 },
+      "Brihadeeswarar Temple, Thanjavur":{ lat: 10.7828, lng: 79.1318 },
+      "Shore Temple, Mahabalipuram":     { lat: 12.6166, lng: 80.1992 },
+      "Charminar, Hyderabad":            { lat: 17.3616, lng: 78.4747 },
+      "Golconda Fort, Hyderabad":        { lat: 17.3833, lng: 78.4011 },
+      "Golden Temple, Amritsar":         { lat: 31.6200, lng: 74.8765 },
+      "Victoria Memorial, Kolkata":      { lat: 22.5448, lng: 88.3426 },
+      "Mahabodhi Temple, Bodh Gaya":     { lat: 24.6961, lng: 84.9913 },
+      "Sanchi Stupa, Madhya Pradesh":    { lat: 23.4793, lng: 77.7397 },
+      "Khajuraho Temples, MP":           { lat: 24.8318, lng: 79.9199 },
+      "Dashashwamedh Ghat, Varanasi":    { lat: 25.3070, lng: 83.0104 },
+      "Sarnath, Varanasi":               { lat: 25.3811, lng: 83.0238 },
+      "Dal Lake, Srinagar":              { lat: 34.1200, lng: 74.8600 },
+      "Rann of Kutch, Gujarat":          { lat: 23.7337, lng: 69.8597 },
+      "Living Root Bridges, Meghalaya":  { lat: 25.2478, lng: 91.6689 }
+    };
+
+    let composerType = 'post';          // 'post' | 'alert'
+    let alertKind = 'Road blockage';
+    let alertGpsResult = null;          // { ok, lat, lng, distanceKm, destination, at }
+
+    function haversineKm(lat1, lon1, lat2, lon2) {
+      const R = 6371, toRad = d => d * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function fillAlertDestinations() {
+      const sel = document.getElementById('alertDestinationSelect');
+      if (!sel || sel.options.length) return;
+      Object.keys(ALERT_DESTINATIONS).forEach(name => {
+        const o = document.createElement('option'); o.value = name; o.textContent = name; sel.appendChild(o);
+      });
+    }
+
+    function setComposerType(type) {
+      composerType = type;
+      const isAlert = type === 'alert';
+      document.getElementById('typeBtnPost')?.classList.toggle('active', !isAlert);
+      const ab = document.getElementById('typeBtnAlert');
+      if (ab) { ab.classList.toggle('active', isAlert); ab.classList.toggle('alert', isAlert); }
+      document.getElementById('composerAlertPanel')?.classList.toggle('open', isAlert);
+      const ta = document.getElementById('composerTextInput');
+      if (ta) ta.placeholder = isAlert
+        ? 'Describe the problem — where exactly, since when, and any workaround (e.g. "NH-44 blocked at Sikandra, use the Yamuna Expressway exit").'
+        : 'What cultural discovery or journey experience would you like to share?';
+      const submit = document.getElementById('composerSubmitBtn');
+      if (submit) submit.textContent = isAlert ? '⚠️ Publish Alert' : 'Post to Feed';
+      // Polls don't make sense on an alert; hide that tool while in alert mode.
+      document.querySelectorAll('.composer-quick-actions .composer-tool-btn[title="Create Poll"]').forEach(b => { b.style.display = isAlert ? 'none' : ''; });
+      if (isAlert) fillAlertDestinations();
+    }
+
+    function setAlertKind(btn) {
+      alertKind = btn.dataset.kind;
+      document.querySelectorAll('.alert-kind-btn').forEach(b => b.classList.toggle('active', b === btn));
+    }
+
+    function resetAlertGps() {
+      alertGpsResult = null;
+      const box = document.getElementById('alertGpsBox');
+      const st = document.getElementById('alertGpsStatus');
+      const btn = document.getElementById('alertGpsBtn');
+      if (box) box.classList.remove('ok', 'fail');
+      if (st) st.innerHTML = '<strong>Verify you\'re actually there.</strong> Alerts publish only when your live location is near the destination — so the community can trust them. Your location is requested only when you tap Verify.';
+      if (btn) { btn.disabled = false; btn.textContent = '📍 Verify my location'; }
+    }
+
+    /* The only place in the app that asks the browser for location. */
+    function verifyAlertLocation() {
+      const box = document.getElementById('alertGpsBox');
+      const st = document.getElementById('alertGpsStatus');
+      const btn = document.getElementById('alertGpsBtn');
+      const dest = document.getElementById('alertDestinationSelect')?.value;
+      const target = ALERT_DESTINATIONS[dest];
+      if (!target) { showSocialToast('Choose the destination first.'); return; }
+      if (!('geolocation' in navigator)) {
+        box.classList.add('fail'); st.innerHTML = '<strong>Location unavailable.</strong> This browser can\'t provide GPS, so alerts can\'t be verified here.'; return;
+      }
+      btn.disabled = true; btn.textContent = 'Locating…';
+      box.classList.remove('ok', 'fail');
+      st.innerHTML = 'Getting your live position… allow the location prompt if the browser asks.';
+
+      navigator.geolocation.getCurrentPosition(pos => {
+        const { latitude: lat, longitude: lng, accuracy } = pos.coords;
+        const distanceKm = haversineKm(lat, lng, target.lat, target.lng);
+        const ok = distanceKm <= ALERT_RADIUS_KM;
+        alertGpsResult = { ok, lat, lng, accuracy, distanceKm, destination: dest, at: Date.now() };
+        box.classList.add(ok ? 'ok' : 'fail');
+        const km = distanceKm < 1 ? (distanceKm * 1000).toFixed(0) + ' m' : distanceKm.toFixed(1) + ' km';
+        st.innerHTML = ok
+          ? `<strong>✅ Verified on location.</strong> You are ${km} from ${dest} (±${Math.round(accuracy)} m). Publish when ready.`
+          : `<strong>❌ Too far to verify.</strong> You are ${km} from ${dest}; alerts can only be published from within ${ALERT_RADIUS_KM} km of the destination. If you\'re reporting from elsewhere, share it as a normal post instead.`;
+        btn.disabled = false; btn.textContent = ok ? '✅ Verified' : '📍 Try again';
+      }, err => {
+        alertGpsResult = null;
+        box.classList.add('fail');
+        const why = err.code === 1 ? 'Location permission was denied. Allow it in the browser and try again.'
+                  : err.code === 2 ? 'Your position couldn\'t be determined. Move to open sky and try again.'
+                  : 'Timed out waiting for GPS. Try again.';
+        st.innerHTML = '<strong>Couldn\'t verify.</strong> ' + why;
+        btn.disabled = false; btn.textContent = '📍 Try again';
+      }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 });
+    }
+
+    /* ── People in the community ─────────────────────────────────────
+       The seed personas, in one place, so profiles, follower lists and the
+       "who follows you back" behaviour all read the same data. */
+    const PERSONAS = {
+      aditi:  { id: 'aditi',  name: 'Aditi Sen',      handle: '@aditisen',     avatar: 'assets/images/remote/unsplash_photo-1544005313-94ddf0286df2_0dcd70.jpg', bio: 'Heritage photographer and handloom reviver based in Jaipur. Passionate about Bagru indigo.', followers: 1240, following: 386 },
+      rahul:  { id: 'rahul',  name: 'Rahul Mehta',    handle: '@rahul_voyager', avatar: 'assets/images/remote/unsplash_photo-1507003211169-0a1dd7228f2d_cd9f92.jpg', bio: 'Culinary explorer documenting heirloom Indian recipes and street traditions.', followers: 862, following: 211 },
+      meera:  { id: 'meera',  name: 'Meera Shah',     handle: '@meerashah',    avatar: 'assets/images/remote/unsplash_photo-1573496359142-b8d87734a5a2_ffdd56.jpg', bio: 'Tribal arts documentarian working across Bastar and Central India.', followers: 2310, following: 540 },
+      arjun:  { id: 'arjun',  name: 'Arjun Kapoor',   handle: '@arjunkapoor',  avatar: 'assets/images/remote/unsplash_photo-1500648767791-00dcc994a43e_8c87f8.jpg', bio: 'Cultural filmmaker and community lead. Stories from the road.', followers: 4120, following: 98 },
+      ananya: { id: 'ananya', name: 'Dr. Ananya Roy', handle: '@ananya_roy',   avatar: 'assets/images/remote/unsplash_photo-1573496359142-b8d87734a5a2_ffdd56.jpg', bio: 'Senior ethnobotanist researching living root architecture in Meghalaya and Assam.', followers: 980, following: 143 }
+    };
+    function isMe(id) { return id === 'current_user' || (id || '').startsWith('user_'); }
+
+    /* Followers of the signed-in person, kept per account. There is no server,
+       so followers come from the personas who follow you back when you follow
+       them — which makes the Followers tab demonstrable rather than forever 0. */
+    function followersKey() { return 'virasat_social_followers:' + (getCurrentUser().email || 'guest'); }
+    function getMyFollowers() {
+      try { return new Set(JSON.parse(localStorage.getItem(followersKey()) || '[]')); } catch (e) { return new Set(); }
+    }
+    function saveMyFollowers(set) {
+      try { localStorage.setItem(followersKey(), JSON.stringify([...set])); } catch (e) {}
+    }
+    function bioKey() { return 'virasat_social_bio:' + (getCurrentUser().email || 'guest'); }
+    function getMyBio() {
+      let b = null; try { b = localStorage.getItem(bioKey()); } catch (e) {}
+      return b || 'Heritage explorer on Virasat. Sharing dispatches, crafts and travel alerts from the road.';
+    }
+
+    /* ── My Profile ─────────────────────────────────────────────────── */
+    let myProfileTab = 'posts';
+    function openMyProfile(tab) {
+      const me = getCurrentUser();
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      const av = document.getElementById('meAvatar'); if (av) av.src = me.avatar;
+      set('meName', me.name); set('meHandle', me.handle); set('meEmail', me.email || 'Not signed in');
+      set('meBio', getMyBio());
+      const edit = document.getElementById('meBioEdit'); if (edit) { edit.style.display = 'none'; edit.value = getMyBio(); }
+      const bioBtn = document.getElementById('meEditBioBtn'); if (bioBtn) bioBtn.textContent = '✏️ Edit bio';
+      document.getElementById('meProfileModal')?.classList.add('active');
+      setMyProfileTab(tab || 'posts');
+    }
+    function closeMyProfile() { document.getElementById('meProfileModal')?.classList.remove('active'); }
+
+    function toggleEditBio() {
+      const view = document.getElementById('meBio'), edit = document.getElementById('meBioEdit'), btn = document.getElementById('meEditBioBtn');
+      if (!view || !edit || !btn) return;
+      const editing = edit.style.display !== 'none';
+      if (editing) {
+        const val = edit.value.trim().slice(0, 160);
+        try { localStorage.setItem(bioKey(), val); } catch (e) {}
+        view.textContent = val || getMyBio();
+        edit.style.display = 'none'; btn.textContent = '✏️ Edit bio';
+        showSocialToast('Bio updated.');
+      } else {
+        edit.value = getMyBio(); edit.style.display = 'block'; edit.focus(); btn.textContent = '💾 Save bio';
+      }
+    }
+
+    function myPosts() {
+      const me = getCurrentUser();
+      return socialPosts.filter(p => p.author && (p.author.id === me.id || isMe(p.author.id)));
+    }
+
+    function setMyProfileTab(tab) {
+      myProfileTab = tab;
+      const mine = myPosts();
+      const followers = getMyFollowers();
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      set('mePostsCount', mine.length); set('meFollowersCount', followers.size); set('meFollowingCount', followedUserIds.size);
+      ['Posts', 'Followers', 'Following'].forEach(t => {
+        document.getElementById('meTab' + t)?.classList.toggle('active', t.toLowerCase() === tab);
+        document.getElementById('meStat' + t)?.classList.toggle('active', t.toLowerCase() === tab);
+      });
+      const body = document.getElementById('meBody');
+      if (!body) return;
+
+      if (tab === 'posts') {
+        if (!mine.length) {
+          body.innerHTML = `<div class="me-empty"><strong>No posts yet</strong>Share your first dispatch or a travel alert and it will appear here.</div>`;
+          return;
+        }
+        body.innerHTML = `<div class="me-grid">${mine.map(p => {
+          const img = p.images && p.images[0];
+          const inner = img ? `<img src="${img}" alt="" loading="lazy">` : `<div class="me-grid-text">${(p.content || '').replace(/</g, '&lt;')}</div>`;
+          const alertTag = p.type === 'alert' ? `<span class="me-grid-alert">⚠️ Alert</span>` : '';
+          return `<div class="me-grid-item" onclick="jumpToMyPost('${p.id}')" title="Open post">${inner}${alertTag}<span class="me-grid-likes">♥ ${p.likes || 0}</span></div>`;
+        }).join('')}</div>`;
+        return;
+      }
+
+      const list = tab === 'followers' ? [...followers] : [...followedUserIds];
+      if (!list.length) {
+        body.innerHTML = tab === 'followers'
+          ? `<div class="me-empty"><strong>No followers yet</strong>Follow creators and share dispatches — people who like your work will follow you back.</div>`
+          : `<div class="me-empty"><strong>Not following anyone</strong>Tap Follow on a creator's profile to see their dispatches in your Following feed.</div>`;
+        return;
+      }
+      body.innerHTML = `<div class="me-people">${list.map(id => {
+        const u = PERSONAS[id]; if (!u) return '';
+        const iFollow = followedUserIds.has(id);
+        const btn = tab === 'following'
+          ? `<button class="following" onclick="toggleFollowCreator('${id}'); setMyProfileTab('following')">Unfollow</button>`
+          : (iFollow ? `<button class="following" onclick="toggleFollowCreator('${id}'); setMyProfileTab('followers')">Following</button>`
+                     : `<button class="primary" onclick="toggleFollowCreator('${id}'); setMyProfileTab('followers')">Follow back</button>`);
+        return `<div class="me-person">
+          <img loading="lazy" decoding="async" src="${u.avatar}" alt="${u.name}" onclick="closeMyProfile(); openProfileModal('${id}')" style="cursor:pointer;">
+          <div class="me-person-meta" onclick="closeMyProfile(); openProfileModal('${id}')" style="cursor:pointer;"><h5>${u.name}</h5><span>${u.handle} · ${u.bio}</span></div>
+          ${btn}
+        </div>`;
+      }).join('')}</div>`;
+    }
+
+    function jumpToMyPost(postId) {
+      closeMyProfile();
+      const post = socialPosts.find(p => p.id === postId);
+      if (post && post.type === 'alert' && currentFeedTab !== 'alerts') switchFeedTab('alerts');
+      else if (currentFeedTab === 'saved' || currentFeedTab === 'following' || currentFeedTab === 'alerts') switchFeedTab('for_you');
+      activeFilterTag = null; renderSocialFeed();
+      const card = document.getElementById('card_' + postId);
+      if (card) { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); card.style.outline = '2px solid var(--accent-terracotta)'; setTimeout(() => { card.style.outline = ''; }, 1800); }
+    }
+
+    /* ── Edit / delete your own posts ─────────────────────────────── */
+    let ownMenuPostId = null;
+    let editingPostId = null;
+    function openOwnPostMenu(postId) { ownMenuPostId = postId; document.getElementById('ownPostModal')?.classList.add('active'); }
+    function closeOwnPostMenu() { ownMenuPostId = null; document.getElementById('ownPostModal')?.classList.remove('active'); }
+
+    function deleteOwnPost() {
+      const id = ownMenuPostId; closeOwnPostMenu();
+      const post = socialPosts.find(p => p.id === id);
+      if (!post) return;
+      if (!confirm(post.type === 'alert' ? 'Delete this travel alert? Other travellers will no longer see it.' : 'Delete this post? This cannot be undone.')) return;
+      socialPosts = socialPosts.filter(p => p.id !== id);
+      try { localStorage.setItem('virasat_social_posts', JSON.stringify(socialPosts)); } catch (e) {}
+      renderSocialFeed();
+      if (document.getElementById('meProfileModal')?.classList.contains('active')) setMyProfileTab(myProfileTab);
+      showSocialToast(post.type === 'alert' ? 'Travel alert deleted.' : 'Post deleted.');
+    }
+
+    function editOwnPost() {
+      const id = ownMenuPostId; closeOwnPostMenu();
+      const post = socialPosts.find(p => p.id === id);
+      if (!post) return;
+      openComposerModal();
+      editingPostId = id;
+      const isAlert = post.type === 'alert';
+      setComposerType(isAlert ? 'alert' : 'post');
+      // An alert's kind, destination and GPS proof stay as they were verified;
+      // only the wording can change. Lock the switch so a post can't become an
+      // alert (or vice-versa) without going through verification.
+      document.getElementById('typeBtnPost').disabled = true;
+      document.getElementById('typeBtnAlert').disabled = true;
+      document.getElementById('composerTextInput').value = post.content || '';
+      document.getElementById('composerImageUrl').value = (post.images && post.images[0]) || '';
+      document.getElementById('composerLocationInput').value = post.location || '';
+      document.getElementById('composerTagsInput').value = (post.tags || []).join(', ');
+      if (isAlert) {
+        document.getElementById('composerAlertPanel').style.display = 'none';
+      }
+      if (post.images && post.images[0]) toggleComposerAddon('photo');
+      document.querySelector('.composer-modal-header h3').textContent = isAlert ? 'Edit Travel Alert' : 'Edit Post';
+      document.getElementById('composerSubmitBtn').textContent = '💾 Save changes';
+    }
+
+    function finishEditMode() {
+      editingPostId = null;
+      document.getElementById('typeBtnPost').disabled = false;
+      document.getElementById('typeBtnAlert').disabled = false;
+      const panel = document.getElementById('composerAlertPanel'); if (panel) panel.style.display = '';
+      const h = document.querySelector('.composer-modal-header h3'); if (h) h.textContent = 'Create Post';
+    }
+
+    /* The person actually signed in (from login.html), used as the author of
+       anything they post. Posts used to be attributed to a fixed persona with
+       a stock photo, so your own dispatch never looked like yours. */
+    function getCurrentUser() {
+      const email = (localStorage.getItem('virasat_user_email') || '').trim().toLowerCase();
+      let users = {};
+      try { users = JSON.parse(localStorage.getItem('virasat_users') || '{}'); } catch (e) {}
+      const rec = users[email] || {};
+      const name = rec.name || localStorage.getItem('virasat_user_name') ||
+        (email ? email.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Virasat Explorer');
+      const handle = '@' + (email ? email.split('@')[0] : 'explorer').replace(/[^a-z0-9_]/gi, '_').toLowerCase();
+      const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || 'V';
+      // Initials avatar as a data URI — no network, no wrong-person stock photo.
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%239E4733'/><stop offset='1' stop-color='%23c9a84c'/></linearGradient></defs><rect width='120' height='120' fill='url(%23g)'/><text x='60' y='74' text-anchor='middle' font-family='Georgia,serif' font-size='46' font-weight='700' fill='%23fff'>${initials}</text></svg>`;
+      return {
+        id: email ? 'user_' + email : 'current_user',
+        name, handle, email,
+        avatar: 'data:image/svg+xml;utf8,' + svg,
+        verified: false,
+        bio: (rec.role === 'artisan') ? 'Verified Artisan' : 'Virasat Community Member',
+        signedIn: !!email
+      };
+    }
+
+    /* Stored posts may predate the current schema (older builds saved posts
+       without an author object, tags or comments). Rendering used to throw on
+       the first such post, which emptied the feed and aborted publishing. */
+    function normalizePost(p) {
+      if (!p || typeof p !== 'object') return null;
+      const a = (p.author && typeof p.author === 'object') ? p.author : {};
+      return Object.assign({}, p, {
+        id: p.id || ('post_' + Math.random().toString(36).slice(2)),
+        author: Object.assign({
+          id: 'unknown', name: 'Virasat Explorer', handle: '@explorer',
+          avatar: getCurrentUser().avatar, verified: false, bio: ''
+        }, a),
+        time: p.time || 'Earlier',
+        location: p.location || 'India',
+        region: p.region || 'North',
+        content: p.content || '',
+        tags: Array.isArray(p.tags) ? p.tags : [],
+        likes: Number(p.likes) || 0,
+        comments: Array.isArray(p.comments) ? p.comments : [],
+        images: Array.isArray(p.images) ? p.images : (p.images ? [p.images] : undefined),
+        type: p.type === 'alert' ? 'alert' : 'post',
+        alert: (p.type === 'alert' && p.alert && typeof p.alert === 'object') ? p.alert : undefined
+      });
+    }
+
+    // --- Initialize Community ---
+    function initSocialCommunity() {
+      const storedPosts = localStorage.getItem('virasat_social_posts');
+      if (storedPosts) {
+        try {
+          const parsed = JSON.parse(storedPosts);
+          socialPosts = Array.isArray(parsed) ? parsed.map(normalizePost).filter(Boolean) : SEED_SOCIAL_POSTS;
+          if (!socialPosts.length) socialPosts = SEED_SOCIAL_POSTS;
+        } catch (e) { socialPosts = SEED_SOCIAL_POSTS; }
+      } else {
+        socialPosts = SEED_SOCIAL_POSTS;
+      }
+      try { localStorage.setItem('virasat_social_posts', JSON.stringify(socialPosts)); } catch (e) {}
+
+      const storedLikes = localStorage.getItem('virasat_social_likes');
+      if (storedLikes) {
+        try { likedPostIds = new Set(JSON.parse(storedLikes)); } catch (e) {}
+      }
+
+      const storedSaved = localStorage.getItem('virasat_social_saved');
+      if (storedSaved) {
+        try { savedPostIds = new Set(JSON.parse(storedSaved)); } catch (e) {}
+      }
+
+      const storedFollows = localStorage.getItem('virasat_social_follows');
+      if (storedFollows) {
+        try { followedUserIds = new Set(JSON.parse(storedFollows)); } catch (e) {}
+      }
+
+      updateSavedBadges();
+      syncFollowButtons();
+      renderSocialFeed();
+    }
+
+    function updateSavedBadges() {
+      const badge = document.getElementById('leftSavedBadge');
+      if (badge) badge.innerText = savedPostIds.size;
+    }
+
+    function syncFollowButtons() {
+      ['aditi', 'rahul', 'meera'].forEach(userId => {
+        const btn = document.getElementById(`followBtn_${userId}`);
+        if (btn) {
+          const isF = followedUserIds.has(userId);
+          btn.classList.toggle('following', isF);
+          btn.innerText = isF ? 'Following' : 'Follow';
+        }
+      });
+    }
+
+    // --- Switch Feed Tabs ---
+    function switchFeedTab(tabKey) {
+      currentFeedTab = tabKey;
+      activeFilterTag = null;
+
+      // Update Header Tab UI
+      ['for_you', 'following', 'trending', 'nearby', 'alerts'].forEach(t => {
+        const btn = document.getElementById(`feedTab${t.charAt(0).toUpperCase() + t.slice(1).replace('_', '')}`);
+        if (btn) btn.classList.toggle('active', t === tabKey);
+      });
+
+      // Update Left Sidebar UI
+      ['ForYou', 'Following', 'Trending', 'Nearby', 'Saved', 'Alerts'].forEach(t => {
+        const item = document.getElementById(`sideNav${t}`);
+        if (item) item.classList.toggle('active', t.toLowerCase() === tabKey.replace('_', ''));
+      });
+
+      renderSocialFeed();
+    }
+
+    function filterByTagDirect(tag) {
+      activeFilterTag = tag;
+      renderSocialFeed();
+      showSocialToast(`Showing posts tagged with ${tag}`);
+    }
+
+    function handleSocialSearch(val) {
+      const query = val.toLowerCase().trim();
+      renderSocialFeed(query);
+    }
+
+    // --- Render Social Feed ---
+    function renderSocialFeed(searchQuery = '') {
+      const container = document.getElementById('socialFeedPostsContainer');
+      if (!container) return;
+
+      let filtered = socialPosts.filter(post => {
+        // Tab Filtering
+        if (currentFeedTab === 'following') {
+          if (!followedUserIds.has(post.author.id)) return false;
+        } else if (currentFeedTab === 'saved') {
+          if (!savedPostIds.has(post.id)) return false;
+        } else if (currentFeedTab === 'nearby') {
+          // Regional near user
+          if (post.region !== 'North' && post.region !== 'West') return false;
+        } else if (currentFeedTab === 'alerts') {
+          if (post.type !== 'alert') return false;
+        }
+
+        // Tag Filter
+        if (activeFilterTag && !(post.tags && post.tags.includes(activeFilterTag))) {
+          return false;
+        }
+
+        // Search Query
+        if (searchQuery) {
+          const matchText = (post.content || '').toLowerCase().includes(searchQuery);
+          const matchAuthor = (post.author?.name || '').toLowerCase().includes(searchQuery);
+          const matchLoc = (post.location || '').toLowerCase().includes(searchQuery);
+          const matchTags = (post.tags || []).some(t => t.toLowerCase().includes(searchQuery));
+          if (!matchText && !matchAuthor && !matchLoc && !matchTags) return false;
+        }
+
+        return true;
+      });
+
+      if (currentFeedTab === 'trending') {
+        filtered = [...filtered].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 48px 20px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🕊️</div>
+            <h4 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-main);">No Dispatches in this stream</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); margin: 6px 0 16px;">
+              ${currentFeedTab === 'saved' ? 'You have not bookmarked any dispatches yet.' : currentFeedTab === 'alerts' ? 'No travel alerts right now. If you hit a road block, closure or hazard on the way to a monument, post an alert to warn fellow travellers.' : 'Be the first explorer to share a moment in this circle!'}
+            </p>
+            <button class="btn-quick-post" onclick="${currentFeedTab === 'alerts' ? 'openAlertComposer()' : 'openComposerModal()'}">${currentFeedTab === 'alerts' ? '⚠️ Post a Travel Alert' : 'Create Post'}</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(post => renderSingleSocialCard(post)).join('');
+      updateAlertsBadge();
+    }
+
+    function updateAlertsBadge() {
+      const n = socialPosts.filter(p => p.type === 'alert').length;
+      const b = document.getElementById('leftAlertsBadge');
+      if (b) b.textContent = n;
+      const tab = document.getElementById('feedTabAlerts');
+      if (tab) tab.textContent = n ? `⚠️ Alerts (${n})` : '⚠️ Alerts';
+    }
+
+    // --- Render Single Social Card HTML ---
+    function renderSingleSocialCard(post) {
+      const isLiked = likedPostIds.has(post.id);
+      const isSaved = savedPostIds.has(post.id);
+      const tagsHtml = (post.tags || []).map(t => `<span class="social-tag" onclick="filterByTagDirect('${t}')">${t}</span>`).join(' ');
+
+      // Media block rendering
+      let mediaHtml = '';
+      if (post.images && post.images.length === 1) {
+        mediaHtml = `
+          <div class="post-media-wrap single-img" onclick="openMediaPreview('${post.images[0]}')">
+            <img src="${post.images[0]}" alt="Post media" loading="lazy">
+          </div>
+        `;
+      } else if (post.images && post.images.length === 2) {
+        mediaHtml = `
+          <div class="post-media-wrap two-col-grid">
+            <img src="${post.images[0]}" alt="Media 1" onclick="openMediaPreview('${post.images[0]}')" loading="lazy">
+            <img src="${post.images[1]}" alt="Media 2" onclick="openMediaPreview('${post.images[1]}')" loading="lazy">
+          </div>
+        `;
+      } else if (post.images && post.images.length >= 3) {
+        mediaHtml = `
+          <div class="post-media-wrap three-img-collage">
+            <img src="${post.images[0]}" alt="Media 1" onclick="openMediaPreview('${post.images[0]}')" loading="lazy">
+            <img src="${post.images[1]}" alt="Media 2" onclick="openMediaPreview('${post.images[1]}')" loading="lazy">
+            <img src="${post.images[2]}" alt="Media 3" onclick="openMediaPreview('${post.images[2]}')" loading="lazy">
+          </div>
+        `;
+      }
+
+      // Poll block rendering
+      let pollHtml = '';
+      if (post.isPoll && post.poll) {
+        const hasVoted = votedPollIds.has(post.id);
+        const optionsHtml = post.poll.options.map((opt, idx) => {
+          const pct = Math.round((opt.votes / (post.poll.totalVotes || 1)) * 100);
+          return `
+            <button class="poll-option-btn" onclick="votePoll('${post.id}', ${idx})">
+              <div class="poll-progress-bar" style="width: ${hasVoted ? pct + '%' : '0%'};"></div>
+              <span class="poll-option-text">${opt.text}</span>
+              ${hasVoted ? `<span class="poll-percentage">${pct}%</span>` : ''}
+            </button>
+          `;
+        }).join('');
+
+        pollHtml = `
+          <div class="poll-box-container">
+            <div class="poll-question-title">${post.poll.question}</div>
+            <div class="poll-options-list">${optionsHtml}</div>
+            <div class="poll-meta-foot">${post.poll.totalVotes} votes • ${hasVoted ? '✓ You voted' : 'Tap an option to vote'}</div>
+          </div>
+        `;
+      }
+
+      // Long-form story strip
+      let longformHtml = '';
+      if (post.isLongForm && post.longFormStory) {
+        longformHtml = `
+          <div class="longform-read-strip">
+            <span>📖 Extended Field Chronicle Attached</span>
+            <span class="btn-read-deep-story" onclick="openDeepStoryReader('${post.id}')">Read full story &rarr;</span>
+          </div>
+        `;
+      }
+
+      // Entity chip
+      let entityHtml = '';
+      if (post.entity) {
+        entityHtml = `
+          <a href="${post.entity.link || '#'}" class="entity-context-chip">
+            <span>👤</span>
+            <span>${post.entity.name}</span>
+          </a>
+        `;
+      }
+
+      // Comments rendering
+      const comments = post.comments || [];
+      const commentsHtml = comments.map(c => `
+        <div class="comment-item-block">
+          <img loading="lazy" decoding="async" src="${c.avatar || 'assets/images/remote/unsplash_photo-1535713875002-d1d0cf377fde_9b93f3.jpg'}" alt="" class="comment-avatar">
+          <div class="comment-bubble-content">
+            <div class="comment-author-name">
+              <span>${c.name}</span>
+              <span class="comment-time">${c.time}</span>
+            </div>
+            <div class="comment-text">${c.text}</div>
+            <div class="comment-actions-micro">
+              <span>♡ Like</span>
+              <span>Reply</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      const isAlert = post.type === 'alert' && post.alert;
+      const alertBannerHtml = isAlert ? `
+          <div class="alert-banner">
+            <span>⚠️ Travel alert</span>
+            <span class="alert-kind">${post.alert.kind}</span>
+            <span class="alert-dest">→ ${post.alert.destination}</span>
+          </div>` : '';
+      const alertStampHtml = isAlert ? `
+          <div class="alert-verified-stamp" title="Published from a live GPS fix ${post.alert.distanceKm} km from the destination">
+            📍 GPS-verified on location · ${post.alert.distanceKm < 1 ? Math.round(post.alert.distanceKm * 1000) + ' m' : post.alert.distanceKm.toFixed(1) + ' km'} from ${post.alert.destination.split(',')[0]}
+          </div>` : '';
+
+      return `
+        <article class="post-card ${isAlert ? 'alert-card' : ''}" id="card_${post.id}">
+          ${alertBannerHtml}
+          <div class="post-header">
+            <div class="post-author-group" onclick="openProfileModal('${post.author.id}')">
+              <img loading="lazy" decoding="async" src="${post.author.avatar}" alt="${post.author.name}" class="post-author-avatar">
+              <div class="post-author-meta">
+                <h4>
+                  ${post.author.name}
+                  ${post.author.verified ? `<svg class="verified-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>` : ''}
+                </h4>
+                <div class="post-location-time">
+                  <span>📍 <a href="javascript:void(0)">${post.location}</a></span>
+                  <span>•</span>
+                  <span>${post.time}</span>${post.edited ? ' <span class="post-edited-tag">· edited</span>' : ''}
+                </div>
+              </div>
+            </div>
+
+            <button class="post-more-btn" onclick="openPostMoreMenu('${post.id}')" title="More options">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="post-content-body">
+            <p>${post.content}</p>
+            ${entityHtml}
+            <div class="post-cultural-tags">${tagsHtml}</div>
+          </div>
+
+          ${alertStampHtml}
+          ${mediaHtml}
+          ${pollHtml}
+          ${longformHtml}
+
+          <div class="post-actions-bar">
+            <div class="post-actions-left">
+              <button class="action-icon-btn ${isLiked ? 'liked' : ''}" onclick="toggleLikePost('${post.id}')">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span>${post.likes || 0}</span>
+              </button>
+
+              <button class="action-icon-btn" onclick="toggleCommentsDrawer('${post.id}')">
+                <svg viewBox="0 0 24 24">
+                  <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                </svg>
+                <span>${comments.length}</span>
+              </button>
+
+              <button class="action-icon-btn" onclick="sharePostDirect('${post.id}')">
+                <svg viewBox="0 0 24 24">
+                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/>
+                </svg>
+              </button>
+            </div>
+
+            <div>
+              <button class="action-icon-btn ${isSaved ? 'saved' : ''}" onclick="toggleSavePost('${post.id}')" title="Save post">
+                <svg viewBox="0 0 24 24">
+                  <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Inline Expandable Comments Drawer -->
+          <div class="post-comments-drawer" id="commentsDrawer_${post.id}">
+            <div class="comments-sort-row">
+              <span>Discussion (${comments.length})</span>
+              <select>
+                <option>Top comments</option>
+                <option>Newest first</option>
+              </select>
+            </div>
+
+            <div id="commentsList_${post.id}">
+              ${commentsHtml}
+            </div>
+
+            <div class="comment-input-inline-form">
+              <input type="text" id="commentInput_${post.id}" placeholder="Write a reflection or question..." onkeydown="if(event.key==='Enter') submitInlineComment('${post.id}')">
+              <button onclick="submitInlineComment('${post.id}')">Reply</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    // --- Like Interaction ---
+    function toggleLikePost(postId) {
+      const post = socialPosts.find(p => p.id === postId);
+      if (!post) return;
+
+      if (likedPostIds.has(postId)) {
+        likedPostIds.delete(postId);
+        post.likes = Math.max(0, (post.likes || 1) - 1);
+        showSocialToast("Like removed");
+      } else {
+        likedPostIds.add(postId);
+        post.likes = (post.likes || 0) + 1;
+        showSocialToast("Liked post ❤️");
+      }
+
+      localStorage.setItem('virasat_social_likes', JSON.stringify([...likedPostIds]));
+      localStorage.setItem('virasat_social_posts', JSON.stringify(socialPosts));
+      renderSocialFeed();
+    }
+
+    // --- Save Interaction ---
+    function toggleSavePost(postId) {
+      if (savedPostIds.has(postId)) {
+        savedPostIds.delete(postId);
+        showSocialToast("Removed from saved collection");
+      } else {
+        savedPostIds.add(postId);
+        showSocialToast("Saved to your personal collection 🔖");
+      }
+
+      localStorage.setItem('virasat_social_saved', JSON.stringify([...savedPostIds]));
+      updateSavedBadges();
+      renderSocialFeed();
+    }
+
+    // --- Toggle Comments Drawer ---
+    function toggleCommentsDrawer(postId) {
+      const drawer = document.getElementById(`commentsDrawer_${postId}`);
+      if (drawer) {
+        drawer.classList.toggle('open');
+        if (drawer.classList.contains('open')) {
+          document.getElementById(`commentInput_${postId}`)?.focus();
+        }
+      }
+    }
+
+    // --- Submit Inline Comment ---
+    function submitInlineComment(postId) {
+      const input = document.getElementById(`commentInput_${postId}`);
+      const text = input?.value.trim();
+      if (!text) return;
+
+      const post = socialPosts.find(p => p.id === postId);
+      if (!post) return;
+
+      if (!post.comments) post.comments = [];
+      const me = getCurrentUser();
+      post.comments.push({
+        name: me.name + " (You)",
+        time: "Just now",
+        avatar: me.avatar,
+        text: text
+      });
+
+      localStorage.setItem('virasat_social_posts', JSON.stringify(socialPosts));
+      input.value = '';
+      renderSocialFeed();
+      // keep open
+      setTimeout(() => {
+        document.getElementById(`commentsDrawer_${postId}`)?.classList.add('open');
+      }, 50);
+      showSocialToast("Reflection posted! 💬");
+    }
+
+    // --- Vote on Poll ---
+    function votePoll(postId, optionIdx) {
+      if (votedPollIds.has(postId)) {
+        showSocialToast("You have already voted on this poll");
+        return;
+      }
+
+      const post = socialPosts.find(p => p.id === postId);
+      if (!post || !post.poll) return;
+
+      post.poll.options[optionIdx].votes += 1;
+      post.poll.totalVotes += 1;
+      votedPollIds.add(postId);
+
+      localStorage.setItem('virasat_social_posts', JSON.stringify(socialPosts));
+      renderSocialFeed();
+      showSocialToast("Vote recorded! 📊");
+    }
+
+    // --- Follow Creator ---
+    function toggleFollowCreator(userId, btnEl) {
+      if (followedUserIds.has(userId)) {
+        followedUserIds.delete(userId);
+        showSocialToast("Unfollowed creator");
+      } else {
+        followedUserIds.add(userId);
+        showSocialToast("Now following! Their dispatches will appear in your Following feed.");
+        // Personas follow you back a moment later — the only way to gain
+        // followers without a server, and it makes the Followers tab real.
+        const u = PERSONAS[userId];
+        if (u) setTimeout(() => {
+          const f = getMyFollowers();
+          if (!f.has(userId)) {
+            f.add(userId); saveMyFollowers(f);
+            showSocialToast(`${u.name} followed you back 🎉`);
+            if (document.getElementById('meProfileModal')?.classList.contains('active')) setMyProfileTab(myProfileTab);
+          }
+        }, 1400);
+      }
+
+      try { localStorage.setItem('virasat_social_follows', JSON.stringify([...followedUserIds])); } catch (e) {}
+      syncFollowButtons();
+      if (currentFeedTab === 'following') renderSocialFeed();
+    }
+
+    // --- Share Post ---
+    function sharePostDirect(postId) {
+      navigator.clipboard?.writeText(window.location.href);
+      showSocialToast("Link copied to clipboard! Share this dispatch. ↗");
+    }
+
+    // --- Post More Menu & Report ---
+    function openPostMoreMenu(postId) {
+      const post = socialPosts.find(p => p.id === postId);
+      const me = getCurrentUser();
+      if (post && post.author && (post.author.id === me.id || isMe(post.author.id))) {
+        openOwnPostMenu(postId);
+        return;
+      }
+      reportingPostId = postId;
+      document.getElementById('reportModal').classList.add('active');
+    }
+
+    function closeReportModal() {
+      document.getElementById('reportModal').classList.remove('active');
+      reportingPostId = null;
+    }
+
+    function submitReport(reason) {
+      closeReportModal();
+      showSocialToast(`Thank you. Post reported for "${reason}". Virasat moderators will review.`);
+    }
+
+    // --- Media Lightbox Preview ---
+    function openMediaPreview(imgUrl) {
+      // preview modal
+      window.open(imgUrl, '_blank');
+    }
+
+    // --- Ephemeral Stories Viewer ---
+    const SEED_STORIES_DATA = {
+      story_your: { name: "Your Story", avatar: "", img: "assets/images/remote/Living_root_bridge__Maghalaya__India1_5aed9a.jpg", caption: "Early sunrise hike to the Double Decker Living Root Bridge in Nongriat." },
+      story_aditi: { name: "Aditi Sen", avatar: "assets/images/remote/unsplash_photo-1544005313-94ddf0286df2_bc88bb.jpg", img: "assets/images/remote/Woman_doing_Block_Printing_at_Bagru_village__Jaipur__India_c2c663.jpg", caption: "Sun-drying fresh indigo fabrics under the Jaipur afternoon sky." },
+      story_rahul: { name: "Rahul Mehta", avatar: "assets/images/remote/unsplash_photo-1507003211169-0a1dd7228f2d_2f8df5.jpg", img: "assets/images/remote/Dokra_from_tribes_of_Bastar_DSCN1172_03_98e9a7.jpg", caption: "Freshly roasted sattu stuffed parathas at an ancient highway dhaba." },
+      story_meera: { name: "Meera Shah", avatar: "assets/images/remote/unsplash_photo-1573496359142-b8d87734a5a2_2507cf.jpg", img: "assets/images/remote/Looms_at_Rehwa_society__Maheshwari_handloom_sarees_weavers_society__Maheshwar.jp_af7e8a.jpg", caption: "Molten bronze glow inside the earthen kiln in Bastar." },
+      story_arjun: { name: "Arjun Kapoor", avatar: "assets/images/remote/unsplash_photo-1500648767791-00dcc994a43e_433696.jpg", img: "assets/images/remote/Abhaneri-Chand_Baori-17a-Stufenbrunnen-2018-gje_73d846.jpg", caption: "Shadows dancing along the underground tiers of Rani ki Vav stepwell." }
+    };
+
+    let storyTimeout = null;
+
+    function openStoryViewer(storyKey) {
+      const data = SEED_STORIES_DATA[storyKey] || SEED_STORIES_DATA.story_aditi;
+      document.getElementById('storyViewerAvatar').src = data.avatar;
+      document.getElementById('storyViewerName').innerText = data.name;
+      document.getElementById('storyViewerImg').src = data.img;
+      document.getElementById('storyViewerCaption').innerText = data.caption;
+
+      const fill = document.getElementById('storyProgressFill');
+      fill.style.width = '0%';
+      document.getElementById('storyViewerModal').classList.add('active');
+
+      setTimeout(() => {
+        fill.style.width = '100%';
+      }, 50);
+
+      storyTimeout = setTimeout(() => {
+        closeStoryViewer();
+      }, 5000);
+    }
+
+    function closeStoryViewer(e) {
+      if (storyTimeout) clearTimeout(storyTimeout);
+      document.getElementById('storyViewerModal').classList.remove('active');
+    }
+
+    // --- Profile Drawer Modal ---
+    function openProfileModal(userId) {
+      const modal = document.getElementById('profileQuickModal');
+      const avatar = document.getElementById('modalProfileAvatar');
+      const name = document.getElementById('modalProfileName');
+      const handle = document.getElementById('modalProfileHandle');
+      const bio = document.getElementById('modalProfileBio');
+      const btn = document.getElementById('modalProfileFollowBtn');
+
+      if (isMe(userId)) { openMyProfile(); return; }
+
+      // Every persona used to fall through to Rahul; now each shows their own.
+      const u = PERSONAS[userId] || PERSONAS.rahul;
+      avatar.src = u.avatar;
+      name.innerText = u.name;
+      handle.innerText = u.handle;
+      bio.innerText = u.bio;
+      const postsOf = socialPosts.filter(p => p.author && p.author.id === u.id).length;
+      const pc = document.getElementById('modalProfilePostsCount'); if (pc) pc.textContent = postsOf;
+      const fc = document.getElementById('modalProfileFollowersCount'); if (fc) fc.textContent = (u.followers + (getMyFollowers().has(u.id) ? 0 : 0)).toLocaleString('en-IN');
+      const fg = document.getElementById('modalProfileFollowingCount'); if (fg) fg.textContent = u.following.toLocaleString('en-IN');
+      btn.innerText = followedUserIds.has(u.id) ? '✓ Following' : '+ Follow';
+      btn.onclick = () => { toggleFollowCreator(u.id); btn.innerText = followedUserIds.has(u.id) ? '✓ Following' : '+ Follow'; };
+
+      modal.classList.add('active');
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profileQuickModal').classList.remove('active');
+    }
+
+    // --- Deep Long-form Story Reader Modal ---
+    function openDeepStoryReader(postId) {
+      const post = socialPosts.find(p => p.id === postId);
+      if (!post || !post.longFormStory) return;
+
+      document.getElementById('deepReaderTitle').innerText = post.longFormStory.title;
+      document.getElementById('deepReaderMeta').innerText = `By ${post.author.name} • ${post.location} • ${post.time}`;
+      document.getElementById('deepReaderImg').src = post.images?.[0] || '';
+      document.getElementById('deepReaderContent').innerHTML = `
+        <p style="font-size: 1.12rem; line-height: 1.8; margin-bottom: 16px;">${post.longFormStory.fullText}</p>
+        <p style="line-height: 1.8; margin-bottom: 16px;">The War-Khasi people have perfected the botanical training of the <em>Ficus elastica</em> tree roots across fast-flowing mountain gorges. Unlike modern suspension bridges that corrode under the heavy monsoons of Cherrapunji, these living root bridges thrive and strengthen across centuries.</p>
+        <p style="line-height: 1.8;">Each generation trains young aerial rootlets through hollowed betel nut trunks. Decades later, children and grandchildren walk upon the living pathways nurtured by their ancestors.</p>
+      `;
+
+      document.getElementById('deepReaderModal').classList.add('active');
+    }
+
+    function closeDeepReader() {
+      document.getElementById('deepReaderModal').classList.remove('active');
+    }
+
+    // --- Rich Composer Modal ---
+    function openComposerModal() {
+      const modal = document.getElementById('composerModal');
+      if (!modal) return;
+      const me = getCurrentUser();
+      const nameEl = document.getElementById('composerAuthorName');
+      const avatarEl = document.getElementById('composerAuthorAvatar');
+      if (nameEl) nameEl.textContent = me.name;
+      if (avatarEl) avatarEl.src = me.avatar;
+      modal.classList.add('active');
+      if (editingPostId) finishEditMode();
+      setComposerType('post');
+      resetAlertGps();
+      clearComposerFile();
+      const input = document.getElementById('composerTextInput');
+      if (input) setTimeout(() => input.focus(), 30);
+    }
+
+    /* Shortcut used by the Alerts tab and the sidebar. */
+    function openAlertComposer() {
+      openComposerModal();
+      setComposerType('alert');
+    }
+
+    function openComposerWithAddon(addonType) {
+      openComposerModal();
+      toggleComposerAddon(addonType);
+    }
+
+    function closeComposerModal() {
+      document.getElementById('composerModal').classList.remove('active');
+      if (editingPostId) finishEditMode();
+    }
+
+    function toggleComposerAddon(addonType) {
+      const panel = document.getElementById('composerAddonsPanel');
+      panel.classList.add('open');
+
+      document.getElementById('addonSectionPhoto').style.display = addonType === 'photo' ? 'block' : 'none';
+      document.getElementById('addonSectionLocation').style.display = addonType === 'location' ? 'block' : 'none';
+      document.getElementById('addonSectionTags').style.display = addonType === 'tags' ? 'block' : 'none';
+      document.getElementById('addonSectionPoll').style.display = addonType === 'poll' ? 'block' : 'none';
+    }
+
+    function selectComposerPresetImg(url, el) {
+      document.getElementById('composerImageUrl').value = url;
+      document.querySelectorAll('.preset-thumb').forEach(t => t.classList.remove('selected'));
+      if (el) el.classList.add('selected');
+      clearComposerFile(false);
+    }
+
+    /* ── Browse from device ──
+       The chosen photo is shrunk and stored as a data URL in the same field
+       the URL/preset options fill, so the rest of the composer is unchanged. */
+    let composerFileDataUrl = null;
+    function clearComposerFile(alsoClearField = true) {
+      composerFileDataUrl = null;
+      const prev = document.getElementById('composerFilePreview');
+      if (prev) prev.classList.remove('show');
+      const note = document.getElementById('composerFileNote');
+      if (note) note.textContent = 'JPG, PNG or WebP · resized automatically';
+      if (alsoClearField) {
+        const f = document.getElementById('composerImageUrl');
+        if (f && f.value.startsWith('data:')) f.value = '';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('composerFileInput');
+      if (!input || !window.VirasatImagePicker) return;
+      VirasatImagePicker.attach({
+        input,
+        maxEdge: 1280,
+        quality: 0.82,
+        onStart: () => { const n = document.getElementById('composerFileNote'); if (n) n.textContent = 'Preparing photo…'; },
+        onImage: (dataUrl, file) => {
+          composerFileDataUrl = dataUrl;
+          document.getElementById('composerImageUrl').value = dataUrl;
+          document.querySelectorAll('.preset-thumb').forEach(t => t.classList.remove('selected'));
+          const img = document.getElementById('composerFilePreviewImg');
+          const prev = document.getElementById('composerFilePreview');
+          if (img) img.src = dataUrl;
+          if (prev) prev.classList.add('show');
+          const n = document.getElementById('composerFileNote');
+          if (n) n.textContent = `${file.name} · ${Math.round(dataUrl.length * 0.75 / 1024)} KB ready`;
+        },
+        onError: msg => showSocialToast(msg)
+      });
+    });
+
+    // --- Submit Composer Post ---
+    function submitComposerPost() {
+      const text = document.getElementById('composerTextInput')?.value.trim();
+      const imgUrl = document.getElementById('composerImageUrl')?.value.trim();
+      const loc = document.getElementById('composerLocationInput')?.value.trim() || 'India';
+      const rawTags = document.getElementById('composerTagsInput')?.value.trim() || '#Heritage';
+      const pollQ = document.getElementById('composerPollQ')?.value.trim();
+      const opt1 = document.getElementById('composerPollOpt1')?.value.trim();
+      const opt2 = document.getElementById('composerPollOpt2')?.value.trim();
+
+      if (composerType === 'alert' && !editingPostId) {
+        if (!text) { showSocialToast('Describe the problem so others know what to expect.'); return; }
+        const dest = document.getElementById('alertDestinationSelect')?.value;
+        if (!alertGpsResult || alertGpsResult.destination !== dest) {
+          showSocialToast('Tap "Verify my location" first — alerts publish only from near the destination.');
+          document.getElementById('alertGpsBox')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+        if (!alertGpsResult.ok) {
+          showSocialToast(`You're ${alertGpsResult.distanceKm.toFixed(0)} km from ${dest} — too far to publish an alert.`);
+          return;
+        }
+        // A fix older than 10 minutes must be re-taken; conditions change.
+        if (Date.now() - alertGpsResult.at > 10 * 60 * 1000) {
+          resetAlertGps();
+          showSocialToast('Your location check has expired — verify again.');
+          return;
+        }
+      } else if (!text && !imgUrl && !pollQ) {
+        showSocialToast("Please enter text, attach a photo, or write a question!");
+        return;
+      }
+
+      const tags = rawTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
+
+      if (editingPostId) {
+        const existing = socialPosts.find(p => p.id === editingPostId);
+        if (existing) {
+          existing.content = text || existing.content;
+          if (existing.type !== 'alert') {
+            existing.location = loc;
+            existing.tags = tags;
+            if (imgUrl) { existing.images = [imgUrl]; existing.mediaType = 'single'; }
+            else { delete existing.images; delete existing.mediaType; }
+          }
+          existing.edited = true;
+          try { localStorage.setItem('virasat_social_posts', JSON.stringify(socialPosts)); } catch (e) {}
+        }
+        finishEditMode();
+        const ti = document.getElementById('composerTextInput'); if (ti) ti.value = '';
+        closeComposerModal();
+        renderSocialFeed();
+        if (document.getElementById('meProfileModal')?.classList.contains('active')) setMyProfileTab(myProfileTab);
+        showSocialToast('Changes saved.');
+        return;
+      }
+
+      const me = getCurrentUser();
+      const newPost = {
+        id: "post_user_" + Date.now(),
+        author: {
+          id: me.id,
+          name: me.name,
+          handle: me.handle,
+          avatar: me.avatar,
+          verified: me.verified,
+          bio: me.bio
+        },
+        time: "Just now",
+        location: loc,
+        region: "North",
+        content: text || "Sharing a fresh encounter from my heritage expedition.",
+        tags: tags,
+        likes: 1,
+        comments: [],
+        type: 'post'
+      };
+
+      if (composerType === 'alert') {
+        const dest = alertGpsResult.destination;
+        newPost.type = 'alert';
+        newPost.location = dest;
+        newPost.tags = ['#TravelAlert', '#' + alertKind.replace(/[^A-Za-z]+/g, ''), '#' + dest.split(',')[0].replace(/[^A-Za-z]+/g, '')];
+        newPost.likes = 0;
+        newPost.alert = {
+          kind: alertKind,
+          destination: dest,
+          lat: +alertGpsResult.lat.toFixed(4),
+          lng: +alertGpsResult.lng.toFixed(4),
+          distanceKm: +alertGpsResult.distanceKm.toFixed(2),
+          verifiedAt: new Date(alertGpsResult.at).toISOString()
+        };
+      }
+
+      if (pollQ && opt1 && opt2) {
+        newPost.isPoll = true;
+        newPost.poll = {
+          question: pollQ,
+          options: [{ text: opt1, votes: 0 }, { text: opt2, votes: 0 }],
+          totalVotes: 0
+        };
+      } else if (imgUrl) {
+        newPost.mediaType = "single";
+        newPost.images = [imgUrl];
+      }
+
+      socialPosts.unshift(newPost);
+      try {
+        localStorage.setItem('virasat_social_posts', JSON.stringify(socialPosts));
+      } catch (e) {
+        // Almost always the ~5 MB quota. Keep the post on screen but say so.
+        showSocialToast('Saved for this session only — browser storage is full. Remove old photo posts to free space.');
+      }
+
+      // Reset
+      const ti = document.getElementById('composerTextInput'); if (ti) ti.value = '';
+      ['composerPollQ', 'composerPollOpt1', 'composerPollOpt2'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      closeComposerModal();
+      // Show the new post from the feed the visitor is on.
+      if (currentFeedTab === 'saved' || currentFeedTab === 'following') currentFeedTab = 'for_you';
+      activeFilterTag = null;
+      if (newPost.type === 'alert') { switchFeedTab('alerts'); }
+      else { try { renderSocialFeed(); } catch (e) { console.error('Feed render failed after publish:', e); } }
+      showSocialToast(newPost.type === 'alert' ? '⚠️ Travel alert published — thank you for warning fellow travellers.' : "Dispatch published to Virasat Community feed! 🕊️");
+      alertGpsResult = null;
+      const feed = document.getElementById('socialFeedPostsContainer');
+      if (feed && feed.scrollIntoView) feed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // --- Toast Helper ---
+    function showSocialToast(msg) {
+      const toast = document.getElementById('socialToast');
+      if (!toast) return;
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // --- Floating Virasat Mitr AI Chatbot ---
+    function toggleAiChat() {
+      const win = document.getElementById('aiChatWindow');
+      if (win) win.classList.toggle('active');
+    }
+
+    async function sendAiChatMessage() {
+      const input = document.getElementById('aiInputText');
+      const text = input?.value.trim();
+      if (!text) return;
+
+      const chatBody = document.getElementById('aiChatBody');
+      const userMsg = document.createElement('div');
+      userMsg.className = 'chat-msg user';
+      userMsg.innerText = text;
+      chatBody.appendChild(userMsg);
+      input.value = '';
+
+      const botMsg = document.createElement('div');
+      botMsg.className = 'chat-msg bot';
+      botMsg.innerHTML = `<em>✨ Virasat Mitr is consulting the community context...</em>`;
+      chatBody.appendChild(botMsg);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [
+              {
+                role: 'system',
+                content: 'You are Virasat Mitr, the cultural companion of the Virasat social network. Help travelers learn about crafts, folklore, and artisans mentioned in community posts (like Bagru indigo, Bastar Dhokra, or Malabar Theyyam). Keep answers warm, insightful, and under 80 words.'
+              },
+              { role: 'user', content: text }
+            ],
+            model: 'openai/gpt-oss-120b'
+          })
+        });
+
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        botMsg.innerHTML = data.choices?.[0]?.message?.content || data.reply || "A wonderful question!";
+      } catch (err) {
+        botMsg.innerHTML = "<b>⚠️ Live AI is offline.</b> Run <code>node server.js</code> in the project folder (or start the site with <code>node static_server.js</code>, which launches it automatically), then ask again.";
+      }
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // --- Initialize on DOM Loaded ---
+    document.addEventListener('DOMContentLoaded', () => {
+      initSocialCommunity();
+      // Everywhere the page shows "you", show the signed-in person.
+      const me = getCurrentUser();
+      document.querySelectorAll('[data-me-avatar]').forEach(img => { img.src = me.avatar; img.alt = me.name; });
+      if (typeof SEED_STORIES_DATA !== 'undefined' && SEED_STORIES_DATA.story_your) SEED_STORIES_DATA.story_your.avatar = me.avatar;
+      document.querySelectorAll('[data-me-name]').forEach(el => { el.textContent = me.name; });
+      document.querySelectorAll('[data-me-handle]').forEach(el => { el.textContent = me.handle; });
+    });
+  </script>
+<script src="assets/js/guide.js" defer></script>
+</body>
+
+</html>

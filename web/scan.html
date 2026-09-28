@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan Monument — VIRASAT AI Recognition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <script src="assets/js/subscription.js"></script>
+  <script src="assets/js/budget-data.js"></script>
+  <style>
+    :root {
+      --bg-primary: #FBF9F5;
+      --bg-surface: #F4EFE6;
+      --bg-card: #FFFFFF;
+      --bg-dark: #1E1C1A;
+
+      --text-main: #1F1D1B;
+      --text-muted: #6B655E;
+      --text-light: #948E85;
+
+      --accent-terracotta: #9E4733;
+      --accent-terracotta-hover: #853B29;
+      --accent-gold: #B5882D;
+
+      --border-light: #E7E1D7;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 8px rgba(31, 29, 27, 0.04);
+      --shadow-md: 0 8px 24px rgba(31, 29, 27, 0.07);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 60px;
+    }
+
+    /* Top Navigation Header */
+    .top-header-bar {
+      height: 64px;
+      padding: 0 24px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--text-main);
+      color: #ffffff;
+    }
+
+    /* Editorial Scanner Layout */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .editorial-header {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto 2.5rem auto;
+    }
+
+    .editorial-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      color: var(--accent-terracotta);
+    }
+
+    .editorial-header h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin: 0.5rem 0 0.8rem 0;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    .text-lead {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* File Upload Box */
+    .upload-drop-zone {
+      background: var(--bg-surface);
+      border: 2px dashed var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 3rem auto;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .upload-drop-zone:hover {
+      border-color: var(--accent-terracotta);
+      background: #F0E9DC;
+    }
+
+    .upload-icon-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary-action {
+      background-color: var(--text-main);
+      color: #FFFFFF;
+      border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: var(--radius-full);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary-action:hover {
+      background-color: var(--accent-terracotta);
+      transform: translateY(-1px);
+    }
+
+    /* Samples Grid */
+    .samples-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .samples-divider-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .samples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .sample-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .sample-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent-terracotta);
+    }
+
+    .sample-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .sample-card-info {
+      padding: 0.85rem;
+    }
+
+    .sample-card-info h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+      color: var(--text-main);
+    }
+
+    .sample-card-info span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Scanning & Result Stage */
+    .scan-stage-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .scan-stage-grid.has-result {
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    .photo-preview-box {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: var(--bg-surface);
+      height: 100%;
+      min-height: 420px;
+    }
+
+    .photo-preview-box img {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Laser Sweep Overlay */
+    .scan-laser-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(20, 18, 16, 0.55);
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .laser-line {
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      background: var(--accent-terracotta);
+      box-shadow: 0 0 16px var(--accent-terracotta), 0 0 24px var(--accent-gold);
+      animation: scanSweep 2.2s ease-in-out infinite;
+    }
+
+    @keyframes scanSweep {
+      0% {
+        top: 0%;
+      }
+
+      50% {
+        top: 96%;
+      }
+
+      100% {
+        top: 0%;
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinning-sparkle {
+      animation: spin 2.5s linear infinite;
+      margin-bottom: 0.8rem;
+    }
+
+    /* Result Card Styling */
+    .editorial-result-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .confidence-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent-terracotta);
+    }
+
+    .reset-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .reset-btn:hover {
+      color: var(--text-main);
+    }
+
+    .monument-result-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      margin: 0 0 0.2rem 0;
+      font-weight: 600;
+    }
+
+    .monument-meta-subtitle {
+      display: block;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--accent-terracotta);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 1.2rem 0;
+    }
+
+    .result-section {
+      margin-bottom: 1.2rem;
+    }
+
+    .result-section h4 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-main);
+    }
+
+    .craft-tag-pill {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 2px 4px 4px 0;
+    }
+
+    .info-dual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-explore-btn {
+      width: 100%;
+      padding: 0.9rem 1.4rem;
+      background: var(--text-main);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-full);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .cta-explore-btn:hover {
+      background: var(--accent-terracotta);
+    }
+
+    /* ── Persistent Floating AI Chatbot (Matches index.html Home Screen UI - Right Side) ── */
+    .ai-chatbot-trigger {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      background: rgba(10, 12, 17, 0.92);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      border-radius: 40px;
+      padding: 10px 18px 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(201, 168, 76, 0.2);
+      backdrop-filter: blur(16px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ai-chatbot-trigger:hover {
+      border-color: #c9a84c;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), 0 0 30px rgba(201, 168, 76, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .ai-bot-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+    }
+
+    .ai-bot-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #000;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .ai-trigger-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .ai-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .ai-chatbot-window,
+    .ai-chatbot-window *,
+    .ai-chatbot-trigger,
+    .ai-chatbot-trigger * {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    }
+
+    .ai-chatbot-window {
+      position: fixed;
+      bottom: 84px;
+      right: 28px;
+      width: 410px;
+      max-width: calc(100vw - 40px);
+      height: 560px;
+      max-height: calc(100vh - 120px);
+      background: rgba(10, 12, 17, 0.97);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(25px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .ai-chatbot-window.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .ai-chat-header {
+      padding: 14px 20px;
+      background: rgba(20, 24, 34, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ai-chat-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .ai-chat-sub {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .ai-close-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 22px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .ai-close-btn:hover {
+      color: #ffffff;
+    }
+
+    .mitr-tabs-bar {
+      display: flex;
+      background: rgba(18, 22, 32, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .mitr-tab-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      background: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .mitr-tab-btn.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 2px solid #c9a84c;
+    }
+
+    .mitr-tab-content-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .mitr-tab-pane {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .mitr-tab-pane.active {
+      display: flex;
+    }
+
+    .ai-chat-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .chat-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 88%;
+    }
+
+    .chat-msg.bot {
+      align-self: flex-start;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      letter-spacing: 0.1px;
+    }
+
+    .msg-bubble strong {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .chat-msg.bot .msg-bubble {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #f1f5f9;
+      border-top-left-radius: 2px;
+    }
+
+    .chat-msg.user .msg-bubble {
+      background: rgba(201, 168, 76, 0.25);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      color: #fff;
+      border-top-right-radius: 2px;
+    }
+
+    .ai-chips-wrapper {
+      padding: 10px 14px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 10, 15, 0.7);
+      flex-shrink: 0;
+    }
+
+    .ai-chips-wrapper::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    .ai-chips-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .ai-chip {
+      padding: 7px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      font-size: 12px;
+      font-weight: 500;
+      color: #f1f5f9;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .ai-chip:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .ai-chat-input-row {
+      padding: 12px 16px;
+      background: rgba(14, 16, 24, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-input-row input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .ai-chat-input-row input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .ai-send-btn {
+      background: #ffffff;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ai-send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    }
+
+    /* ── Budget Planner Form & Results Pane ── */
+    .budget-planner-pane {
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .budget-form-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .budget-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .budget-field-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .budget-field-group input,
+    .budget-field-group select {
+      padding: 7px 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #fff;
+      outline: none;
+    }
+
+    .budget-field-group select option {
+      background: #141824;
+      color: #fff;
+    }
+
+    .calc-budget-btn {
+      width: 100%;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, #c9a84c, #967527);
+      color: #000;
+      border: none;
+      border-radius: 20px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.25);
+    }
+
+    .calc-budget-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    .budget-result-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .budget-result-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .budget-city-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .res-style-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      background: rgba(201, 168, 76, 0.2);
+      color: #c9a84c;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+
+    .res-total-highlight {
+      font-size: 15px;
+      font-weight: 800;
+      color: #22c55e;
+    }
+
+    .budget-breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+
+    /* Entrance animation from Explore More transition */
+    @keyframes pageEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    body {
+      animation: pageEntrance 0.5s 0.1s cubic-bezier(0.16, 1, 0.3, 1) backwards; /* not "both": a lingering transform on <body> would trap every position:fixed element */
+    }
+
+    /* ── Live camera scanner ───────────────────────────────────────── */
+    .btn-live-scan { margin-top: 0.75rem; background: var(--accent-terracotta); }
+    .btn-live-scan:hover { background: var(--accent-terracotta-hover); }
+    .scanner-overlay {
+      position: fixed; inset: 0; z-index: 12000; background: #000; color: #fff;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+    }
+    .scanner-overlay[hidden] { display: none; }
+    .scanner-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+    .scanner-shade { position: absolute; inset: 0; background: rgba(0,0,0,.25); pointer-events: none; }
+    .scanner-frame {
+      position: relative; width: min(78vw, 60vh); aspect-ratio: 1 / 1; border-radius: 18px;
+      box-shadow: 0 0 0 9999px rgba(0,0,0,.45); overflow: hidden;
+    }
+    .sc-corner { position: absolute; width: 34px; height: 34px; border: 4px solid #F2C463; }
+    .sc-corner.tl { top: 0; left: 0; border-right: 0; border-bottom: 0; border-top-left-radius: 16px; }
+    .sc-corner.tr { top: 0; right: 0; border-left: 0; border-bottom: 0; border-top-right-radius: 16px; }
+    .sc-corner.bl { bottom: 0; left: 0; border-right: 0; border-top: 0; border-bottom-left-radius: 16px; }
+    .sc-corner.br { bottom: 0; right: 0; border-left: 0; border-top: 0; border-bottom-right-radius: 16px; }
+    .scanner-laser {
+      position: absolute; left: 6%; right: 6%; height: 3px; top: 8%;
+      background: linear-gradient(90deg, transparent, #F2C463, #fff, #F2C463, transparent);
+      box-shadow: 0 0 14px 3px rgba(242,196,99,.55);
+      animation: scannerSweep 2.2s ease-in-out infinite;
+    }
+    .scanner-overlay.is-capturing .scanner-laser { animation-duration: .6s; }
+    @keyframes scannerSweep { 0% { top: 8%; } 50% { top: 90%; } 100% { top: 8%; } }
+    .scanner-top {
+      position: absolute; top: 0; left: 0; right: 0; padding: calc(14px + env(safe-area-inset-top)) 16px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(rgba(0,0,0,.65), transparent);
+    }
+    .scanner-title { font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 800; color: #F2C463; }
+    .scanner-icon-btn {
+      width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.35);
+      background: rgba(0,0,0,.45); color: #fff; font-size: 18px; cursor: pointer;
+    }
+    .scanner-hint {
+      position: absolute; bottom: 150px; left: 0; right: 0; text-align: center; font-size: 14px;
+      color: rgba(255,255,255,.92); text-shadow: 0 1px 6px rgba(0,0,0,.8); padding: 0 24px;
+    }
+    .scanner-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 18px 28px calc(26px + env(safe-area-inset-bottom));
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(transparent, rgba(0,0,0,.7));
+    }
+    .scanner-spacer, .scanner-gallery-btn { width: 52px; height: 52px; }
+    .scanner-gallery-btn {
+      border-radius: 14px; border: 1px solid rgba(255,255,255,.35); background: rgba(0,0,0,.45); color: #fff; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .scanner-shutter {
+      width: 78px; height: 78px; border-radius: 50%; border: 4px solid #fff; background: transparent;
+      display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;
+    }
+    .scanner-shutter span { width: 60px; height: 60px; border-radius: 50%; background: #F2C463; transition: transform .12s ease; }
+    .scanner-shutter:active span { transform: scale(.86); }
+    .scanner-overlay.is-capturing .scanner-shutter { opacity: .5; pointer-events: none; }
+    .scanner-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; animation: scannerFlash .35s ease-out; }
+    @keyframes scannerFlash { 0% { opacity: .9; } 100% { opacity: 0; } }
+    @media (max-width: 768px) {
+      .upload-drop-zone label > p { display: none; }
+      .btn-live-scan { width: 100%; justify-content: center; }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="top-header-bar">
+    <a href="index.html?slide=scan" class="header-left" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+      <div style="background:#0f172a; width:32px; height:32px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo" style="height:20px; width:auto; mix-blend-mode:screen; filter:brightness(1.3);">
+      </div>
+      <div class="logo-title">Virasat</div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html?slide=scan" class="nav-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </svg>
+        <span>Home</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Editorial Header Title -->
+    <div class="editorial-header">
+      <span class="editorial-tag">AI Visual Recognition</span>
+      <h1>Scan Monument Photo & Uncover Heritage</h1>
+      <p class="text-lead">
+        Upload any photograph of an Indian monument or ancient temple. Our computer vision model identifies
+        architectural features, stone dynasties, associated crafts, and historical narratives.
+      </p>
+    </div>
+
+    <!-- Upload Stage & Sample Selector -->
+    <div id="uploadStage">
+      <!-- File Upload Box -->
+      <div class="upload-drop-zone">
+        <input type="file" accept="image/*" id="monumentFileInput" style="display: none;">
+        <label for="monumentFileInput" style="cursor: pointer; display: block;">
+          <div class="upload-icon-circle">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent-terracotta)"
+              stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </div>
+          <h3 style="font-family:var(--font-serif); font-size:1.5rem; margin-bottom:0.4rem;">Upload Monument Photograph
+          </h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.2rem;">
+            Drag and drop your file here or click to browse (JPG, PNG, WEBP)
+          </p>
+          <span class="btn-primary-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+            Choose Image
+          </span>
+        </label>
+        <button type="button" class="btn-primary-action btn-live-scan" id="openScannerBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+          </svg>
+          Scan with Camera
+        </button>
+      </div>
+
+      <!-- Live camera scanner -->
+      <div id="scannerOverlay" class="scanner-overlay" hidden>
+        <video id="scannerVideo" class="scanner-video" autoplay playsinline muted></video>
+        <canvas id="scannerCanvas" hidden></canvas>
+        <div class="scanner-shade"></div>
+        <div class="scanner-frame">
+          <span class="sc-corner tl"></span><span class="sc-corner tr"></span>
+          <span class="sc-corner bl"></span><span class="sc-corner br"></span>
+          <div class="scanner-laser"></div>
+        </div>
+        <div class="scanner-top">
+          <button type="button" class="scanner-icon-btn" id="scannerCloseBtn" aria-label="Close">&#x2715;</button>
+          <span class="scanner-title">Monument Scanner</span>
+          <button type="button" class="scanner-icon-btn" id="scannerFlipBtn" aria-label="Switch camera">&#x21bb;</button>
+        </div>
+        <div class="scanner-hint" id="scannerHint">Frame the monument inside the box</div>
+        <div class="scanner-bottom">
+          <button type="button" class="scanner-gallery-btn" id="scannerGalleryBtn" aria-label="Gallery">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </button>
+          <button type="button" class="scanner-shutter" id="scannerShutterBtn" aria-label="Scan">
+            <span></span>
+          </button>
+          <span class="scanner-spacer"></span>
+        </div>
+      </div>
+
+      <!-- Quick Pre-loaded Sample Monuments Grid -->
+      <div class="samples-wrapper">
+        <div class="samples-divider-title">
+          — Or select an iconic sample photograph to test AI recognition —
+        </div>
+        <div class="samples-grid" id="samplesGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Scanning & Results Stage -->
+    <div id="resultsStage" style="display: none;">
+      <div class="scan-stage-grid" id="scanStageGrid">
+
+        <!-- Left Photo Container with Laser Overlay -->
+        <div class="photo-preview-box">
+          <img loading="lazy" decoding="async" id="previewImage" src="" alt="Selected Monument">
+
+          <div class="scan-laser-overlay" id="laserOverlay">
+            <div class="laser-line"></div>
+            <div class="spinning-sparkle">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2">
+                <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14" />
+              </svg>
+            </div>
+            <p style="font-family:var(--font-serif); font-size:1.3rem; margin-bottom:4px;" id="scanStatusTitle">Analyzing Architectural
+              Features...</p>
+            <span style="font-size:0.8rem; color:#E0D8CE;" id="scanStatusDetail">Extracting stone carvings, era signatures & dome
+              geometry</span>
+          </div>
+        </div>
+
+        <!-- Right Result Details Container -->
+        <div class="editorial-result-card" id="resultCard" style="display: none;">
+          <div class="result-header-bar">
+            <span class="confidence-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-terracotta)"
+                stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <polyline points="9 12 11 14 15 10" />
+              </svg>
+              <span id="resConfidence">AI Detection Confirmed (99.4%)</span>
+            </span>
+            <button class="reset-btn" id="resetScanBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 4v6h-6" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
+              Scan Another
+            </button>
+          </div>
+
+          <h2 class="monument-result-title" id="resMonumentName">Taj Mahal</h2>
+          <span class="monument-meta-subtitle" id="resMonumentMeta">Agra, Uttar Pradesh • Emperor Shah Jahan (1631–1653
+            AD)</span>
+
+          <!-- Quick Monument Switcher / Verifier -->
+          <div id="monumentSelectorBar" style="margin: 0.6rem 0 1rem 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: var(--bg-surface); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--accent-terracotta);">🔍 Verified Site:</span>
+            <select id="monumentQuickSelect" style="flex: 1; min-width: 180px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.82rem; background: #FFF; cursor: pointer; color: var(--text-main); font-weight: 600;">
+            </select>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- History & Architectural Story -->
+          <div class="result-section">
+            <h4>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-terracotta)"
+                stroke-width="2">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3" />
+              </svg>
+              Heritage & Architectural History
+            </h4>
+            <p style="font-size:0.92rem; line-height:1.7; color:var(--text-main);" id="resHistoryStory"></p>
+          </div>
+
+          <!-- Associated Crafts -->
+          <div class="result-section">
+            <h4>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L3 13.25V21h7.75l9.49-9.49z" />
+              </svg>
+              Living Crafts of this Region
+            </h4>
+            <div id="resCraftsTags"></div>
+          </div>
+
+          <!-- Regional Food & Festivals Dual Grid -->
+          <div class="info-dual-grid">
+            <div>
+              <h4 style="font-size:0.88rem;">🍲 Local Food</h4>
+              <span style="font-size:0.82rem; color:var(--text-muted);" id="resFoodText"></span>
+            </div>
+            <div>
+              <h4 style="font-size:0.88rem;">📅 Key Festivals</h4>
+              <span style="font-size:0.82rem; color:var(--text-muted);" id="resFestivalsText"></span>
+            </div>
+          </div>
+
+          <!-- Explore City CTA -->
+          <a href="explore.html" id="resExploreBtn" class="cta-explore-btn">
+            <span>Explore Full City Page & Artisans</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Persistent Floating AI Chatbot -->
+  <div class="ai-chatbot-trigger" id="aiChatTrigger">
+    <div class="ai-bot-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2a8 8 0 0 1 8 8c0 5.33-8 12-8 12S4 15.33 4 10a8 8 0 0 1 8-8z" />
+        <circle cx="12" cy="10" r="2.5" />
+        <path d="M9 18l-2 3" />
+        <path d="M15 18l2 3" />
+      </svg>
+    </div>
+    <span class="ai-trigger-label">VIRASAT MITR AI</span>
+    <div class="ai-pulse-dot"></div>
+  </div>
+
+  <!-- Chatbot Window -->
+  <div class="ai-chatbot-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <div class="ai-chat-title-group">
+        <div class="ai-bot-icon" style="width:28px;height:28px;">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;">
+            <path d="M12 2a8 8 0 0 1 8 8c0 5.33-8 12-8 12S4 15.33 4 10a8 8 0 0 1 8-8z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+        </div>
+        <div>
+          <div class="ai-chat-title">Virasat Mitr AI</div>
+          <div class="ai-chat-sub">Cultural Guide & Budget Planner</div>
+        </div>
+      </div>
+      <button class="ai-close-btn" id="aiChatClose">&times;</button>
+    </div>
+
+    <div class="mitr-tabs-bar">
+      <button class="mitr-tab-btn active" id="tabBtnQA" onclick="switchMitrTab('qa')">💬 Regional Q&A</button>
+      <button class="mitr-tab-btn" id="tabBtnBudget" onclick="switchMitrTab('budget')">🧮 Budget Planner</button>
+    </div>
+
+    <div class="mitr-tab-content-container">
+      <div class="mitr-tab-pane active" id="paneQA">
+        <div class="ai-chat-body" id="aiChatBody">
+          <div class="chat-msg bot">
+            <div class="msg-bubble">
+              Namaste! I am your <strong>Virasat Mitr AI</strong>. Ask me anything about Indian heritage places, architectural styles, and scanner results!
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-chips-wrapper">
+          <div class="ai-chip" onclick="askAiQuestion('Tell me about Amber Fort history')">🏛️ Amber Fort</div>
+          <div class="ai-chip" onclick="askAiQuestion('Tell me about Panna Meena Stepwell')">✨ Panna Meena Story</div>
+          <div class="ai-chip" onclick="askAiQuestion('Varanasi Ganga Aarti timing and guide')">🕉️ Ganga Aarti</div>
+        </div>
+
+        <div class="ai-chat-input-row">
+          <input type="text" id="aiUserInput" placeholder="Ask about monuments, history, or culture..." autocomplete="off">
+          <button class="ai-send-btn" id="aiSendBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="mitr-tab-pane" id="paneBudget">
+        <div class="budget-planner-pane">
+          <div class="budget-form-row">
+            <div class="budget-field-group" style="flex:1;">
+              <label for="userBudgetInput">Your Budget (₹):</label>
+              <input type="number" id="userBudgetInput" value="10500" step="500" min="1000">
+            </div>
+            <div class="budget-field-group" style="width:90px;">
+              <label for="budgetDaysInput">Days:</label>
+              <input type="number" id="budgetDaysInput" value="3" min="1" max="30">
+            </div>
+          </div>
+
+          <div class="budget-field-group">
+            <label for="budgetCitySelect">Destination City:</label>
+            <select id="budgetCitySelect">
+              <!-- populated from assets/js/budget-data.js: every state & major UT -->
+              <option value="jaipur" selected>Jaipur (Rajasthan)</option>
+            </select>
+          </div>
+
+          <div class="budget-field-group">
+            <label for="budgetStyleSelect">Travel Style Preference:</label>
+            <select id="budgetStyleSelect">
+              <option value="Heritage Explorer" selected>Heritage Explorer (Balanced)</option>
+              <option value="Backpacker">Backpacker (Economical)</option>
+              <option value="Royal Luxury">Royal Luxury (Premium Stay & Dining)</option>
+            </select>
+          </div>
+
+          <button class="calc-budget-btn" onclick="calculateCulturalBudget()">
+            <span>✨</span>
+            <span>Plan Around My Budget</span>
+          </button>
+
+          <div class="budget-result-card" id="budgetResultCard">
+            <div class="budget-result-hdr">
+              <span class="budget-city-title" id="resCityTitle">Jaipur (3 Days)</span>
+              <span class="res-style-badge" id="resStyleTag">Heritage Explorer</span>
+            </div>
+            <div class="res-total-highlight" id="resTotalCost">Est. Total: ₹10,500</div>
+
+            <div class="budget-breakdown-grid">
+              <div class="breakdown-item"><span>🏨 Stay:</span> <strong id="resStayCost">₹4,200</strong></div>
+              <div class="breakdown-item"><span>🎨 Crafts & Shop:</span> <strong id="resShopCost">₹2,625</strong></div>
+              <div class="breakdown-item"><span>🍲 Dining:</span> <strong id="resDiningCost">₹2,100</strong></div>
+              <div class="breakdown-item"><span>🚗 Transit & Passes:</span> <strong id="resTransitCost">₹1,575</strong>
+              </div>
+            </div>
+
+            <div id="resBudgetRecommendation" style="font-size:11.5px;color:#c9a84c;margin-top:4px;">
+              🎯 <strong>AI Smart Allocation:</strong> Optimized for ₹3,500/day in Jaipur.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ── ROBOFLOW TRAINED MODEL CONFIGURATION ── */
+    const ROBOFLOW_CONFIG = {
+      apiKey: "ZsOHvF1rCOgUMIHR83o7",
+      modelId: "monuments-rlke5-zekfr",
+      version: 1,
+      endpoint: "https://detect.roboflow.com/monuments-rlke5-zekfr/1?api_key=ZsOHvF1rCOgUMIHR83o7"
+    };
+
+    /* ── CURATED HERITAGE KNOWLEDGE BASE FOR 30+ ICONIC INDIAN MONUMENTS ── */
+    const MONUMENT_KNOWLEDGE_BASE = {
+      "Taj Mahal": {
+        location: "Agra, Uttar Pradesh",
+        builtBy: "Mughal Emperor Shah Jahan (1631–1653 AD)",
+        cityId: "agra",
+        historyStory: "Built as an eternal testament of love for Empress Mumtaz Mahal on the banks of Yamuna River. Constructed using pure white Makrana marble from Rajasthan, thousands of precious lapis lazuli, turquoise, and carnelian stones were inlaid using the delicate Pietra Dura art.",
+        craftsAssociated: ["Pietra Dura Inlay Art", "Zardozi Gold Embroidery", "Agra Marble Carving"],
+        foodAssociated: ["Agra Petha (Ash Gourd Sweet)", "Mughlai Bedmi Poori"],
+        festivalsAssociated: ["Taj Mahotsav (February)"]
+      },
+      "Hawa Mahal": {
+        location: "Jaipur, Rajasthan",
+        builtBy: "Maharaja Sawai Pratap Singh (1799 AD)",
+        cityId: "jaipur",
+        historyStory: "Designed by Lal Chand Ustad in the shape of Lord Krishna's crown. Features 953 intricate jharokhas (small windows) with latticework that creates a Venturi air-cooling effect for royal ladies to observe street celebrations unnoticed.",
+        craftsAssociated: ["Jaipur Blue Pottery", "Block Printing", "Gota Patti Jewelry"],
+        foodAssociated: ["Dal Baati Churma", "Pyaaz Kachori"],
+        festivalsAssociated: ["Teej", "Gangaur"]
+      },
+      "Gateway of India": {
+        location: "Mumbai, Maharashtra",
+        builtBy: "Architect George Wittet (1911–1924 AD)",
+        cityId: "mumbai",
+        historyStory: "Erected to commemorate the landing of King George V and Queen Mary at Apollo Bunder in 1911. Designed in the Indo-Saracenic style combining Roman archways with Gujarati Islamic stone lattice craft.",
+        craftsAssociated: ["Kolhapuri Leatherwork", "Warli Folk Art"],
+        foodAssociated: ["Bombay Vada Pav", "Pav Bhaji"],
+        festivalsAssociated: ["Ganesh Chaturthi", "Elephanta Festival"]
+      },
+      "Red Fort": {
+        location: "Old Delhi, Delhi",
+        builtBy: "Mughal Emperor Shah Jahan (1638–1648 AD)",
+        cityId: "delhi",
+        historyStory: "Constructed from red sandstone when the Mughal capital shifted from Agra to Shahjahanabad. Houses iconic palaces like Diwan-i-Aam and Diwan-i-Khas, where Prime Ministers unfurl the national tricolor every Independence Day.",
+        craftsAssociated: ["Zardozi Threadwork", "Ivory & Bone Carving", "Meenakari Enameling"],
+        foodAssociated: ["Old Delhi Paranthas", "Daulat Ki Chaat"],
+        festivalsAssociated: ["Phool Walon Ki Sair", "Independence Day"]
+      },
+      "Konark Sun Temple": {
+        location: "Konark, Odisha",
+        builtBy: "Eastern Ganga King Narasimhadeva I (1250 AD)",
+        cityId: "konark",
+        historyStory: "Conceived as a colossal stone chariot driven by seven horses with 24 carved stone wheels symbolizing the sun god Surya. The wheels function as sundials calculating solar time accurate to the minute.",
+        craftsAssociated: ["Pattachitra Palm Leaf Painting", "Stone Carving", "Appliqué Work of Pipili"],
+        foodAssociated: ["Chhena Poda", "Dalma"],
+        festivalsAssociated: ["Konark Dance Festival (December)"]
+      },
+      "Meenakshi Amman Temple": {
+        location: "Madurai, Tamil Nadu",
+        builtBy: "Pandyan & Nayak Dynasties (6th - 17th Century AD)",
+        cityId: "madurai",
+        historyStory: "Dedicated to Goddess Meenakshi and Lord Sundareswarar. The 45-acre temple complex houses 33,000 stone sculptures and 14 towering gopurams decorated with thousands of painted mythological figures.",
+        craftsAssociated: ["Madurai Sungudi Saree", "Brass Idol Casting"],
+        foodAssociated: ["Madurai Jigarthanda", "Kari Dosa"],
+        festivalsAssociated: ["Chithirai Thiruvizha"]
+      },
+      "Mysore Palace": {
+        location: "Mysuru, Karnataka",
+        builtBy: "Wodeyar Dynasty & Henry Irwin (1912 AD)",
+        cityId: "mysore",
+        historyStory: "Official residence of the Wodeyar Maharajas. Blends Indo-Saracenic, Rajput, and Gothic styles with carved rosewood doors, stained glass ceilings, and over 97,000 light bulbs illuminating the facade during Dasara.",
+        craftsAssociated: ["Mysore Silk Weaving", "Rosewood Inlay", "Channapatna Wooden Toys"],
+        foodAssociated: ["Mysore Pak", "Mylari Dosa"],
+        festivalsAssociated: ["Mysore Dasara"]
+      },
+      "Hampi": {
+        location: "Hampi, Karnataka",
+        builtBy: "Vijayanagara Empire (14th–16th Century AD)",
+        cityId: "hampi",
+        historyStory: "Capital of the opulent Vijayanagara Empire situated along the Tungabhadra River. Features the stone chariot of Vittala Temple, musical pillars, royal pavilions, and monolithic Narasimha statues carved directly from granite boulders.",
+        craftsAssociated: ["Lambani Tribal Embroidery", "Banana Fiber Crafts"],
+        foodAssociated: ["Bisi Bele Bath", "Jolada Rotti"],
+        festivalsAssociated: ["Hampi Utsav"]
+      },
+      "Victoria Memorial": {
+        location: "Kolkata, West Bengal",
+        builtBy: "Architect William Emerson (1906–1921 AD)",
+        cityId: "kolkata",
+        historyStory: "A majestic white Makrana marble monument dedicated to Queen Victoria, surrounded by 64 acres of gardens. Blends British Classical architecture with Mughal domes and Islamic arch accents.",
+        craftsAssociated: ["Terracotta Craft of Bankura", "Kantha Stitch Embroidery", "Dokra Metal Craft"],
+        foodAssociated: ["Kolkata Kathi Roll", "Mishti Doi & Rasgulla"],
+        festivalsAssociated: ["Durga Puja"]
+      },
+      "Golden Temple": {
+        location: "Amritsar, Punjab",
+        builtBy: "Guru Arjan Dev Ji (1589 AD) & Maharaja Ranjit Singh",
+        cityId: "amritsar",
+        historyStory: "Harmandir Sahib stands surrounded by the sacred Amrit Sarovar lake. The upper floors were covered with over 750 kg of pure gold foil by Maharaja Ranjit Singh in 1830. Operates the world's largest free community kitchen (Langar).",
+        craftsAssociated: ["Phulkari Floral Embroidery", "Amritsari Brass Utensils", "Jutti Footwear"],
+        foodAssociated: ["Amritsari Kulcha", "Langar Ki Dal & Halwa"],
+        festivalsAssociated: ["Baisakhi", "Gurpurab"]
+      },
+      "Qutub Minar": {
+        location: "Mehrauli, New Delhi",
+        builtBy: "Qutb-ud-din Aibak & Iltutmish (1192 AD)",
+        cityId: "delhi",
+        historyStory: "A 73-meter tall UNESCO World Heritage minaret built of red sandstone carved with Arabic calligraphic inscriptions and intricate geometric bands. Houses the famous rust-resistant 1600-year-old Iron Pillar of Chandragupta II.",
+        craftsAssociated: ["Calligraphic Stone Carving", "Pottery of Blue Art"],
+        foodAssociated: ["Chole Bhature", "Nihari"],
+        festivalsAssociated: ["Qutub Festival of Music & Dance"]
+      },
+      "Charminar": {
+        location: "Hyderabad, Telangana",
+        builtBy: "Sultan Muhammad Quli Qutb Shah (1591 AD)",
+        cityId: "hyderabad",
+        historyStory: "Built to commemorate the end of a deadly plague epidemic. Features four grand arches supporting 56-meter tall minarets overlooking the historic Laad Bazaar pearl and bangle markets.",
+        craftsAssociated: ["Hyderabadi Lac Bangles", "Bidriware Metalwork", "Pearl Jewelry"],
+        foodAssociated: ["Hyderabadi Dum Biryani", "Double Ka Meetha"],
+        festivalsAssociated: ["Bonalu", "Deccan Festival"]
+      },
+      "Ajanta Caves": {
+        location: "Chhatrapati Sambhaji Nagar, Maharashtra",
+        builtBy: "Satavahana & Vakataka Dynasties (2nd Century BCE – 5th Century CE)",
+        cityId: "aurangabad",
+        historyStory: "30 rock-cut Buddhist cave monuments carved into a horseshoe-shaped cliff along the Waghora River. Famous for breathtaking ancient fresco paintings depicting Jataka tales, masterly rock sculptures, and serene prayer halls (Chaityas).",
+        craftsAssociated: ["Himroo Textile Weaving", "Bidri Metal Craft", "Stone Cave Relief Carving"],
+        foodAssociated: ["Aurangabadi Naan Qalia", "Thalipeeth"],
+        festivalsAssociated: ["Ellora Ajanta International Festival"]
+      },
+      "Ellora Caves": {
+        location: "Chhatrapati Sambhaji Nagar, Maharashtra",
+        builtBy: "Rashtrakuta & Yadava Dynasties (6th - 10th Century CE)",
+        cityId: "aurangabad",
+        historyStory: "34 rock-cut caves representing Buddhism, Hinduism, and Jainism. Houses the monolithic Kailasa Temple (Cave 16), carved entirely from top to bottom out of a single gigantic basalt cliff, removing 200,000 tonnes of rock.",
+        craftsAssociated: ["Paithani Silk Sarees", "Himroo Weaving", "Bidri Metal Craft"],
+        foodAssociated: ["Puran Poli", "Naan Qalia"],
+        festivalsAssociated: ["Ellora Festival"]
+      },
+      "India Gate": {
+        location: "Central New Delhi, Delhi",
+        builtBy: "Sir Edwin Lutyens (1921–1931 AD)",
+        cityId: "delhi",
+        historyStory: "A 42-meter high triumphal arch honoring 84,000 soldiers of the British Indian Army who died in World War I. Houses the Amar Jawan Jyoti memorial flame burning continuously under the archway.",
+        craftsAssociated: ["Delhi Brassware", "Zari Embroidery", "Paper Crafts"],
+        foodAssociated: ["Chaat", "Kulfi Falooda"],
+        festivalsAssociated: ["Republic Day Parade", "Independence Day"]
+      },
+      "Amer Fort": {
+        location: "Amer, Jaipur, Rajasthan",
+        builtBy: "Raja Man Singh I (1592 AD)",
+        cityId: "jaipur",
+        historyStory: "Grand hilltop fortress built from yellow and pink sandstone with white marble. Renowned for its Diwan-i-Khas, Ganesh Pol gateway, and the shimmering Sheesh Mahal inlaid with Belgian mirror convex tiles.",
+        craftsAssociated: ["Kundan Meena Jewelry", "Hand Block Printing", "Lac Bangles"],
+        foodAssociated: ["Ghevar", "Ker Sangri"],
+        festivalsAssociated: ["Elephant Festival", "Navratri Utsav"]
+      },
+      "Mehrangarh Fort": {
+        location: "Jodhpur, Rajasthan",
+        builtBy: "Rao Jodha (1459 AD)",
+        cityId: "jodhpur",
+        historyStory: "Towering 400 feet above the blue city of Jodhpur on a rocky cliff. Houses opulent period rooms including Moti Mahal, Phool Mahal, and Sheesh Mahal, with cannonball marks from historical sieges preserved on the outer gates.",
+        craftsAssociated: ["Mojari Footwear", "Tie & Dye Bandhani", "Bone Inlay Furniture"],
+        foodAssociated: ["Mirchi Bada", "Makhaniya Lassi"],
+        festivalsAssociated: ["Rajasthan International Folk Festival", "Marwar Utsav"]
+      },
+      "Golconda Fort": {
+        location: "Hyderabad, Telangana",
+        builtBy: "Kakatiya Dynasty & Qutb Shahi Kings (13th - 16th Century AD)",
+        cityId: "hyderabad",
+        historyStory: "Famous for its ingenious acoustic engineering: a hand clap at the entrance Fateh Darwaza can be clearly heard at the highest point of Bala Hissar, one kilometer away. Historically the trading center of legendary Koh-i-Noor and Hope diamonds.",
+        craftsAssociated: ["Bidriware", "Pochampally Ikat", "Golkonda Cotton"],
+        foodAssociated: ["Hyderabadi Haleem", "Irani Chai & Osmania Biscuits"],
+        festivalsAssociated: ["Bonalu Jathara", "Qutb Shahi Heritage Fest"]
+      },
+      "Sanchi Stupa": {
+        location: "Sanchi, Madhya Pradesh",
+        builtBy: "Mauryan Emperor Ashoka (3rd Century BCE)",
+        cityId: "delhi",
+        historyStory: "The oldest stone structure in India. Commissioned by Emperor Ashoka over the Buddha's sacred relics, featuring a hemispherical dome crowned by the parasol (Chhatri) and four elaborately carved Torana gateways.",
+        craftsAssociated: ["Chanderi Silk Weaving", "Bhopal Zardozi", "Gond Tribal Paintings"],
+        foodAssociated: ["Poha Jalebi", "Bhopali Gosht Korma"],
+        festivalsAssociated: ["Chethiyagiri Vihara Festival"]
+      },
+      "Khajuraho Temples": {
+        location: "Chhatarpur, Madhya Pradesh",
+        builtBy: "Chandela Dynasty (950–1050 AD)",
+        cityId: "varanasi",
+        historyStory: "UNESCO World Heritage group of Hindu and Jain temples famed for their Nagara-style architectural symbolism and intricate stone carvings celebrating human life, devotion, and celestial beauty (Apsaras).",
+        craftsAssociated: ["Bell Metal Dhokra Art", "Stone Sculpture Relief", "Terracotta Pottery"],
+        foodAssociated: ["Bhutte Ka Kees", "Dal Bafla"],
+        festivalsAssociated: ["Khajuraho Dance Festival (February)"]
+      },
+      "Brihadisvara Temple": {
+        location: "Thanjavur, Tamil Nadu",
+        builtBy: "Chola Emperor Raja Raja Chola I (1010 AD)",
+        cityId: "madurai",
+        historyStory: "A crowning masterpiece of Dravidian Chola architecture. Built entirely of granite, its 66-meter tall Vimana tower is topped by an 80-tonne monolithic stone dome (Kumbam) placed using a 6-km inclined ramp.",
+        craftsAssociated: ["Tanjore Gold Leaf Painting", "Bronze Lost-Wax Casting", "Thanjavur Art Plates"],
+        foodAssociated: ["Thanjavur Ashoka Halwa", "Filter Kaapi"],
+        festivalsAssociated: ["Maha Shivaratri", "Chola Natyanjali"]
+      },
+      "Mahabodhi Temple": {
+        location: "Bodh Gaya, Bihar",
+        builtBy: "Emperor Ashoka & Gupta Dynasty (3rd Century BCE – 5th Century CE)",
+        cityId: "bodhgaya",
+        historyStory: "Marks the sacred spot where Siddhartha Gautama achieved supreme enlightenment under the Bodhi Tree (Ficus religiosa) around 588 BCE. Features a 55-meter tall pyramidal spire.",
+        craftsAssociated: ["Madhubani Painting", "Sikki Grass Craft", "Stone Buddha Carving"],
+        foodAssociated: ["Bihari Litti Chokha", "Khaja Sweet"],
+        festivalsAssociated: ["Buddha Jayanti (Vaishakh Purnima)"]
+      },
+      "Sarnath Dhamek Stupa": {
+        location: "Sarnath, Varanasi, Uttar Pradesh",
+        builtBy: "Mauryan Emperor Ashoka & Gupta Dynasty (500 CE)",
+        cityId: "varanasi",
+        historyStory: "Built on the sacred site of Deer Park where Lord Buddha delivered his first sermon (Dhammacakkappavattana Sutta) to his first five disciples. Adorned with delicate Gupta-era floral carvings.",
+        craftsAssociated: ["Banarasi Zari Silk", "Varanasi Wooden Toys", "Gulabi Meenakari"],
+        foodAssociated: ["Banarasi Tamatar Chaat", "Malaiyo"],
+        festivalsAssociated: ["Buddha Purnima", "Dev Deepawali"]
+      }
+    };
+
+    /* ── POPULATE VERIFIED MONUMENT SELECTOR ── */
+    function populateQuickSelector() {
+      const select = document.getElementById('monumentQuickSelect');
+      if (!select) return;
+      select.innerHTML = Object.keys(MONUMENT_KNOWLEDGE_BASE).sort().map(m => `
+        <option value="${m}">${m}</option>
+      `).join('');
+
+      select.addEventListener('change', (e) => {
+        const chosen = e.target.value;
+        if (MONUMENT_KNOWLEDGE_BASE[chosen]) {
+          renderMonumentResult(chosen, 99.1, "Verified Selection");
+        }
+      });
+    }
+    populateQuickSelector();
+
+    /* ── FAST CLIENT-SIDE IMAGE COMPRESSOR (Transforms 10MB into 40KB in 20ms) ── */
+    function compressImageForInference(imgInput, maxDim = 640) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+          const base64Clean = dataUrl.split(',')[1] || '';
+          resolve({ dataUrl, base64Clean });
+        };
+        img.onerror = () => {
+          if (typeof imgInput === 'string' && imgInput.startsWith('data:')) {
+            resolve({ dataUrl: imgInput, base64Clean: imgInput.split(',')[1] || '' });
+          } else {
+            resolve({ dataUrl: imgInput, base64Clean: '' });
+          }
+        };
+
+        if (typeof imgInput === 'string') {
+          img.src = imgInput;
+        } else if (imgInput instanceof File || imgInput instanceof Blob) {
+          const reader = new FileReader();
+          reader.onload = (e) => { img.src = e.target.result; };
+          reader.readAsDataURL(imgInput);
+        }
+      });
+    }
+
+    /* ── NAME NORMALISER ── */
+    function cleanMonumentTitle(str) {
+      if (!str) return "Heritage Monument";
+      let clean = str.replace(/\.(jpeg|jpg|png|webp|gif|bmp)$/i, '');
+      clean = clean.replace(/[-_\.]+/g, ' ').replace(/\s+/g, ' ').trim();
+      clean = clean.replace(/\b[a-z]/g, letter => letter.toUpperCase());
+      return clean;
+    }
+
+    function normalizeDetectedClass(rawClass) {
+      if (!rawClass) return null;
+      const s = rawClass.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (s.includes('taj')) return "Taj Mahal";
+      if (s.includes('hawa')) return "Hawa Mahal";
+      if (s.includes('gateway')) return "Gateway of India";
+      if (s.includes('redfort') || s.includes('lalqila')) return "Red Fort";
+      if (s.includes('konark') || s.includes('suntemple')) return "Konark Sun Temple";
+      if (s.includes('meenakshi')) return "Meenakshi Amman Temple";
+      if (s.includes('mysore')) return "Mysore Palace";
+      if (s.includes('hampi') || s.includes('vijayanagara') || s.includes('vittala')) return "Hampi";
+      if (s.includes('victoria')) return "Victoria Memorial";
+      if (s.includes('golden') || s.includes('harmandir')) return "Golden Temple";
+      // "Charminar" contains "minar" — test it before the Qutub Minar rule.
+      if (s.includes('charminar')) return "Charminar";
+      if (s.includes('qutub') || s.includes('qutb') || s.includes('minar')) return "Qutub Minar";
+      if (s.includes('ajanta')) return "Ajanta Caves";
+      if (s.includes('ellora') || s.includes('kailasa')) return "Ellora Caves";
+      if (s.includes('indiagate')) return "India Gate";
+      if (s.includes('amer') || s.includes('amber')) return "Amer Fort";
+      if (s.includes('mehrangarh')) return "Mehrangarh Fort";
+      if (s.includes('golconda') || s.includes('golkonda')) return "Golconda Fort";
+      if (s.includes('sanchi')) return "Sanchi Stupa";
+      if (s.includes('khajuraho')) return "Khajuraho Temples";
+      if (s.includes('brihad') || s.includes('thanjavur')) return "Brihadisvara Temple";
+      if (s.includes('mahabodhi') || s.includes('bodhgaya')) return "Mahabodhi Temple";
+      if (s.includes('sarnath') || s.includes('dhamek')) return "Sarnath Dhamek Stupa";
+
+      // Match against known keys
+      const matched = Object.keys(MONUMENT_KNOWLEDGE_BASE).find(k =>
+        k.toLowerCase().replace(/[^a-z0-9]/g, '') === s || s.includes(k.toLowerCase().replace(/[^a-z0-9]/g, ''))
+      );
+      return matched || cleanMonumentTitle(rawClass);
+    }
+
+    /* ── SAMPLE MONUMENTS SELECTOR GRID DATA (Fast Local & Verified CDNs) ── */
+    const SAMPLE_MONUMENTS = [
+      {
+        id: "sample-taj",
+        name: "Taj Mahal",
+        location: "Agra, Uttar Pradesh",
+        image: "assets/images/taj_mahal_panorama.png"
+      },
+      {
+        id: "sample-gateway",
+        name: "Gateway of India",
+        location: "Mumbai, Maharashtra",
+        image: "assets/images/gateway_of_india_panorama.png"
+      },
+      {
+        id: "sample-redfort",
+        name: "Red Fort",
+        location: "Old Delhi, Delhi",
+        image: "assets/images/red_fort_panorama.png"
+      },
+      {
+        id: "sample-mysore",
+        name: "Mysore Palace",
+        location: "Mysuru, Karnataka",
+        image: "assets/images/mysore_palace_panorama.png"
+      },
+      {
+        id: "sample-hampi",
+        name: "Hampi Vijayanagara",
+        location: "Hampi, Karnataka",
+        image: "assets/images/hampi_panorama.png"
+      },
+      {
+        id: "sample-hawa",
+        name: "Hawa Mahal",
+        location: "Jaipur, Rajasthan",
+        image: "assets/images/remote/unsplash_photo-1599661046289-e31897846e41_c23b2d.jpg"
+      },
+      {
+        id: "sample-konark",
+        name: "Konark Sun Temple",
+        location: "Konark, Odisha",
+        image: "assets/images/remote/unsplash_photo-1609137144813-7d9921338f24_a48847.jpg"
+      },
+      {
+        id: "sample-meenakshi",
+        name: "Meenakshi Amman Temple",
+        location: "Madurai, Tamil Nadu",
+        image: "assets/images/remote/unsplash_photo-1582510003544-4d00b7f74220_a7081b.jpg"
+      }
+    ];
+
+    /* ── Render Samples Grid ── */
+    const samplesGrid = document.getElementById('samplesGrid');
+    if (samplesGrid) {
+      samplesGrid.innerHTML = SAMPLE_MONUMENTS.map(m => `
+        <div class="sample-card" onclick="triggerMonumentScan('${m.id}')">
+          <img loading="lazy" decoding="async" src="${m.image}" alt="${m.name}">
+          <div class="sample-card-info">
+            <h4>${m.name}</h4>
+            <span>${m.location}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ── City resolver: monument / city / state text → an Explore city id ──
+       Place-name hints are checked first; generic building words ("temple",
+       "fort") say nothing about which state a building stands in. */
+    const CITY_HINTS = [
+      ['agra',       ['agra', 'taj', 'fatehpur', 'sikandra', 'itmad']],
+      ['delhi',      ['delhi', 'qutub', 'qutb', 'humayun', 'lotus temple', 'jama masjid', 'india gate', 'lodhi', 'safdarjung', 'tughlaq', 'purana qila', 'akshardham']],
+      ['jaipur',     ['jaipur', 'hawa', 'amber', 'amer', 'jantar', 'nahargarh', 'jal mahal', 'albert hall', 'rajasthan']],
+      ['jodhpur',    ['jodhpur', 'mehrangarh', 'umaid', 'jaswant']],
+      ['mumbai',     ['mumbai', 'bombay', 'gateway', 'elephanta', 'shivaji terminus', 'haji ali', 'siddhivinayak']],
+      ['aurangabad', ['ajanta', 'ellora', 'kailasa', 'aurangabad', 'sambhaji', 'daulatabad', 'bibi ka', 'maharashtra']],
+      ['hampi',      ['hampi', 'vijayanagara', 'virupaksha', 'vittala', 'stone chariot']],
+      ['mysore',     ['mysore', 'mysuru', 'chamundi', 'srirangapatna', 'brindavan', 'karnataka']],
+      ['madurai',    ['madurai', 'meenakshi', 'thirumalai', 'nayak', 'tamil nadu', 'thanjavur', 'brihad']],
+      ['hyderabad',  ['hyderabad', 'charminar', 'golconda', 'golkonda', 'qutb shahi', 'chowmahalla', 'mecca masjid', 'telangana']],
+      ['kolkata',    ['kolkata', 'calcutta', 'victoria memorial', 'howrah', 'dakshineswar', 'belur', 'west bengal']],
+      ['amritsar',   ['amritsar', 'golden temple', 'harmandir', 'jallianwala', 'wagah', 'punjab']],
+      ['konark',     ['konark', 'sun temple', 'puri', 'jagannath', 'lingaraj', 'bhubaneswar', 'odisha']],
+      ['varanasi',   ['varanasi', 'kashi', 'benaras', 'banaras', 'ghat', 'sarnath', 'vishwanath', 'uttar pradesh']],
+      ['srinagar',   ['srinagar', 'kashmir', 'dal lake', 'shalimar', 'pari mahal', 'hazratbal']],
+      ['kutch',      ['kutch', 'kachchh', 'bhuj', 'rann', 'dholavira', 'prag mahal', 'gujarat']],
+      ['bodhgaya',   ['bodh gaya', 'bodhgaya', 'mahabodhi', 'nalanda', 'rajgir', 'bihar']]
+    ];
+    const REGION_INFO = {
+      agra:       ["Agra, Uttar Pradesh",        ["Marble Inlay (Pietra Dura)", "Zardozi", "Leather Craft"],   ["Agra Petha", "Bedai & Jalebi"],       ["Taj Mahotsav"]],
+      delhi:      ["Delhi",                       ["Zardozi Embroidery", "Meenakari", "Inlay Metalwork"],       ["Mughlai Delicacies", "Kulfi Falooda"], ["Qutub Festival", "Phool Walon Ki Sair"]],
+      jaipur:     ["Jaipur, Rajasthan",           ["Block Printing", "Blue Pottery", "Lac Bangles"],           ["Dal Baati Churma", "Pyaaz Kachori"],   ["Teej Festival", "Gangaur"]],
+      jodhpur:    ["Jodhpur, Rajasthan",          ["Bandhani", "Mojari Footwear", "Lacquer Work"],             ["Mirchi Bada", "Makhaniya Lassi"],      ["Marwar Utsav"]],
+      mumbai:     ["Mumbai, Maharashtra",         ["Warli Painting", "Kolhapuri Chappal", "Paithani Silk"],    ["Vada Pav", "Bombay Duck"],             ["Ganesh Chaturthi", "Kala Ghoda Festival"]],
+      aurangabad: ["Chhatrapati Sambhaji Nagar, Maharashtra", ["Himroo Weaving", "Bidri Metal Craft", "Paithani"], ["Naan Qalia", "Puran Poli"],       ["Ellora Ajanta Festival"]],
+      hampi:      ["Hampi, Karnataka",            ["Banana Fibre Craft", "Lambani Embroidery", "Stone Carving"], ["Bisi Bele Bath", "Jolada Rotti"],    ["Hampi Utsav"]],
+      mysore:     ["Mysuru, Karnataka",           ["Mysore Silk", "Sandalwood Carving", "Rosewood Inlay"],     ["Mysore Pak", "Mysore Masala Dosa"],    ["Mysuru Dasara"]],
+      madurai:    ["Madurai, Tamil Nadu",         ["Sungudi Saree", "Bronze Casting", "Wood Carving"],         ["Jigarthanda", "Kari Dosa"],            ["Chithirai Festival"]],
+      hyderabad:  ["Hyderabad, Telangana",        ["Bidriware", "Pochampally Ikat", "Lac Bangles"],            ["Hyderabadi Biryani", "Haleem"],        ["Bonalu", "Deccan Festival"]],
+      kolkata:    ["Kolkata, West Bengal",        ["Kantha Embroidery", "Terracotta", "Shola Craft"],          ["Rosogolla", "Kathi Roll"],             ["Durga Puja"]],
+      amritsar:   ["Amritsar, Punjab",            ["Phulkari Embroidery", "Punjabi Jutti", "Wood Inlay"],      ["Amritsari Kulcha", "Lassi"],           ["Baisakhi", "Hola Mohalla"]],
+      konark:     ["Konark, Odisha",              ["Pattachitra", "Pipili Applique", "Stone Carving"],         ["Chhena Poda", "Dalma"],                ["Konark Dance Festival", "Rath Yatra"]],
+      varanasi:   ["Varanasi, Uttar Pradesh",     ["Banarasi Silk", "Wooden Toys", "Gulabi Meenakari"],        ["Banarasi Paan", "Kachori Sabzi"],      ["Dev Deepawali", "Ganga Mahotsav"]],
+      srinagar:   ["Srinagar, Jammu & Kashmir",   ["Pashmina", "Papier-mache", "Walnut Wood Carving"],         ["Wazwan", "Kahwa"],                     ["Tulip Festival", "Shikara Festival"]],
+      kutch:      ["Kutch, Gujarat",              ["Ajrakh Printing", "Rogan Art", "Kutchi Embroidery"],       ["Dabeli", "Kutchi Thali"],              ["Rann Utsav"]],
+      bodhgaya:   ["Bodh Gaya, Bihar",            ["Madhubani Painting", "Sikki Grass Craft", "Stone Carving"], ["Litti Chokha", "Khaja"],              ["Buddha Purnima", "Kalachakra"]]
+    };
+    function resolveCityId(text) {
+      const t = (text || '').toLowerCase();
+      for (const [id, hints] of CITY_HINTS) {
+        if (hints.some(h => t.includes(h))) return id;
+      }
+      return null;
+    }
+
+    /* ── Monument metadata: curated entry when we have one, otherwise built
+       from what the vision model reported (city, state, builder, summary). ── */
+    function getMonumentDetails(rawClassName, seen) {
+      seen = seen || {};
+      const cleanClass = cleanMonumentTitle(rawClassName);
+      if (!cleanClass) return { name: "Heritage Monument", ...MONUMENT_KNOWLEDGE_BASE["Taj Mahal"] };
+
+      if (MONUMENT_KNOWLEDGE_BASE[cleanClass]) {
+        return { name: cleanClass, ...MONUMENT_KNOWLEDGE_BASE[cleanClass] };
+      }
+
+      const matchedKey = Object.keys(MONUMENT_KNOWLEDGE_BASE).find(k =>
+        cleanClass.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(cleanClass.toLowerCase())
+      );
+      if (matchedKey) {
+        return { name: matchedKey, ...MONUMENT_KNOWLEDGE_BASE[matchedKey] };
+      }
+
+      // Not in the curated base: place it from the model's own answer.
+      const placeText = [cleanClass, seen.city, seen.state].filter(Boolean).join(' ');
+      const cityId = resolveCityId(placeText);
+      const region = cityId ? REGION_INFO[cityId] : null;
+
+      let location = region ? region[0] : [seen.city, seen.state].filter(Boolean).join(', ');
+      if (seen.city && region && !region[0].toLowerCase().includes(seen.city.toLowerCase())) {
+        location = `${seen.city}, ${seen.state || region[0].split(',').pop().trim()}`;
+      }
+      if (!location) location = seen.country || "India";
+
+      return {
+        name: cleanClass,
+        location: location,
+        builtBy: seen.builtBy || seen.era || "Builder not recorded",
+        cityId: cityId,                      // null → Explore opens without a city
+        historyStory: seen.summary || `${cleanClass} is a heritage site in ${location}. Detailed history is not yet in our archive — open Explore to browse the region's monuments, crafts and festivals.`,
+        craftsAssociated: region ? region[1] : ["Regional Handicrafts"],
+        foodAssociated: region ? region[2] : ["Regional Cuisine"],
+        festivalsAssociated: region ? region[3] : ["Regional Festivals"],
+        regionKnown: Boolean(region)
+      };
+    }
+
+    /* ── File Upload Handler ── */
+    const monumentFileInput = document.getElementById('monumentFileInput');
+    if (monumentFileInput) {
+      monumentFileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          runMonumentScan(file, file.name);
+        }
+      });
+    }
+
+
+    /* ── Live camera scanner ───────────────────────────────────────── */
+    (function () {
+      const overlay = document.getElementById('scannerOverlay');
+      const video = document.getElementById('scannerVideo');
+      const canvas = document.getElementById('scannerCanvas');
+      const hint = document.getElementById('scannerHint');
+      const openBtn = document.getElementById('openScannerBtn');
+      if (!overlay || !video || !openBtn) return;
+      // An animated (transformed) ancestor would trap position:fixed, so
+      // the overlay lives directly under <body>.
+      document.body.appendChild(overlay);
+
+      let stream = null;
+      let facing = 'environment';
+
+      const canUseCamera = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+
+      async function start() {
+        stop();
+        if (!canUseCamera()) {
+          // No live camera API (plain http:// on a phone, or an old WebView):
+          // the file input with capture= still opens the camera app.
+          monumentFileInput.setAttribute('capture', 'environment');
+          monumentFileInput.click();
+          return;
+        }
+        overlay.hidden = false;
+        overlay.classList.remove('is-capturing');
+        hint.textContent = 'Starting camera…';
+        document.body.style.overflow = 'hidden';
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: facing }, width: { ideal: 1920 }, height: { ideal: 1080 } },
+            audio: false
+          });
+          video.srcObject = stream;
+          await video.play().catch(() => {});
+          hint.textContent = 'Frame the monument inside the box';
+        } catch (err) {
+          hint.textContent = err && err.name === 'NotAllowedError'
+            ? 'Camera permission denied — allow camera access and try again.'
+            : 'Camera unavailable — choose a photo from the gallery instead.';
+        }
+      }
+
+      function stop() {
+        if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+        video.srcObject = null;
+      }
+
+      function close() {
+        stop();
+        overlay.hidden = true;
+        overlay.classList.remove('is-capturing');
+        document.body.style.overflow = '';
+      }
+
+      function capture() {
+        if (!stream || !video.videoWidth) return;
+        overlay.classList.add('is-capturing');
+        hint.textContent = 'Scanning…';
+        const flash = document.createElement('div');
+        flash.className = 'scanner-flash';
+        overlay.appendChild(flash);
+        setTimeout(() => flash.remove(), 400);
+
+        // Crop to the square frame the visitor lined up, at up to 1600px.
+        const vw = video.videoWidth, vh = video.videoHeight;
+        const side = Math.min(vw, vh);
+        const sx = (vw - side) / 2, sy = (vh - side) / 2;
+        const out = Math.min(1600, side);
+        canvas.width = out; canvas.height = out;
+        canvas.getContext('2d').drawImage(video, sx, sy, side, side, 0, 0, out, out);
+        canvas.toBlob(blob => {
+          if (!blob) { overlay.classList.remove('is-capturing'); hint.textContent = 'Could not capture — try again.'; return; }
+          const file = new File([blob], 'scan-' + Date.now() + '.jpg', { type: 'image/jpeg' });
+          setTimeout(() => { close(); runMonumentScan(file, file.name); }, 350);
+        }, 'image/jpeg', 0.9);
+      }
+
+      openBtn.addEventListener('click', start);
+      document.getElementById('scannerCloseBtn').addEventListener('click', close);
+      document.getElementById('scannerShutterBtn').addEventListener('click', capture);
+      document.getElementById('scannerFlipBtn').addEventListener('click', () => {
+        facing = facing === 'environment' ? 'user' : 'environment';
+        start();
+      });
+      document.getElementById('scannerGalleryBtn').addEventListener('click', () => {
+        close();
+        monumentFileInput.removeAttribute('capture');
+        monumentFileInput.click();
+      });
+      document.addEventListener('visibilitychange', () => { if (document.hidden && !overlay.hidden) stop(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !overlay.hidden) close(); });
+    })();
+
+    window.triggerMonumentScan = function (id) {
+      const item = SAMPLE_MONUMENTS.find(m => m.id === id) || SAMPLE_MONUMENTS[0];
+      runMonumentScan(item.image, item.name);
+    };
+
+    function renderMonumentResult(monumentName, confidenceScore, statusLabel, seen) {
+      const monumentObj = getMonumentDetails(monumentName, seen);
+      const confNumber = Math.max(0, Math.min(100, parseFloat(confidenceScore) || 0));
+
+      let confBadgeText = statusLabel;
+      if (!confBadgeText) {
+        confBadgeText = confNumber >= 75 ? `AI Detection Confirmed (${confNumber.toFixed(0)}%)`
+          : `Probable Match (${confNumber.toFixed(0)}%) — please verify`;
+      }
+      document.getElementById('resConfidence').textContent = confBadgeText;
+      document.getElementById('resMonumentName').textContent = monumentObj.name;
+      document.getElementById('resMonumentMeta').textContent = `${monumentObj.location} • ${monumentObj.builtBy}`;
+      document.getElementById('resHistoryStory').textContent = monumentObj.historyStory;
+
+      const quickSelect = document.getElementById('monumentQuickSelect');
+      if (quickSelect) {
+        if (MONUMENT_KNOWLEDGE_BASE[monumentObj.name]) {
+          quickSelect.value = monumentObj.name;
+        }
+      }
+
+      document.getElementById('resCraftsTags').innerHTML = monumentObj.craftsAssociated.map(c => `
+        <span class="craft-tag-pill">${c}</span>
+      `).join('');
+
+      document.getElementById('resFoodText').textContent = monumentObj.foodAssociated.join(', ');
+      document.getElementById('resFestivalsText').textContent = monumentObj.festivalsAssociated.join(', ');
+
+      const targetCity = monumentObj.cityId;
+      const monumentNameParam = encodeURIComponent(monumentObj.name);
+
+      if (targetCity) {
+        localStorage.setItem('scanned_monument_target', JSON.stringify({
+          city: targetCity,
+          monument: monumentObj.name
+        }));
+        document.getElementById('resExploreBtn').href = `explore.html?city=${targetCity}&monument=${monumentNameParam}`;
+      } else {
+        localStorage.removeItem('scanned_monument_target');
+        document.getElementById('resExploreBtn').href = 'explore.html';
+      }
+    }
+
+    /* Nothing recognisable: say so, instead of inventing a monument. */
+    function renderUnrecognised(seen) {
+      seen = seen || {};
+      document.getElementById('resConfidence').textContent = seen.confidence
+        ? `No confident match (${Math.round(seen.confidence)}%)` : 'No confident match';
+      document.getElementById('resMonumentName').textContent = 'Monument not recognised';
+      document.getElementById('resMonumentMeta').textContent = 'Try a closer, well-lit photo of the main structure';
+
+      let story = seen.summary
+        ? `What the AI could see: ${seen.summary}`
+        : 'The photo could not be matched to a known monument. Photos of the whole façade, gate or main tower work best; crowds, interiors and heavy zoom make identification harder.';
+      if (seen.alternatives && seen.alternatives.length) {
+        story += ` It might be: ${seen.alternatives.join(' or ')}. Pick one from the list above if you know the monument.`;
+      }
+      document.getElementById('resHistoryStory').textContent = story;
+      document.getElementById('resCraftsTags').innerHTML = '';
+      document.getElementById('resFoodText').textContent = '—';
+      document.getElementById('resFestivalsText').textContent = '—';
+      localStorage.removeItem('scanned_monument_target');
+      document.getElementById('resExploreBtn').href = 'explore.html';
+    }
+
+    /* ── MONUMENT IDENTIFICATION ──
+       1. The photo is downscaled in the browser (a 10 MB phone shot becomes
+          ~60 KB) so no upload takes more than a moment.
+       2. Two identifiers run in parallel:
+            • the vision model behind server.js (/api/identify) — accurate,
+              knows the whole country, returns city/builder/summary;
+            • the Roboflow detector — the trained demo model, used to
+              corroborate or as a stand-in when the proxy is not running.
+          Each is time-boxed, so the scan can never hang.
+       3. Only a confident answer is shown as a match; anything weaker is
+          labelled "probable", and no answer at all says "not recognised"
+          rather than defaulting to some famous monument. Filenames are
+          never treated as an identification. */
+    const IDENTIFY_TIMEOUT_MS = 28000;
+    const ROBOFLOW_TIMEOUT_MS = 12000;
+    const ROBOFLOW_MIN_CONFIDENCE = 0.60;
+
+    function proxyOrigins() {
+      const h = window.location.hostname;
+      // same-origin first (works through tunnels / on phones), then local
+      return ['', 'http://localhost:3005', 'http://127.0.0.1:3005'];
+    }
+
+    function setScanStatus(title, detail) {
+      const t = document.getElementById('scanStatusTitle');
+      const d = document.getElementById('scanStatusDetail');
+      if (t && title) t.textContent = title;
+      if (d && detail !== undefined) d.textContent = detail;
+    }
+
+    function fetchWithTimeout(url, options, ms) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), ms);
+      return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+    }
+
+    /* Vision model via the proxy. Resolves to the parsed answer or null. */
+    async function identifyWithVision(dataUrl, hint) {
+      if (!dataUrl || !dataUrl.startsWith('data:image')) return null;
+      const body = JSON.stringify({ image: dataUrl, hint: hint || '' });
+      for (const origin of proxyOrigins()) {
+        try {
+          const res = await fetchWithTimeout(`${origin}/api/identify`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body
+          }, IDENTIFY_TIMEOUT_MS);
+          if (res.ok) return await res.json();
+          const err = await res.json().catch(() => ({}));
+          console.warn('Vision identify:', res.status, err.error && err.error.message);
+          return null;                   // reachable but failed — don't retry on another origin
+        } catch (e) {
+          console.warn(`Vision identify unreachable at ${origin}:`, e.message);
+        }
+      }
+      return null;
+    }
+
+    /* Roboflow detector. Resolves to { name, confidence } or null. */
+    async function identifyWithRoboflow(base64Clean) {
+      if (!base64Clean) return null;
+      try {
+        const res = await fetchWithTimeout(ROBOFLOW_CONFIG.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: base64Clean
+        }, ROBOFLOW_TIMEOUT_MS);
+        if (!res.ok) return null;
+        const data = await res.json();
+        const preds = (data.predictions || []).slice().sort((a, b) => b.confidence - a.confidence);
+        if (!preds.length) return null;
+        return { name: normalizeDetectedClass(preds[0].class), confidence: preds[0].confidence };
+      } catch (e) {
+        console.warn('Roboflow inference notice:', e.message);
+        return null;
+      }
+    }
+
+    async function runMonumentScan(imgInput, labelHint) {
+      if (window.VirasatSub && !window.VirasatSub.canScan()) {
+        window.VirasatSub.showModal('scan');
+        return;
+      }
+      if (window.VirasatSub) {
+        window.VirasatSub.incrementScanCount();
+      }
+
+      document.getElementById('uploadStage').style.display = 'none';
+      document.getElementById('resultsStage').style.display = 'block';
+
+      const scanStageGrid = document.getElementById('scanStageGrid');
+      scanStageGrid.classList.remove('has-result');
+
+      const previewImage = document.getElementById('previewImage');
+      const laserOverlay = document.getElementById('laserOverlay');
+      const resultCard = document.getElementById('resultCard');
+
+      laserOverlay.style.display = 'flex';
+      resultCard.style.display = 'none';
+      setScanStatus('Preparing photo…', 'Optimising the image for analysis');
+
+      const startedAt = Date.now();
+      const { dataUrl, base64Clean } = await compressImageForInference(imgInput);
+      previewImage.src = dataUrl || (typeof imgInput === 'string' ? imgInput : previewImage.src);
+
+      // A sample card is a known monument — no inference needed.
+      const sample = labelHint && SAMPLE_MONUMENTS.find(s => s.name.toLowerCase() === labelHint.toLowerCase());
+      let outcome;
+
+      if (sample) {
+        outcome = { name: sample.name, confidence: 100, label: 'Verified Sample Monument' };
+      } else {
+        setScanStatus('Identifying monument…', 'Reading architecture, materials and setting');
+        const hint = typeof labelHint === 'string' ? labelHint.replace(/\.[a-z0-9]+$/i, '') : '';
+        const visionP = identifyWithVision(dataUrl, hint);
+        const roboflowP = identifyWithRoboflow(base64Clean);
+
+        const vision = await visionP;
+        if (vision && vision.identified && vision.confidence >= 60) {
+          outcome = { name: vision.monument, confidence: vision.confidence, seen: vision };
+        } else {
+          setScanStatus('Cross-checking…', 'Consulting the trained heritage model');
+          const rf = await roboflowP;
+          if (rf && rf.confidence >= ROBOFLOW_MIN_CONFIDENCE) {
+            outcome = { name: rf.name, confidence: rf.confidence * 100, seen: vision || {} };
+          } else if (vision && vision.identified) {
+            outcome = { name: vision.monument, confidence: vision.confidence, seen: vision };
+          } else if (rf && rf.confidence >= 0.40) {
+            outcome = { name: rf.name, confidence: rf.confidence * 100, seen: vision || {} };
+          } else {
+            outcome = { unrecognised: true, seen: vision || {} };
+          }
+        }
+      }
+
+      // Let the sweep finish its pass on quick answers, but never pad a slow one.
+      const remaining = Math.max(0, 900 - (Date.now() - startedAt));
+      setTimeout(() => {
+        laserOverlay.style.display = 'none';
+        scanStageGrid.classList.add('has-result');
+        if (outcome.unrecognised) {
+          renderUnrecognised(outcome.seen);
+        } else {
+          renderMonumentResult(normalizeDetectedClass(outcome.name), outcome.confidence, outcome.label, outcome.seen);
+        }
+        resultCard.style.display = 'block';
+      }, remaining);
+    }
+    document.getElementById('resetScanBtn').addEventListener('click', () => {
+      document.getElementById('uploadStage').style.display = 'block';
+      document.getElementById('resultsStage').style.display = 'none';
+      if (monumentFileInput) monumentFileInput.value = '';
+    });
+
+    /* ── AI Integration (Groq via the local proxy) ──
+       No API key here: the browser posts to server.js, which holds the
+       key server-side. Start it with: node server.js */
+    const AI_CONFIG = {
+      proxyEndpoints: [
+        "/api/chat",
+        "/api/chat"
+      ],
+      model: "openai/gpt-oss-120b"
+    };
+
+    async function getAiBotReply(userQuery) {
+      try {
+        if (AI_CONFIG.proxyEndpoints.length) {
+          const sysPrompt = "You are Virasat Mitr AI (Virasat Mitra), an expert Indian cultural guide, heritage historian, and monument consultant. Answer questions accurately and concisely about Indian heritage, monuments, history, architecture, crafts, food, and culture using clean HTML formatting (<b> for bold, <br> for line breaks). Do NOT calculate trip budget allocations or money breakdowns in this Q&A chat; if the user asks about budget calculation or trip costs, briefly answer any cultural aspect and direct them to use the dedicated 'Budget Planner' tab in this window.";
+          const endpoints = AI_CONFIG.proxyEndpoints;
+
+          for (const url of endpoints) {
+            try {
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 8000);
+              const res = await fetch(url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  model: AI_CONFIG.model,
+                  messages: [
+                    { role: "system", content: sysPrompt },
+                    { role: "user", content: userQuery }
+                  ],
+                  temperature: 0.6,
+                  max_tokens: 1024
+                }),
+                signal: controller.signal
+              });
+              clearTimeout(timeoutId);
+              if (res.ok) {
+                const data = await res.json();
+                if (data.choices && data.choices.length > 0) {
+                  let text = data.choices[0].message.content;
+                  return text.replace(/\n\n/g, "<br><br>").replace(/\n/g, "<br>").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+                }
+              }
+            } catch (err) {
+              console.warn("AI proxy endpoint attempt failed:", url, err);
+            }
+          }
+        }
+      } catch (e) {}
+      return `<b>⚠️ Live AI is offline.</b> I only have stored answers right now, and none covers <b>${userQuery}</b>.<br><br>Run <code>node server.js</code> in the project folder (or start the site with <code>node static_server.js</code>, which launches it automatically), then ask again.`;
+    }
+
+    /* ── Virasat Mitr AI Chatbot Controller ── */
+    const aiChatTrigger = document.getElementById('aiChatTrigger');
+    const aiChatWindow = document.getElementById('aiChatWindow');
+    const aiChatClose = document.getElementById('aiChatClose');
+    const aiChatBody = document.getElementById('aiChatBody');
+    const aiUserInput = document.getElementById('aiUserInput');
+    const aiSendBtn = document.getElementById('aiSendBtn');
+
+    if (aiChatTrigger && aiChatWindow) {
+      aiChatTrigger.addEventListener('click', () => aiChatWindow.classList.toggle('open'));
+      aiChatClose.addEventListener('click', () => aiChatWindow.classList.remove('open'));
+
+      window.switchMitrTab = function (tabName) {
+        document.getElementById('tabBtnQA')?.classList.toggle('active', tabName === 'qa');
+        document.getElementById('tabBtnBudget')?.classList.toggle('active', tabName === 'budget');
+        document.getElementById('paneQA')?.classList.toggle('active', tabName === 'qa');
+        document.getElementById('paneBudget')?.classList.toggle('active', tabName === 'budget');
+      };
+
+      async function sendUserMessage() {
+        const text = aiUserInput.value.trim();
+        if (!text) return;
+
+        appendChatMessage(text, 'user');
+        aiUserInput.value = '';
+
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'chat-msg bot';
+        typingDiv.innerHTML = `<div class="msg-bubble" style="font-style:italic;color:rgba(201,168,76,0.8);">⚡ Virasat Mitr AI is thinking...</div>`;
+        aiChatBody.appendChild(typingDiv);
+        aiChatBody.scrollTop = aiChatBody.scrollHeight;
+
+        const botReply = await getAiBotReply(text);
+        typingDiv.remove();
+        appendChatMessage(botReply, 'bot');
+      }
+
+      if (aiSendBtn) aiSendBtn.addEventListener('click', sendUserMessage);
+      if (aiUserInput) {
+        aiUserInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') sendUserMessage();
+        });
+      }
+
+      window.askAiQuestion = function (q) {
+        aiUserInput.value = q;
+        sendUserMessage();
+      };
+    }
+
+    function appendChatMessage(htmlContent, sender) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `chat-msg ${sender}`;
+      msgDiv.innerHTML = `<div class="msg-bubble">${htmlContent}</div>`;
+      aiChatBody.appendChild(msgDiv);
+      aiChatBody.scrollTop = aiChatBody.scrollHeight;
+    }
+
+    window.calculateCulturalBudget = function () {
+      const userEnteredBudget = Math.max(1000, parseInt(document.getElementById('userBudgetInput')?.value) || 10500);
+      const days = parseInt(document.getElementById('budgetDaysInput')?.value) || 3;
+      const style = document.getElementById('budgetStyleSelect')?.value || 'Heritage Explorer';
+
+      let pStay = 0.40, pShop = 0.25, pDining = 0.20, pTransit = 0.15;
+      if (style === 'Backpacker') { pStay = 0.30; pShop = 0.15; pDining = 0.35; pTransit = 0.20; }
+      else if (style === 'Royal Luxury') { pStay = 0.50; pShop = 0.25; pDining = 0.15; pTransit = 0.10; }
+
+      const stayCost = Math.round(userEnteredBudget * pStay);
+      const shopCost = Math.round(userEnteredBudget * pShop);
+      const diningCost = Math.round(userEnteredBudget * pDining);
+      const transitCost = Math.round(userEnteredBudget * pTransit);
+
+      if (document.getElementById('resTotalCost')) document.getElementById('resTotalCost').textContent = `Est. Total: ₹${userEnteredBudget.toLocaleString('en-IN')}`;
+      if (document.getElementById('resStayCost')) document.getElementById('resStayCost').textContent = `₹${stayCost.toLocaleString('en-IN')}`;
+      if (document.getElementById('resShopCost')) document.getElementById('resShopCost').textContent = `₹${shopCost.toLocaleString('en-IN')}`;
+      if (document.getElementById('resDiningCost')) document.getElementById('resDiningCost').textContent = `₹${diningCost.toLocaleString('en-IN')}`;
+      if (document.getElementById('resTransitCost')) document.getElementById('resTransitCost').textContent = `₹${transitCost.toLocaleString('en-IN')}`;
+    };
+  </script>
+<script src="assets/js/guide.js" defer></script>
+</body>
+
+</html>

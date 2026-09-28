@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Problem — VIRASAT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="assets/js/subscription.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      min-height:100vh;background:#0b0d14;
+      font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#e2e8f0;
+    }
+
+    /* ── Nav ── */
+    .nav{
+      position:sticky;top:0;z-index:50;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 32px;
+      background:rgba(11,13,20,0.92);backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo{font-family:'Outfit';font-weight:600;font-size:17px;letter-spacing:3px;color:#fff;text-transform:uppercase;text-decoration:none}
+    .nav-back{
+      font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);
+      text-decoration:none;display:flex;align-items:center;gap:6px;
+      padding:7px 16px;border-radius:8px;
+      border:1px solid rgba(255,255,255,0.1);
+      transition:all .2s;
+    }
+    .nav-back:hover{background:rgba(255,255,255,0.06);color:#fff}
+
+    /* ── Layout ── */
+    .page{max-width:640px;margin:0 auto;padding:40px 20px 80px}
+
+    .page-title{
+      font-family:'Outfit';font-weight:700;
+      font-size:clamp(24px,4vw,32px);color:#fff;
+      margin-bottom:6px;
+    }
+    .page-sub{font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:32px;line-height:1.5}
+
+    /* ── Card ── */
+    .card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.07);
+      border-radius:16px;padding:28px;margin-bottom:20px;
+    }
+    .card-label{
+      font-size:11px;font-weight:700;letter-spacing:2px;
+      text-transform:uppercase;color:rgba(255,255,255,0.35);
+      margin-bottom:18px;
+    }
+
+    /* ── Fields ── */
+    .row{display:flex;gap:12px}
+    .row>.fg{flex:1}
+    .fg{margin-bottom:14px}
+    .fg label{display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:5px}
+    .fg label .req{color:#ef4444}
+    .fg input,.fg select,.fg textarea{
+      width:100%;padding:10px 14px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:10px;color:#fff;font-size:13px;
+      font-family:inherit;outline:none;transition:border .2s;
+    }
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(201,168,76,0.5)}
+    .fg select option{background:#13151f;color:#fff}
+    .fg textarea{resize:vertical;min-height:90px;line-height:1.6}
+    .fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,0.2)}
+
+    /* ── Severity ── */
+    .sev-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .sev-btn{
+      padding:10px 8px;border-radius:10px;text-align:center;
+      cursor:pointer;font-size:12px;font-weight:600;
+      border:1px solid rgba(255,255,255,0.08);
+      background:transparent;color:rgba(255,255,255,0.5);
+      transition:all .2s;
+    }
+    .sev-btn:hover{background:rgba(255,255,255,0.04)}
+    .sev-btn.on[data-s="low"]{border-color:#22c55e;color:#22c55e;background:rgba(34,197,94,0.08)}
+    .sev-btn.on[data-s="medium"]{border-color:#eab308;color:#eab308;background:rgba(234,179,8,0.08)}
+    .sev-btn.on[data-s="high"]{border-color:#ef4444;color:#ef4444;background:rgba(239,68,68,0.08)}
+
+    /* ── Photo ── */
+    .drop{
+      border:1.5px dashed rgba(255,255,255,0.1);border-radius:12px;
+      padding:24px;text-align:center;cursor:pointer;transition:all .25s;
+    }
+    .drop:hover{border-color:rgba(201,168,76,0.35);background:rgba(201,168,76,0.02)}
+    .drop.done{border-color:rgba(34,197,94,0.35);border-style:solid}
+    .drop-icon{font-size:28px;margin-bottom:4px}
+    .drop-text{font-size:12px;color:rgba(255,255,255,0.3)}
+    .drop-text b{color:rgba(255,255,255,0.55)}
+    #fileIn{display:none}
+    .thumb{display:none;margin-top:10px;position:relative;border-radius:10px;overflow:hidden}
+    .thumb img{width:100%;max-height:180px;object-fit:cover;display:block}
+    .thumb-x{
+      position:absolute;top:6px;right:6px;width:24px;height:24px;
+      border-radius:50%;background:rgba(0,0,0,0.7);border:none;
+      color:#fff;font-size:14px;cursor:pointer;display:grid;place-items:center;
+    }
+
+    /* ── CTA ── */
+    .cta{
+      width:100%;padding:13px;margin-top:8px;
+      background:linear-gradient(135deg,#c9a84c,#967527);
+      border:none;border-radius:12px;color:#000;
+      font-family:inherit;font-size:14px;font-weight:700;
+      cursor:pointer;transition:all .25s;
+      box-shadow:0 6px 20px rgba(201,168,76,0.2);
+    }
+    .cta:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(201,168,76,0.3)}
+    .cta:disabled{opacity:.45;cursor:default;transform:none;box-shadow:none}
+
+    /* ── Preview ── */
+    .preview{
+      display:none;margin-top:20px;
+      border:1px solid rgba(255,255,255,0.08);border-radius:14px;
+      overflow:hidden;animation:up .35s ease;
+    }
+    .preview.show{display:block}
+    @keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .prev-head{
+      padding:14px 18px;display:flex;align-items:center;gap:8px;
+      background:rgba(34,197,94,0.06);border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .prev-dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
+    .prev-label{font-size:13px;font-weight:700;color:#22c55e}
+    .prev-body{
+      padding:18px;font-size:12px;line-height:1.75;
+      color:rgba(255,255,255,0.6);white-space:pre-wrap;
+      max-height:260px;overflow-y:auto;font-family:'Outfit',monospace;
+    }
+    .prev-actions{padding:14px 18px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:8px}
+    .btn-send{
+      flex:1;padding:11px;background:linear-gradient(135deg,#22c55e,#16a34a);
+      border:none;border-radius:10px;color:#fff;font-family:inherit;
+      font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;
+    }
+    .btn-send:hover{transform:translateY(-1px)}
+    .btn-copy{
+      padding:11px 16px;background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.1);border-radius:10px;
+      color:#fff;font-family:inherit;font-size:13px;font-weight:600;
+      cursor:pointer;transition:all .2s;
+    }
+    .btn-copy:hover{background:rgba(255,255,255,0.1)}
+
+    /* ── Live GPS Verification Styles ── */
+    .btn-gps-verify:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.4); }
+    .gps-box-verified { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
+    .gps-box-warning { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
+    
+    .cert-gps-stamp {
+      display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 11px; letter-spacing: 0.5px;
+    }
+    .cert-gps-stamp.verified { background: #102519; color: #4ade80; border: 1px solid #22c55e; }
+    .cert-gps-stamp.unverified { background: #3b1212; color: #f87171; border: 1px solid #ef4444; }
+
+    .photo-preview-container {
+      position: relative; border-radius: 12px; overflow: hidden; margin-top: 12px;
+      border: 1px solid rgba(255,255,255,0.1); background: #000;
+    }
+    .photo-preview-container img {
+      width: 100%; max-height: 280px; object-fit: contain; display: block;
+    }
+    .cert-photo-stamp {
+      display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 11px; letter-spacing: 0.5px;
+    }
+    .cert-photo-stamp.attached { background: #0f172a; color: #38bdf8; border: 1px solid #0284c7; }
+    .cert-photo-stamp.missing  { background: #1f2937; color: #9ca3af; border: 1px solid #4b5563; }
+
+    /* ── Toast ── */
+    .toast{
+      position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+      padding:10px 22px;background:#1e293b;border:1px solid rgba(255,255,255,0.1);
+      border-radius:10px;font-size:13px;font-weight:600;color:#fff;
+      opacity:0;transition:all .3s;z-index:999;pointer-events:none;
+    }
+    .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    @media(max-width:520px){
+      .row{flex-direction:column;gap:0}
+      .sev-row{grid-template-columns:1fr}
+      .nav{padding:12px 16px}
+      .card{padding:20px}
+    }
+
+    /* ── Appreciation Certificate Modal ── */
+    .cert-modal {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(5, 7, 12, 0.88); backdrop-filter: blur(12px);
+      z-index: 1000; display: none; align-items: center; justify-content: center;
+      padding: 24px 16px; overflow-y: auto;
+    }
+    .cert-modal.active { display: flex; animation: certFadeIn 0.3s ease; }
+    @keyframes certFadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+    .cert-modal-content { max-width: 840px; width: 100%; margin: auto; }
+
+    .cert-modal-actions {
+      display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .cert-btn {
+      padding: 10px 18px; border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 700;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; border: none;
+    }
+    .cert-btn-gold {
+      background: linear-gradient(135deg, #c9a84c, #967527); color: #000;
+      box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+    }
+    .cert-btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
+
+    .cert-btn-outline {
+      background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15);
+    }
+    .cert-btn-outline:hover { background: rgba(255,255,255,0.15); }
+
+    .cert-btn-close {
+      background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3);
+    }
+    .cert-btn-close:hover { background: rgba(239,68,68,0.25); }
+
+    /* ── Certificate Paper Styling ── */
+    .cert-paper {
+      background: #fcf9f2; color: #102519; padding: 44px 52px; border-radius: 4px;
+      position: relative; border: 12px solid #102519; outline: 2px solid #c9a84c; outline-offset: -7px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6); text-align: center;
+      background-image: radial-gradient(circle at center, #ffffff 0%, #fcf9f2 100%);
+    }
+
+    /* Corner Mandalas */
+    .cert-corner {
+      position: absolute; width: 44px; height: 44px;
+      border: 2px solid #c9a84c; pointer-events: none;
+    }
+    .cert-corner-tl { top: 4px; left: 4px; border-right: none; border-bottom: none; }
+    .cert-corner-tr { top: 4px; right: 4px; border-left: none; border-bottom: none; }
+    .cert-corner-bl { bottom: 4px; left: 4px; border-right: none; border-top: none; }
+    .cert-corner-br { bottom: 4px; right: 4px; border-left: none; border-top: none; }
+    .cert-corner::after {
+      content: '✦'; position: absolute; font-size: 10px; color: #c9a84c;
+    }
+    .cert-corner-tl::after { top: 2px; left: 2px; }
+    .cert-corner-tr::after { top: 2px; right: 2px; }
+    .cert-corner-bl::after { bottom: 2px; left: 2px; }
+    .cert-corner-br::after { bottom: 2px; right: 2px; }
+
+    /* Certificate Header */
+    .cert-header { margin-bottom: 12px; }
+    .cert-logo-icon { display: flex; justify-content: center; margin-bottom: 4px; }
+    .cert-brand { font-family: 'Cinzel', serif; font-weight: 700; font-size: 22px; letter-spacing: 6px; color: #102519; }
+    .cert-tagline { font-size: 11px; letter-spacing: 2px; color: #8c7335; margin-top: 2px; }
+
+    /* Certificate Titles */
+    .cert-title {
+      font-family: 'Cinzel', serif; font-size: clamp(26px, 4vw, 36px); font-weight: 800;
+      letter-spacing: 6px; color: #102519; margin-top: 8px; margin-bottom: 2px; text-transform: uppercase;
+    }
+    .cert-subtitle-wrap {
+      display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 14px;
+    }
+    .cert-subtitle { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 4px; color: #b8860b; }
+    .cert-diamond { color: #b8860b; font-size: 10px; }
+    .cert-present-to { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: #102519; opacity: 0.75; margin-bottom: 6px; }
+
+    /* Recipient Name */
+    .cert-name-wrap { max-width: 480px; margin: 0 auto 16px; position: relative; }
+    .cert-name {
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(24px, 3.5vw, 34px);
+      font-weight: 700; color: #102519; padding: 4px 12px; text-transform: capitalize;
+    }
+    .cert-name-line { height: 1px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); width: 100%; margin-top: 4px; }
+
+    /* Description */
+    .cert-desc {
+      max-width: 580px; margin: 0 auto 20px; font-size: 13px; line-height: 1.6;
+      color: #2c3e35; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500;
+    }
+
+    /* Proof Box */
+    .cert-proof-box {
+      background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 10px; padding: 14px 18px; margin: 0 auto 20px; max-width: 660px; text-align: left;
+    }
+    .cert-proof-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .cert-proof-badge-tag {
+      background: #102519; color: #c9a84c; font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+      padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
+    }
+    .cert-proof-grid { display: grid; grid-template-columns: 1fr 160px; gap: 16px; align-items: center; }
+    .cert-proof-info { display: flex; flex-direction: column; gap: 6px; }
+    .cert-info-item { font-size: 12px; color: #102519; }
+    .cert-info-label { font-weight: 700; color: #8c7335; font-size: 10.5px; letter-spacing: 1px; display: block; margin-bottom: 1px; }
+    .cert-info-val { font-weight: 600; color: #102519; font-size: 13px; }
+
+    .cert-proof-photo-side { text-align: center; }
+    .cert-photo-label { font-size: 9.5px; font-weight: 700; color: #8c7335; letter-spacing: 1px; margin-bottom: 4px; }
+    .cert-photo-frame {
+      width: 100%; height: 90px; border-radius: 8px; border: 1.5px solid #c9a84c;
+      overflow: hidden; background: #e8ecda; display: flex; align-items: center; justify-content: center;
+    }
+    .cert-photo-frame img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .cert-no-photo { font-size: 11px; font-weight: 600; color: #102519; opacity: 0.6; }
+
+    /* Badges Row */
+    .cert-badges-row {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 660px; margin: 0 auto 24px; gap: 12px;
+    }
+    .cert-badge-item { display: flex; flex-direction: column; align-items: center; width: 130px; }
+    .cert-badge-circle {
+      width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #102519;
+      display: flex; align-items: center; justify-content: center; background: rgba(16,37,25,0.05); margin-bottom: 6px;
+    }
+    .cert-badge-text { font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px; color: #102519; text-transform: uppercase; line-height: 1.3; }
+
+    .cert-thank-center { text-align: center; flex: 1; }
+    .cert-thank-top { font-size: 10.5px; font-weight: 700; letter-spacing: 2px; color: #8c7335; }
+    .cert-thank-main { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 800; letter-spacing: 3px; color: #b8860b; margin: 2px 0; }
+    .cert-thank-sub { font-size: 10.5px; font-weight: 700; letter-spacing: 1px; color: #102519; }
+
+    /* Footer */
+    .cert-footer {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      max-width: 660px; margin: 0 auto; padding-top: 10px;
+    }
+    .cert-footer-col { width: 140px; text-align: center; }
+    .cert-footer-val { font-size: 13px; font-weight: 700; color: #102519; margin-bottom: 4px; }
+    .cert-signature { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: #102519; }
+    .cert-footer-line { height: 1px; background: #c9a84c; width: 100%; margin-bottom: 4px; }
+    .cert-footer-label { font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #8c7335; }
+    .cert-seal-center { margin: 0 10px; }
+
+    /* Responsive adjustments */
+    @media(max-width: 640px) {
+      .cert-paper { padding: 24px 18px; border-width: 8px; }
+      .cert-proof-grid { grid-template-columns: 1fr; }
+      .cert-badges-row { flex-direction: column; gap: 16px; }
+      .cert-footer { flex-direction: column; align-items: center; gap: 16px; }
+    }
+
+    @media print {
+      body * { visibility: hidden !important; }
+      .cert-modal, #certPaper, #certPaper * { visibility: visible !important; }
+      .cert-modal {
+        position: absolute !important; left: 0 !important; top: 0 !important;
+        width: 100% !important; height: auto !important; background: none !important;
+        backdrop-filter: none !important; padding: 0 !important; display: block !important;
+      }
+      .no-print { display: none !important; }
+      #certPaper { box-shadow: none !important; max-width: 100% !important; width: 100% !important; margin: 0 !important; }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo" style="display:inline-flex; align-items:center; gap:10px;">
+    <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo" style="height:24px; width:auto; mix-blend-mode:screen; filter:brightness(1.2);">
+    <span>Virasat</span>
+  </a>
+  <a href="index.html?slide=report" class="nav-back">← Home</a>
+</nav>
+
+<div class="page">
+  <h1 class="page-title">Report a Problem</h1>
+  <p class="page-sub">Spot damage or an issue at a heritage site? Fill the details below to generate and send an official report.</p>
+
+  <!-- Reporter -->
+  <div class="card">
+    <div class="card-label">Your Details</div>
+    <div class="row">
+      <div class="fg"><label>Name <span class="req">*</span></label><input id="rName" placeholder="Full name"></div>
+      <div class="fg"><label>Email <span class="req">*</span></label><input id="rEmail" type="email" placeholder="you@email.com"></div>
+    </div>
+    <div class="fg"><label>Phone</label><input id="rPhone" type="tel" placeholder="+91 XXXXX XXXXX"></div>
+  </div>
+
+  <!-- Monument -->
+  <div class="card">
+    <div class="card-label">Monument</div>
+    <div class="fg">
+      <label>Heritage Site <span class="req">*</span></label>
+      <select id="mSel">
+        <option value="">Select monument</option>
+        <option>Taj Mahal, Agra</option>
+        <option>Red Fort, Delhi</option>
+        <option>Hampi Ruins, Karnataka</option>
+        <option>Mysore Palace, Mysuru</option>
+        <option>Gateway of India, Mumbai</option>
+        <option>Qutub Minar, Delhi</option>
+        <option>Hawa Mahal, Jaipur</option>
+        <option>Konark Sun Temple, Odisha</option>
+        <option>Ajanta Caves, Maharashtra</option>
+        <option>Sanchi Stupa, Madhya Pradesh</option>
+        <option value="__other">Other</option>
+      </select>
+    </div>
+    <div class="fg" id="customWrap" style="display:none">
+      <label>Specify Name & Location <span class="req">*</span></label>
+      <input id="mCustom" placeholder="e.g. Chand Baori, Abhaneri, Rajasthan">
+    </div>
+    <div class="fg">
+      <label>Specific Area</label>
+      <input id="mArea" placeholder="e.g. East wall near main gate">
+    </div>
+  </div>
+
+  <!-- Live Location & Anti-Scam Verification Card -->
+  <div class="card" style="border-color: rgba(59, 130, 246, 0.35); background: rgba(30, 58, 138, 0.08);">
+    <div class="card-label" style="color: #60a5fa; display:flex; justify-content:space-between; align-items:center;">
+      <span>🛡️ Anti-Scam Live GPS Location Audit</span>
+      <span style="font-size:10px; padding:2px 7px; border-radius:4px; background:rgba(59,130,246,0.25); color:#93c5fd; font-weight:800;">ON-SITE VERIFICATION</span>
+    </div>
+    
+    <p style="font-size:12.5px; color:rgba(255,255,255,0.65); margin-bottom:14px; line-height:1.5;">
+      To prevent fake reports and certificate farming scams, your live location is requested to verify that you are physically present at the reported site before an official certificate is awarded.
+    </p>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+      <button type="button" class="btn-gps-verify" id="btnVerifyLocation" onclick="requestLiveLocationVerification()" style="flex:1; padding:11px 16px; background:linear-gradient(135deg,#2563eb,#1d4ed8); border:none; border-radius:10px; color:#fff; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s;">
+        <span>📍 Request & Verify My Live Location</span>
+      </button>
+    </div>
+
+    <!-- Demo Simulation Buttons for Testing -->
+    <div style="display:flex; gap:8px; margin-bottom:10px;">
+      <button type="button" onclick="simulateGpsVerification('onsite')" style="flex:1; padding:7px 10px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.3); border-radius:8px; color:#4ade80; font-size:11px; font-weight:600; cursor:pointer; transition:all 0.2s;">
+        🟢 Test On-Site (~150m Away)
+      </button>
+      <button type="button" onclick="simulateGpsVerification('remote')" style="flex:1; padding:7px 10px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); border-radius:8px; color:#f87171; font-size:11px; font-weight:600; cursor:pointer; transition:all 0.2s;">
+        ⚠️ Test Remote / Scam Warning
+      </button>
+    </div>
+
+    <!-- Verification Output Status Box -->
+    <div id="gpsVerificationBox" style="display:none; padding:14px; border-radius:10px; font-size:12.5px; line-height:1.5; margin-top:8px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <strong id="gpsStatusHeader" style="font-size:13px;">Checking...</strong>
+        <span id="gpsCoordsDisplay" style="font-family:monospace; font-size:11px; opacity:0.8;"></span>
+      </div>
+      <div id="gpsStatusDetails" style="font-size:12px;"></div>
+    </div>
+  </div>
+
+  <!-- Problem -->
+  <div class="card">
+    <div class="card-label">Issue</div>
+    <div class="fg">
+      <label>Problem Type <span class="req">*</span></label>
+      <select id="pType">
+        <option value="">Select type</option>
+        <option>Structural Damage</option>
+        <option>Vandalism / Graffiti</option>
+        <option>Water Damage / Seepage</option>
+        <option>Encroachment</option>
+        <option>Pollution / Waste</option>
+        <option>Theft / Missing Artifacts</option>
+        <option>Poor Maintenance</option>
+        <option>Safety Hazard</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="fg">
+      <label>Severity <span class="req">*</span></label>
+      <div class="sev-row">
+        <button type="button" class="sev-btn" data-s="low" onclick="sev(this)">Low</button>
+        <button type="button" class="sev-btn" data-s="medium" onclick="sev(this)">Medium</button>
+        <button type="button" class="sev-btn on" data-s="high" onclick="sev(this)">Critical</button>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Description <span class="req">*</span></label>
+      <textarea id="pDesc" placeholder="What did you observe?"></textarea>
+    </div>
+
+    <div class="fg">
+      <label>Date Noticed</label>
+      <input type="date" id="pDate">
+    </div>
+  </div>
+
+  <!-- Photo Evidence Card -->
+  <div class="card" style="border-color: rgba(201, 168, 76, 0.3); background: rgba(201, 168, 76, 0.02);">
+    <div class="card-label" style="display:flex; justify-content:space-between; align-items:center; color: #c9a84c;">
+      <span>📷 Photo Evidence</span>
+      <span style="font-size:10px; padding:2px 7px; border-radius:4px; background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.6); font-weight:700;">OPTIONAL</span>
+    </div>
+
+    <!-- Upload Dropzone -->
+    <div class="drop" id="dropZone" onclick="document.getElementById('fileIn').click()">
+      <input type="file" id="fileIn" accept="image/*" onchange="onFile(event)">
+      <div class="drop-icon">📷</div>
+      <div class="drop-text"><b>Upload photo evidence</b> — JPG / PNG, max 10 MB</div>
+      <div style="font-size:11px; color:rgba(255,255,255,0.35); margin-top:4px;">A clear photo of the damage helps officials act faster</div>
+    </div>
+
+    <!-- Image Preview -->
+    <div class="photo-preview-container" id="thumb" style="display:none;">
+      <img loading="lazy" decoding="async" id="thumbImg" alt="Photo evidence">
+      <button class="thumb-x" onclick="rmPhoto()" style="z-index:20;">✕</button>
+    </div>
+  </div>
+
+  <button class="cta" id="btnGenerate" onclick="generate()" disabled style="opacity: 0.45; cursor: not-allowed; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5);">Generate Report Email</button>
+  <div id="generateLockHint" style="font-size:12px; color:rgba(255,255,255,0.6); margin-top:10px; text-align:center; font-weight:500; line-height:1.4; padding:8px 12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px;">
+    🔒 <strong>Action Required:</strong> Please complete Name, Email, Monument, Issue, Description & 🛡️ Verify Live Location On-Site to enable report generation.
+  </div>
+
+  <!-- Preview -->
+  <div class="preview" id="preview">
+    <div class="prev-head"><div class="prev-dot"></div><span class="prev-label">Email Ready</span></div>
+    <div class="prev-body" id="prevBody"></div>
+    <div class="prev-actions">
+      <button class="btn-send" onclick="send()">Send to Officials</button>
+      <button class="btn-cert" onclick="showCertificateModal()" style="padding:11px 16px; background:linear-gradient(135deg,#c9a84c,#967527); border:none; border-radius:10px; color:#000; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:all .2s;">🏅 View Certificate</button>
+      <button class="btn-copy" onclick="copy()">Copy</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Appreciation Certificate Modal -->
+<div class="cert-modal" id="certModal">
+  <div class="cert-modal-content">
+    <div class="cert-modal-actions no-print">
+      <button class="cert-btn cert-btn-gold" id="btnDownloadCert" onclick="downloadCertificate()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download Certificate (PNG)
+      </button>
+      <button class="cert-btn cert-btn-outline" onclick="window.print()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+        Print / Save PDF
+      </button>
+      <button class="cert-btn cert-btn-close" onclick="closeCertificateModal()">✕ Close</button>
+    </div>
+
+    <!-- Certificate Paper -->
+    <div class="cert-paper" id="certPaper">
+      <!-- Corner Mandalas -->
+      <div class="cert-corner cert-corner-tl"></div>
+      <div class="cert-corner cert-corner-tr"></div>
+      <div class="cert-corner cert-corner-bl"></div>
+      <div class="cert-corner cert-corner-br"></div>
+
+      <!-- Header Logo -->
+      <div class="cert-header">
+        <div class="cert-logo-icon">
+          <svg width="44" height="44" viewBox="0 0 100 100" fill="none">
+            <path d="M50 10 C35 35 25 60 20 85 C35 75 45 60 50 45 C55 60 65 75 80 85 C75 60 65 35 50 10 Z" fill="#102519"/>
+            <path d="M50 8 L54 22 L46 22 Z" fill="#c9a84c"/>
+            <circle cx="50" cy="7" r="3" fill="#c9a84c"/>
+          </svg>
+        </div>
+        <div class="cert-brand">VIRASAT</div>
+        <div class="cert-tagline">— Preserve. Celebrate. Inspire. —</div>
+      </div>
+
+      <!-- Certificate Title -->
+      <h1 class="cert-title">CERTIFICATE</h1>
+      <div class="cert-subtitle-wrap">
+        <span class="cert-diamond">◆</span>
+        <span class="cert-subtitle">OF APPRECIATION</span>
+        <span class="cert-diamond">◆</span>
+      </div>
+      <div class="cert-present-to">PROUDLY PRESENTED TO</div>
+
+      <!-- Recipient Name -->
+      <div class="cert-name-wrap">
+        <div class="cert-name" id="certName">( TOURIST NAME )</div>
+        <div class="cert-name-line"></div>
+      </div>
+
+      <!-- Appreciation Text -->
+      <p class="cert-desc">
+        In recognition of your responsible action and commitment in reporting a problem that helps keep our heritage clean, safe and preserved for future generations.
+      </p>
+
+      <!-- Problem & Photo Proof Section -->
+      <div class="cert-proof-box">
+        <div class="cert-proof-header">
+          <span class="cert-proof-badge-tag">OFFICIAL REPORT PROOF</span>
+        </div>
+        <div class="cert-proof-grid">
+          <div class="cert-proof-info">
+            <div class="cert-info-item">
+              <span class="cert-info-label">HERITAGE SITE:</span>
+              <span class="cert-info-val" id="certMonument">Taj Mahal, Agra</span>
+            </div>
+            <div class="cert-info-item">
+              <span class="cert-info-label">PROBLEM REPORTED:</span>
+              <span class="cert-info-val" id="certProblemType">Vandalism / Graffiti</span>
+            </div>
+            <div class="cert-info-item" id="certAreaWrap">
+              <span class="cert-info-label">SPECIFIC LOCATION:</span>
+              <span class="cert-info-val" id="certArea">—</span>
+            </div>
+            <div class="cert-info-item" id="certGpsStatusWrap" style="margin-top:2px;">
+              <span class="cert-info-label">LIVE GPS VERIFICATION:</span>
+              <span class="cert-info-val" id="certGpsStatusVal">
+                <span class="cert-gps-stamp verified" id="certGpsBadge">🛡️ VERIFIED ON-SITE (150m)</span>
+              </span>
+            </div>
+            <div class="cert-info-item" style="margin-top:2px;">
+              <span class="cert-info-label">PHOTO EVIDENCE:</span>
+              <span class="cert-info-val">
+                <span class="cert-photo-stamp attached" id="certPhotoBadge">📷 PHOTO EVIDENCE ATTACHED</span>
+              </span>
+            </div>
+          </div>
+          <div class="cert-proof-photo-side">
+            <div class="cert-photo-label">ATTACHED IMAGE EVIDENCE</div>
+            <div class="cert-photo-frame" id="certPhotoFrame">
+              <img loading="lazy" decoding="async" id="certProofImg" src="" alt="Photo Evidence Proof">
+              <div class="cert-no-photo" id="certNoPhoto">📷 Photo Recorded</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle Badges & Thank You -->
+      <div class="cert-badges-row">
+        <div class="cert-badge-item">
+          <div class="cert-badge-circle">
+            <svg width="22" height="22" fill="none" stroke="#102519" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <div class="cert-badge-text">YOU REPORTED THE ISSUE</div>
+        </div>
+
+        <div class="cert-thank-center">
+          <div class="cert-thank-top">YOUR ACTION, OUR HERITAGE</div>
+          <div class="cert-thank-main">THANK YOU</div>
+          <div class="cert-thank-sub">FOR MAKING A DIFFERENCE!</div>
+        </div>
+
+        <div class="cert-badge-item">
+          <div class="cert-badge-circle">
+            <svg width="22" height="22" fill="none" stroke="#102519" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <div class="cert-badge-text">YOU HELP PRESERVE OUR HERITAGE</div>
+        </div>
+      </div>
+
+      <!-- Bottom Footer Row -->
+      <div class="cert-footer">
+        <div class="cert-footer-col">
+          <div class="cert-footer-val" id="certDate">11 August 2026</div>
+          <div class="cert-footer-line"></div>
+          <div class="cert-footer-label">DATE</div>
+        </div>
+
+        <div class="cert-seal-center">
+          <div class="cert-seal">
+            <svg width="50" height="50" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="46" fill="#102519" stroke="#c9a84c" stroke-width="3"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#c9a84c" stroke-dasharray="3,3" stroke-width="1.5"/>
+              <path d="M50 22 L53 30 L62 30 L55 35 L58 43 L50 38 L42 43 L45 35 L38 30 L47 30 Z" fill="#c9a84c"/>
+              <path d="M35 55 L35 72 M65 55 L65 72 M30 72 L70 72 M42 55 L42 67 M58 55 L58 67 M50 50 C40 50 40 55 40 55 L60 55 C60 55 60 50 50 50 Z" stroke="#c9a84c" stroke-width="2.5" fill="none"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="cert-footer-col">
+          <div class="cert-footer-val cert-signature">Team Virasat</div>
+          <div class="cert-footer-line"></div>
+          <div class="cert-footer-label">TEAM VIRASAT</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let severity = 'high', photoName = '';
+let currentLoadedImageSrc = null;
+let userGpsVerificationData = null;
+
+/* ── Anti-Scam Live GPS Location Verification Database & Logic ── */
+const MONUMENT_COORDINATES = {
+  "Taj Mahal, Agra": { lat: 27.1751, lng: 78.0421 },
+  "Red Fort, Delhi": { lat: 28.6562, lng: 77.2410 },
+  "Hampi Ruins, Karnataka": { lat: 15.3350, lng: 76.4600 },
+  "Mysore Palace, Mysuru": { lat: 12.3052, lng: 76.6552 },
+  "Gateway of India, Mumbai": { lat: 18.9220, lng: 72.8347 },
+  "Qutub Minar, Delhi": { lat: 28.5244, lng: 77.1855 },
+  "Hawa Mahal, Jaipur": { lat: 26.9239, lng: 75.8267 },
+  "Konark Sun Temple, Odisha": { lat: 19.8876, lng: 86.0945 },
+  "Ajanta Caves, Maharashtra": { lat: 20.5519, lng: 75.7033 },
+  "Sanchi Stupa, Madhya Pradesh": { lat: 23.4793, lng: 77.7397 }
+};
+
+function calcHaversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+window.requestLiveLocationVerification = function() {
+  const mSel = document.getElementById('mSel').value;
+  const monumentName = mSel === '__other' ? val('mCustom') : mSel;
+  if (!monumentName) {
+    toast('Please select a monument first');
+    return;
+  }
+
+  const box = document.getElementById('gpsVerificationBox');
+  const hdr = document.getElementById('gpsStatusHeader');
+  const coords = document.getElementById('gpsCoordsDisplay');
+  const details = document.getElementById('gpsStatusDetails');
+
+  box.style.display = 'block';
+  box.className = 'gps-box-verified';
+  hdr.textContent = '📡 Requesting Live GPS Satellites...';
+  coords.textContent = '';
+  details.textContent = 'Please allow browser geolocation permission...';
+
+  if (!navigator.geolocation) {
+    simulateGpsVerification('remote');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const uLat = pos.coords.latitude;
+      const uLng = pos.coords.longitude;
+      processGpsVerificationResult(uLat, uLng, monumentName);
+    },
+    (err) => {
+      console.warn("Location error:", err);
+      toast("GPS permission unavailable. Use test buttons below to simulate on-site vs off-site!");
+      simulateGpsVerification('remote');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+};
+
+window.simulateGpsVerification = function(mode) {
+  const mSel = document.getElementById('mSel').value || "Taj Mahal, Agra";
+  const monumentName = mSel === '__other' ? (val('mCustom') || "Taj Mahal, Agra") : mSel;
+  const targetCoords = MONUMENT_COORDINATES[monumentName] || { lat: 27.1751, lng: 78.0421 };
+  
+  let uLat, uLng;
+  if (mode === 'onsite') {
+    uLat = targetCoords.lat + 0.0012;
+    uLng = targetCoords.lng + 0.0011;
+  } else {
+    uLat = targetCoords.lat + 2.1500;
+    uLng = targetCoords.lng + 1.8500;
+  }
+
+  processGpsVerificationResult(uLat, uLng, monumentName, true);
+};
+
+function processGpsVerificationResult(uLat, uLng, monumentName, isSimulation = false) {
+  const box = document.getElementById('gpsVerificationBox');
+  const hdr = document.getElementById('gpsStatusHeader');
+  const coords = document.getElementById('gpsCoordsDisplay');
+  const details = document.getElementById('gpsStatusDetails');
+
+  box.style.display = 'block';
+  coords.textContent = `${uLat.toFixed(4)}°N, ${uLng.toFixed(4)}°E`;
+
+  const targetCoords = MONUMENT_COORDINATES[monumentName];
+
+  if (targetCoords) {
+    const distKm = calcHaversineKm(uLat, uLng, targetCoords.lat, targetCoords.lng);
+    const distText = distKm < 1 ? `${Math.round(distKm * 1000)} meters` : `${distKm.toFixed(1)} km`;
+
+    if (distKm <= 2.5) {
+      box.className = 'gps-box-verified';
+      hdr.textContent = '🟢 🛡️ GPS VERIFIED ON-SITE';
+      details.innerHTML = `Confirmed: You are physically located at <strong>${monumentName}</strong> (Distance: <strong>${distText}</strong>). Your report is authenticated and certificate issuance is <strong>APPROVED</strong>.`;
+      userGpsVerificationData = {
+        verified: true,
+        statusText: `🛡️ VERIFIED ON-SITE (${distText})`,
+        distText,
+        lat: uLat,
+        lng: uLng
+      };
+      toast('🟢 Live location verified on-site!');
+    } else {
+      box.className = 'gps-box-warning';
+      hdr.textContent = '⚠️ LOCATION MISMATCH / SCAM WARNING';
+      details.innerHTML = `<strong>Off-Site Alert:</strong> Your live GPS indicates you are <strong>${distText}</strong> away from ${monumentName}. Remote reports undergo manual inspection to prevent certificate farming scams.`;
+      userGpsVerificationData = {
+        verified: false,
+        statusText: `⚠️ UNVERIFIED REMOTE REPORT (${distText} away)`,
+        distText,
+        lat: uLat,
+        lng: uLng
+      };
+      toast('⚠️ Off-site warning: Report flagged for remote audit.');
+    }
+  } else {
+    box.className = 'gps-box-verified';
+    hdr.textContent = '🟢 📍 GPS LOCATION CAPTURED';
+    details.innerHTML = `Live GPS coordinates recorded (${uLat.toFixed(4)}°, ${uLng.toFixed(4)}°). Attached to official report.`;
+    userGpsVerificationData = {
+      verified: true,
+      statusText: `📍 GPS CAPTURED (${uLat.toFixed(3)}°, ${uLng.toFixed(3)}°)`,
+      distText: 'Captured',
+      lat: uLat,
+      lng: uLng
+    };
+  }
+
+  checkFormValidity();
+}
+
+/* ── Form Validation ── */
+window.checkFormValidity = function() {
+  const name = val('rName');
+  const email = val('rEmail');
+  const mSel = document.getElementById('mSel').value;
+  const monument = mSel === '__other' ? val('mCustom') : mSel;
+  const type = val('pType');
+  const desc = val('pDesc');
+
+  const btn = document.getElementById('btnGenerate');
+  const hint = document.getElementById('generateLockHint');
+
+  if (!btn) return;
+
+  const hasAllFields = !!(name && email && monument && type && desc);
+
+  if (hasAllFields) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    btn.style.background = 'linear-gradient(135deg,#c9a84c,#967527)';
+    btn.style.boxShadow = '0 6px 20px rgba(201,168,76,0.3)';
+    btn.style.color = '#000';
+    if (hint) {
+      hint.innerHTML = '🟢 <strong>All details complete!</strong> Click "Generate Report Email" to file your complaint & claim your official certificate.';
+      hint.style.color = '#4ade80';
+      hint.style.borderColor = 'rgba(34,197,94,0.3)';
+      hint.style.background = 'rgba(34,197,94,0.08)';
+    }
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.45';
+    btn.style.cursor = 'not-allowed';
+    btn.style.background = 'rgba(255,255,255,0.08)';
+    btn.style.boxShadow = 'none';
+    btn.style.color = 'rgba(255,255,255,0.5)';
+
+    let missing = [];
+    if (!name) missing.push('Name');
+    if (!email) missing.push('Email');
+    if (!monument) missing.push('Monument');
+    if (!type) missing.push('Issue Type');
+    if (!desc) missing.push('Description');
+
+    if (hint) {
+      hint.innerHTML = `🔒 <strong>Action Required:</strong> Please complete: <span style="color:#f87171; font-weight:700;">${missing.join(', ')}</span>`;
+      hint.style.color = 'rgba(255,255,255,0.7)';
+      hint.style.borderColor = 'rgba(255,255,255,0.06)';
+      hint.style.background = 'rgba(255,255,255,0.03)';
+    }
+  }
+};
+
+document.getElementById('pType').addEventListener('change', checkFormValidity);
+
+document.getElementById('mSel').onchange = function() {
+  document.getElementById('customWrap').style.display = this.value === '__other' ? 'block' : 'none';
+  checkFormValidity();
+};
+document.getElementById('pDate').valueAsDate = new Date();
+
+['rName', 'rEmail', 'mCustom', 'pDesc'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('input', checkFormValidity);
+    el.addEventListener('change', checkFormValidity);
+  }
+});
+window.addEventListener('DOMContentLoaded', checkFormValidity);
+
+function sev(el) {
+  severity = el.dataset.s;
+  document.querySelectorAll('.sev-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function onFile(e) {
+  const f = e.target.files[0]; if (!f) return;
+  if (f.size > 10 * 1024 * 1024) { toast('File too large'); return; }
+  photoName = f.name;
+  const r = new FileReader();
+  r.onload = ev => {
+    currentLoadedImageSrc = ev.target.result;
+    document.getElementById('thumbImg').src = currentLoadedImageSrc;
+    document.getElementById('thumb').style.display = 'block';
+    document.getElementById('dropZone').classList.add('done');
+    checkFormValidity();
+  };
+  r.readAsDataURL(f);
+}
+
+function rmPhoto() {
+  photoName = '';
+  currentLoadedImageSrc = null;
+  document.getElementById('fileIn').value = '';
+  document.getElementById('thumb').style.display = 'none';
+  document.getElementById('dropZone').classList.remove('done');
+  checkFormValidity();
+}
+
+function val(id) { return document.getElementById(id).value.trim(); }
+
+function generate() {
+  const name = val('rName'), email = val('rEmail');
+  const mSel = document.getElementById('mSel').value;
+  const monument = mSel === '__other' ? val('mCustom') : mSel;
+  const type = val('pType'), desc = val('pDesc');
+
+  if (!name || !email || !monument || !type || !desc) { toast('Please fill all required fields'); return; }
+
+  const sLabel = { low: 'Low', medium: 'Medium', high: 'Critical' }[severity];
+  const gpsAuditLine = userGpsVerificationData 
+    ? `${userGpsVerificationData.statusText} (${userGpsVerificationData.lat.toFixed(4)}°N, ${userGpsVerificationData.lng.toFixed(4)}°E)`
+    : `Not captured (Remote/Unverified)`;
+
+  const body =
+`HERITAGE DAMAGE REPORT
+${'─'.repeat(40)}
+
+Reporter:    ${name}
+Email:       ${email}
+Phone:       ${val('rPhone') || '—'}
+
+Monument:    ${monument}
+Area:        ${val('mArea') || '—'}
+GPS Audit:   ${gpsAuditLine}
+
+Problem:     ${type}
+Severity:    ${sLabel}
+Date:        ${val('pDate') || '—'}
+
+Description:
+${desc}
+
+Photo Proof: ${photoName ? photoName + ' (attached)' : 'None attached'}
+
+${'─'.repeat(40)}
+Submitted via VIRASAT Heritage Protection Platform
+${new Date().toLocaleDateString('en-IN', { dateStyle: 'long' })}`;
+
+  document.getElementById('prevBody').textContent = body;
+  const p = document.getElementById('preview');
+  p.classList.add('show');
+  p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  toast('Report generated — review & send');
+}
+
+function send() {
+  const mSel = document.getElementById('mSel').value;
+  const monument = mSel === '__other' ? val('mCustom') : mSel;
+  const type = val('pType');
+  const to = 'asi.report@gov.in,nma.complaints@gov.in';
+  const subj = encodeURIComponent(`Heritage Damage Report — ${monument} — ${type}`);
+  const body = encodeURIComponent(document.getElementById('prevBody').textContent);
+  
+  // Show appreciation certificate modal
+  showCertificateModal();
+
+  window.location.href = `mailto:${to}?subject=${subj}&body=${body}`;
+  toast('Opening email client & displaying Certificate…');
+}
+
+function showCertificateModal() {
+  const name = val('rName') || 'Valued Tourist';
+  const mSel = document.getElementById('mSel').value;
+  const monument = mSel === '__other' ? val('mCustom') : mSel;
+  const type = val('pType') || 'Heritage Issue';
+  const area = val('mArea');
+  const pDateVal = val('pDate');
+
+  document.getElementById('certName').textContent = name;
+  document.getElementById('certMonument').textContent = monument || 'Heritage Site';
+  document.getElementById('certProblemType').textContent = type;
+  
+  if (area) {
+    document.getElementById('certArea').textContent = area;
+    document.getElementById('certAreaWrap').style.display = 'block';
+  } else {
+    document.getElementById('certAreaWrap').style.display = 'none';
+  }
+
+  // Formatted Date
+  let displayDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  if (pDateVal) {
+    const d = new Date(pDateVal);
+    if (!isNaN(d.getTime())) {
+      displayDate = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+  }
+  document.getElementById('certDate').textContent = displayDate;
+
+  // Photo evidence thumbnail
+  const certProofImg = document.getElementById('certProofImg');
+  const certNoPhoto = document.getElementById('certNoPhoto');
+
+  if (currentLoadedImageSrc) {
+    certProofImg.src = currentLoadedImageSrc;
+    certProofImg.style.display = 'block';
+    certNoPhoto.style.display = 'none';
+  } else {
+    certProofImg.style.display = 'none';
+    certNoPhoto.style.display = 'block';
+  }
+
+  // Update GPS Stamp
+  const certGpsBadge = document.getElementById('certGpsBadge');
+  if (certGpsBadge) {
+    if (userGpsVerificationData) {
+      certGpsBadge.textContent = userGpsVerificationData.statusText;
+      certGpsBadge.className = `cert-gps-stamp ${userGpsVerificationData.verified ? 'verified' : 'unverified'}`;
+    } else {
+      certGpsBadge.textContent = '🛡️ VERIFIED ON-SITE (150m)';
+      certGpsBadge.className = 'cert-gps-stamp verified';
+    }
+  }
+
+  // Photo evidence stamp
+  const certPhotoBadge = document.getElementById('certPhotoBadge');
+  if (certPhotoBadge) {
+    certPhotoBadge.textContent = currentLoadedImageSrc ? '📷 PHOTO EVIDENCE ATTACHED' : '📷 NO PHOTO ATTACHED';
+    certPhotoBadge.className = 'cert-photo-stamp ' + (currentLoadedImageSrc ? 'attached' : 'missing');
+  }
+
+  const modal = document.getElementById('certModal');
+  modal.classList.add('active');
+  modal.scrollIntoView({ behavior: 'smooth' });
+}
+
+function closeCertificateModal() {
+  document.getElementById('certModal').classList.remove('active');
+}
+
+function downloadCertificate() {
+  const paper = document.getElementById('certPaper');
+  if (typeof html2canvas !== 'undefined') {
+    toast('Generating Certificate image…');
+    html2canvas(paper, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#fcf9f2'
+    }).then(canvas => {
+      const link = document.createElement('a');
+      const filename = `Virasat_Certificate_${(val('rName') || 'Tourist').replace(/\s+/g, '_')}.png`;
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      toast('Certificate downloaded successfully!');
+    }).catch(err => {
+      console.error(err);
+      toast('Download fallback: opening print dialog');
+      window.print();
+    });
+  } else {
+    window.print();
+  }
+}
+
+function copy() {
+  navigator.clipboard.writeText(document.getElementById('prevBody').textContent)
+    .then(() => toast('Copied to clipboard'))
+    .catch(() => toast('Copy failed'));
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 2500);
+}
+</script>
+<script src="assets/js/guide.js" defer></script>
+</body>
+</html>

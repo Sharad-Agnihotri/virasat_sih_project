@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <base href="/VR/">
+  <title>VR Monument Explorer</title>
+  
+  <!-- A-Frame for 360/VR -->
+  <!-- A-Frame is served locally: the 1.4 MB CDN copy was the single point of
+       failure on slow networks (every VR script needs window.AFRAME). The CDN
+       is only a fallback if the local file is missing. -->
+  <script src="vendor/aframe.min.js"></script>
+  <script>if (!window.AFRAME) document.write('<script src="https://aframe.io/releases/1.6.0/aframe.min.js"><\/script>');</script>
+  <!-- Custom Shaders & Raycasting -->
+  <script src="js/shaders.js"></script>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/font/lucide.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/mobile.css">
+</head>
+<body>
+
+  <!-- ================= LOADING SCREEN ================= -->
+  <div id="loading-screen">
+    <div class="loading-monument-icon">🏛️</div>
+    <h1 class="loading-title" data-i18n="appTitle">Monument Explorer</h1>
+    <p class="loading-subtitle" data-i18n="loading">Loading Experience...</p>
+    
+    <div class="loading-bar-container">
+      <div class="loading-bar"></div>
+    </div>
+    
+    <button class="loading-enter-btn" data-i18n="enterExperience">Enter Experience</button>
+  </div>
+
+  <!-- ================= 3D SCENE ================= -->
+  <div id="scene-container">
+    <a-scene 
+      vr-mode-ui="enabled: true" 
+      loading-screen="enabled: false"
+      device-orientation-permission-ui="enabled: true"
+      chronos-raycaster="targetId: panorama-sky"
+    >
+      <a-assets>
+        <!-- Pre-load default panorama -->
+        <img id="panorama" src="assets/images/taj_mahal_panorama.webp" crossorigin="anonymous">
+      </a-assets>
+
+      <!-- The 360 image mapped to a large sphere -->
+      <a-sky id="panorama-sky" 
+             src="#panorama" 
+             segments-width="128" 
+             segments-height="64" 
+             rotation="0 -90 0"></a-sky>
+
+      <!-- Camera with custom zoom/fov support -->
+      <a-camera 
+        id="main-camera" 
+        fov="80" 
+        look-controls="reverseMouseDrag: true" 
+        wasd-controls="enabled: false"
+      >
+        <!-- Hotspots are placed within the scene -->
+        <a-entity id="hotspots-container"></a-entity>
+      </a-camera>
+    </a-scene>
+    
+    <!-- Transition overlay (fade to black) -->
+    <div id="panorama-transition"></div>
+  </div>
+
+  <!-- ================= UI LAYER ================= -->
+  
+  <!-- Top Bar -->
+  <header id="top-bar" class="glass">
+    <div class="top-bar-left">
+      <div class="top-bar-brand">
+        <span class="top-bar-title" data-i18n="appTitle">Monument Explorer</span>
+        <span class="top-bar-subtitle" data-i18n="appSubtitle">Virtual Heritage Tours</span>
+      </div>
+    </div>
+    
+    <div class="top-bar-right">
+      <button id="voice-btn" class="icon-btn" data-i18n-title="voiceGuideTitle">
+        🎙️
+      </button>
+      <button id="lang-btn" class="icon-btn" data-i18n-title="language">
+        <i class="icon-globe">🌐</i>
+      </button>
+      <button id="audio-btn" class="icon-btn" data-i18n-title="audioOff">
+        <div class="audio-indicator muted">
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+        </div>
+      </button>
+      <button id="fullscreen-btn" class="icon-btn" data-i18n-title="fullscreen">⛶</button>
+      <button id="info-btn" class="icon-btn" data-i18n-title="infoTitle">ℹ️</button>
+      <button id="help-btn" class="icon-btn" data-i18n-title="help">❓</button>
+    </div>
+  </header>
+
+  <!-- Language Dropdown -->
+  <div id="language-dropdown"></div>
+
+  <!-- Viewpoint Info Bar -->
+  <div id="viewpoint-bar">
+    <div class="viewpoint-name">Main Gateway</div>
+    <div class="viewpoint-separator"></div>
+    <div class="viewpoint-desc">The main entrance to the complex.</div>
+  </div>
+
+  <!-- Viewpoint Dots (Right side) -->
+  <div id="viewpoint-dots"></div>
+
+  <!-- Navigation Controls (Bottom Left) -->
+  <div id="nav-controls">
+    <button class="nav-btn" id="nav-up">▲</button>
+    <div class="nav-row">
+      <button class="nav-btn" id="nav-left">◀</button>
+      <button class="nav-btn" id="nav-down">▼</button>
+      <button class="nav-btn" id="nav-right">▶</button>
+    </div>
+  </div>
+
+  <!-- Zoom Controls (Bottom Right-ish) -->
+  <div id="zoom-controls">
+    <button class="zoom-btn" id="zoom-in-btn" data-i18n-title="zoomIn">+</button>
+    <button class="zoom-btn" id="zoom-out-btn" data-i18n-title="zoomOut">-</button>
+  </div>
+
+  <!-- Side Controls (Bottom Right) -->
+  <div id="right-controls">
+    <button id="chat-toggle-btn" class="control-fab" data-i18n-title="chatTitle">
+      💬
+      <div class="badge"></div>
+    </button>
+  </div>
+    <div class="time-travel-era" data-i18n="presentDay">Off</div>
+  </div>
+
+  <!-- Historical Info Overlay -->
+  <div id="historical-overlay"></div>
+
+  <!-- Monument Selector (Bottom Bar) -->
+  <div id="monument-selector">
+    <div class="monument-selector-inner">
+      <!-- Cards injected by JS -->
+    </div>
+  </div>
+
+  <!-- ================= MODALS & PANELS ================= -->
+
+  <!-- Chat Panel -->
+  <div id="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">🤖</div>
+        <div>
+          <div class="chat-header-title" data-i18n="chatTitle">AI Guide</div>
+          <div class="chat-header-status">Online</div>
+        </div>
+      </div>
+      <button class="chat-close-btn" id="chat-close-btn">×</button>
+    </div>
+    
+    <div class="chat-messages">
+      <!-- Messages injected by JS -->
+    </div>
+    
+    <div class="chat-quick-replies">
+      <!-- Quick replies injected by JS -->
+    </div>
+    
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" class="chat-input" data-i18n="chatPlaceholder" placeholder="Ask me anything...">
+      <button id="chat-send-btn" class="chat-send-btn" data-i18n-title="chatSend">➤</button>
+    </div>
+  </div>
+
+  <!-- Monument Info Modal -->
+  <div id="info-backdrop"></div>
+  <div id="info-panel">
+    <div class="info-panel-header">
+      <h2 class="info-panel-title">Monument Name</h2>
+      <button class="info-panel-close" id="info-panel-close">×</button>
+    </div>
+    <div class="info-panel-body">
+      Description goes here.
+    </div>
+    <div class="info-panel-meta">
+      <!-- Meta details injected by JS -->
+    </div>
+  </div>
+
+  <!-- Hotspot Info Popup (Positioned dynamically) -->
+  <div id="hotspot-info-popup" class="monument-info-popup">
+    <div class="monument-info-popup-close">×</div>
+    <div class="monument-info-popup-title">Title</div>
+    <div class="monument-info-popup-body">Info goes here.</div>
+  </div>
+
+  <!-- Help Overlay -->
+  <div id="help-overlay">
+    <div class="help-card">
+      <h2 data-i18n="help">Help & Navigation</h2>
+      <div class="help-instructions">
+        <div class="help-item">
+          <div class="help-item-icon">🖱️</div>
+          <div class="help-item-text"><strong>Look around:</strong> Click and drag to pan the camera 360 degrees.</div>
+        </div>
+        <div class="help-item">
+          <div class="help-item-icon">🔍</div>
+          <div class="help-item-text"><strong>Zoom:</strong> Use mouse scroll or pinch on touchscreens.</div>
+        </div>
+        <div class="help-item">
+          <div class="help-item-icon">⭕</div>
+          <div class="help-item-text"><strong>Hotspots:</strong> Click glowing rings in the scene to navigate or read information.</div>
+        </div>
+        <div class="help-item">
+          <div class="help-item-icon">⏳</div>
+          <div class="help-item-text"><strong>Time Travel:</strong> Toggle the switch on the left to see historical context.</div>
+        </div>
+      </div>
+      <button class="help-close-btn" data-i18n="close">Close</button>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts (Load order matters) -->
+  <script src="js/monuments.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/voice-guide.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/panorama.js"></script>
+  <script src="js/hotspots.js"></script>
+  <script src="js/gaze-narrator.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

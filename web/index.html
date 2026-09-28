@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIRASAT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script src="assets/js/subscription.js"></script>
+  <script src="assets/js/budget-data.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    body {
+      height: 12000px;
+      background: #000;
+      overflow-x: hidden;
+    }
+
+    /* ── Canvas layers ── */
+    .canvas-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    #canvasA {
+      z-index: 1;
+    }
+
+    /* Only the cross-fade layer changes opacity, so only it needs promoting */
+    #canvasB {
+      z-index: 2;
+      will-change: opacity;
+    }
+
+    /* Background wrapper — 75% opacity animation.
+       Photo enhancement lives here: one filter pass over both canvases. */
+    .bg-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.75;
+      filter: contrast(1.08) saturate(1.2) brightness(1.05);
+    }
+
+    /* ── Logo ── */
+    .logo {
+      position: fixed;
+      top: 28px;
+      left: 36px;
+      z-index: 50;
+      user-select: none;
+      pointer-events: auto;
+      transform-origin: top left;
+      will-change: transform;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #0a0c14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.15);
+    }
+
+    .brand-logo-img {
+      height: 24px;
+      width: auto;
+      object-fit: contain;
+      mix-blend-mode: screen;
+      filter: brightness(1.4) contrast(1.1);
+      transition: filter 0.3s ease;
+    }
+
+    .logo-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 1.5px;
+      color: #fff;
+      text-transform: uppercase;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95);
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .hero-logo-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: clamp(40px, 8vw, 90px);
+      letter-spacing: 6px;
+      color: #ffffff;
+      text-transform: uppercase;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.95);
+      margin-bottom: 12px;
+      visibility: hidden;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-logo-placeholder .brand-logo-wrap {
+      width: clamp(60px, 10vw, 120px);
+      height: clamp(60px, 10vw, 120px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7), 0 0 40px rgba(245, 158, 11, 0.2);
+    }
+
+    .hero-logo-placeholder .brand-logo-img {
+      height: clamp(40px, 7vw, 80px);
+    }
+
+    /* ── Hero section ── */
+    .hero {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      will-change: opacity, transform;
+      contain: layout paint style;
+    }
+
+    /* Fully faded — take it out of paint/compositing entirely */
+    .hero.hero-off {
+      visibility: hidden;
+      will-change: auto;
+    }
+
+    .hero-top-label {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #f59e0b;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-top-label::before,
+    .hero-top-label::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #f59e0b);
+    }
+
+    .hero-top-label::after {
+      background: linear-gradient(90deg, #f59e0b, transparent);
+    }
+
+    .hero-tagline {
+      text-align: center;
+      padding: 0 20px;
+      overflow: hidden;
+    }
+
+    .hero-tagline .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero-tagline .line-1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: clamp(36px, 6vw, 80px);
+      color: #ffffff;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
+      letter-spacing: 2px;
+      line-height: 1.1;
+      opacity: 0;
+      transform: translateY(60px);
+      animation: wordReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+    }
+
+    .hero-tagline .line-2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(40px, 7vw, 96px);
+      background: linear-gradient(135deg, #fbbf24 0%, #fef3c7 40%, #f59e0b 70%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.15;
+      opacity: 0;
+      transform: translateY(60px);
+      animation: wordReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+      filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 30px rgba(245, 158, 11, 0.5));
+    }
+
+    @keyframes wordReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-about-card {
+      margin-top: 36px;
+      max-width: 560px;
+      padding: 24px 36px;
+      background: rgba(15, 12, 9, 0.75);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 20px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.1);
+      opacity: 0;
+      animation: heroFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.7), transparent);
+    }
+
+    .hero-about-text {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      font-size: clamp(14px, 1.5vw, 17px);
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+      text-align: center;
+      line-height: 1.85;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-about-text strong {
+      color: #fbbf24;
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 6vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards;
+    }
+
+    .hero-scroll-hint span {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      font-size: 11.5px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(to bottom, rgba(201, 168, 76, 0.6), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+
+      0%,
+      100% {
+        opacity: 0.4;
+        transform: scaleY(0.6);
+        transform-origin: top;
+      }
+
+      50% {
+        opacity: 1;
+        transform: scaleY(1);
+        transform-origin: top;
+      }
+    }
+
+    @keyframes heroFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Cinematic vignette overlay ── */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background: radial-gradient(ellipse 75% 70% at 50% 50%,
+          transparent 55%,
+          rgba(0, 0, 0, 0.45) 100%);
+    }
+
+    /* ── Film-grain overlay for cinematic texture ── */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* ── Subtle top/bottom letterbox bars ── */
+    .letterbox-top,
+    .letterbox-bottom {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 3.5vh;
+      background: #000;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .letterbox-top {
+      top: 0;
+    }
+
+    .letterbox-bottom {
+      bottom: 0;
+    }
+
+    /* ── Loading overlay ── */
+    .loader {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-ring {
+      width: 44px;
+      height: 44px;
+      border: 2.5px solid rgba(255, 255, 255, 0.06);
+      border-top-color: #c9a84c;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    .loader-bar-track {
+      width: 180px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .loader-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #c9a84c, #e8d59a);
+      border-radius: 1px;
+      transition: width 0.2s ease;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── Feature Slide (one at a time, full screen) ── */
+    .feature-slide {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      contain: layout paint style;
+    }
+
+    .feature-slide.active {
+      pointer-events: auto;
+      visibility: visible;
+      will-change: opacity, transform;
+    }
+
+    .feature-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 40px;
+      transition: transform 0.4s ease;
+    }
+
+    .feature-inner:hover {
+      transform: scale(1.05);
+    }
+
+    .feature-slide .feat-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+    }
+
+    .feature-slide .feat-icon {
+      width: 48px;
+      height: 48px;
+      margin: 8px 0;
+      color: #ffffff;
+    }
+
+    .feature-slide .feat-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-slide .feat-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: clamp(28px, 4vw, 48px);
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .feature-slide .feat-hint {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: clamp(13px, 1.4vw, 16px);
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .feature-slide .feat-cta {
+      margin-top: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s ease, gap 0.3s ease;
+    }
+
+    .feature-inner:hover .feat-cta {
+      color: #ffffff;
+      gap: 14px;
+    }
+
+    /* Progress indicator */
+    .scroll-progress {
+      position: fixed;
+      right: 36px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 12;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .scroll-progress.visible {
+      opacity: 1;
+    }
+
+    .prog-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .prog-dot.active {
+      background: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      transform: scale(1.4);
+    }
+
+    /* ── Floating AI Chatbot Widget (Bottom Right Corner) ── */
+    .ai-chatbot-trigger {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(12, 14, 20, 0.92);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      border-radius: 40px;
+      padding: 10px 18px 10px 14px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(201, 168, 76, 0.2);
+      backdrop-filter: blur(16px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ai-chatbot-trigger:hover {
+      border-color: #c9a84c;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), 0 0 30px rgba(201, 168, 76, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .ai-bot-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+    }
+
+    .ai-bot-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #000;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .ai-trigger-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .ai-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    /* ── Chatbot Window ── */
+    .ai-chatbot-window,
+    .ai-chatbot-window *,
+    .ai-chatbot-trigger,
+    .ai-chatbot-trigger * {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    }
+
+    .ai-chatbot-window {
+      position: fixed;
+      bottom: 84px;
+      right: 28px;
+      width: 410px;
+      max-width: calc(100vw - 40px);
+      height: 560px;
+      max-height: calc(100vh - 120px);
+      background: rgba(10, 12, 17, 0.97);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(25px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .ai-chatbot-window.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .ai-chat-header {
+      padding: 14px 20px;
+      background: rgba(20, 24, 34, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ai-chat-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .ai-chat-sub {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .ai-close-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 22px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .ai-close-btn:hover {
+      color: #ffffff;
+    }
+
+    /* ── Tabs Bar inside Chatbot Window ── */
+    .mitr-tabs-bar {
+      display: flex;
+      background: rgba(18, 22, 32, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .mitr-tab-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      background: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .mitr-tab-btn.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 2px solid #c9a84c;
+    }
+
+    .mitr-tab-content-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .mitr-tab-pane {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .mitr-tab-pane.active {
+      display: flex;
+    }
+
+    .ai-chat-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .chat-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 88%;
+    }
+
+    .chat-msg.bot {
+      align-self: flex-start;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      letter-spacing: 0.1px;
+    }
+
+    .msg-bubble strong {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .chat-msg.bot .msg-bubble {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #f1f5f9;
+      border-top-left-radius: 2px;
+    }
+
+    .chat-msg.user .msg-bubble {
+      background: rgba(201, 168, 76, 0.25);
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      color: #fff;
+      border-top-right-radius: 2px;
+    }
+
+    .ai-chips-wrapper {
+      padding: 10px 14px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 10, 15, 0.7);
+      flex-shrink: 0;
+    }
+
+    .ai-chips-wrapper::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    .ai-chips-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .ai-chip {
+      padding: 7px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      font-size: 12px;
+      font-weight: 500;
+      color: #f1f5f9;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .ai-chip:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .ai-chat-input-row {
+      padding: 12px 16px;
+      background: rgba(14, 16, 24, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-input-row input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .ai-chat-input-row input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .ai-send-btn {
+      background: #ffffff;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ai-send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    }
+
+    /* ── Budget Planner Form & Results Pane ── */
+    .budget-planner-pane {
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .budget-form-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .budget-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .budget-field-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .budget-field-group input,
+    .budget-field-group select {
+      padding: 7px 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #fff;
+      outline: none;
+    }
+
+    .budget-field-group select option {
+      background: #141824;
+      color: #fff;
+    }
+
+    .calc-budget-btn {
+      width: 100%;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, #c9a84c, #967527);
+      color: #000;
+      border: none;
+      border-radius: 20px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.25);
+    }
+
+    .calc-budget-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    .budget-result-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .budget-result-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .budget-city-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .res-style-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      background: rgba(201, 168, 76, 0.2);
+      color: #c9a84c;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+
+    .res-total-highlight {
+      font-size: 15px;
+      font-weight: 800;
+      color: #22c55e;
+    }
+
+    .budget-breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/mobile.css">
+</head>
+
+<body>
+
+  <div class="loader" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-bar-track">
+      <div class="loader-bar-fill" id="loaderBar"></div>
+    </div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo" id="mainLogo">
+    <div class="brand-logo-wrap">
+      <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo" class="brand-logo-img" id="mainLogoImg">
+    </div>
+    <div class="logo-title" id="mainLogoTitle">Virasat</div>
+  </div>
+
+  <!-- Top Right Auth Navigation -->
+  <div style="position:fixed; top:28px; right:36px; z-index:50; display:flex; gap:10px;">
+    <a href="login.html" style="display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(15,23,42,0.7); border:1px solid rgba(245,158,11,0.4); border-radius:999px; color:#fff; font-family:'Outfit',sans-serif; font-size:13px; font-weight:600; text-decoration:none; backdrop-filter:blur(10px); box-shadow:0 4px 15px rgba(0,0,0,0.4);">
+      🔑 Sign In / Register
+    </a>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero" id="hero">
+    <div id="heroLogoPlaceholder" class="hero-logo-placeholder">
+      <div class="brand-logo-wrap">
+        <img loading="lazy" decoding="async" src="assets/images/logo.jpg" alt="Virasat Logo" class="brand-logo-img">
+      </div>
+      <span>VIRASAT</span>
+    </div>
+    <div class="hero-top-label">Discover India's Legacy</div>
+    <h1 class="hero-tagline">
+      <span class="line line-1">Where Traditions</span>
+      <span class="line line-2">Live Forever</span>
+    </h1>
+    <div class="hero-about-card">
+      <p class="hero-about-text">
+        <strong>Virasat</strong> is a celebration of India's timeless heritage —
+        the sacred temples, grand palaces, and living traditions
+        that have endured for centuries. We preserve the stories
+        <strong>etched in stone</strong> and whispered through generations.
+      </p>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+  <!-- Feature Slides (8 core features) -->
+  <div class="feature-slide" data-feat="0">
+    <a href="explore.html" class="feature-inner">
+      <span class="feat-num">01 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <path d="M3 7l6-4 6 4 6-4v14l-6 4-6-4-6 4V7z" />
+          <path d="M9 3v14" />
+          <path d="M15 7v14" />
+        </svg></span>
+      <span class="feat-name">Explore City</span>
+      <span class="feat-hint">Discover heritage sites, crafts, food & culture across India</span>
+      <span class="feat-cta">Explore More →</span>
+    </a>
+  </div>
+
+  <div class="feature-slide" data-feat="1">
+    <a href="scan.html" class="feature-inner">
+      <span class="feat-num">02 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="12" cy="12" r="3" />
+          <path d="M3 9h2" />
+          <path d="M19 9h2" />
+        </svg></span>
+      <span class="feat-name">Scan Monument</span>
+      <span class="feat-hint">Upload a photo — our AI identifies the place instantly</span>
+      <span class="feat-cta">Try it →</span>
+    </a>
+  </div>
+
+  <div class="feature-slide" data-feat="2">
+    <a href="marketplace.html" class="feature-inner">
+      <span class="feat-num">03 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <path d="M3 3h18v18H3V3z" />
+          <path d="M3 9h18" />
+          <path d="M9 21V9" />
+        </svg></span>
+      <span class="feat-name">Marketplace</span>
+      <span class="feat-hint">Handcrafted products with their origin stories</span>
+      <span class="feat-cta">Browse →</span>
+    </a>
+  </div>
+
+  <div class="feature-slide" data-feat="3">
+    <a href="events.html" class="feature-inner">
+      <span class="feat-num">04 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <path d="M16 2v4" />
+          <path d="M8 2v4" />
+          <path d="M3 10h18" />
+          <path d="M8 14h.01" />
+          <path d="M12 14h.01" />
+          <path d="M16 14h.01" />
+          <path d="M8 18h.01" />
+          <path d="M12 18h.01" />
+        </svg></span>
+      <span class="feat-name">Cultural Events</span>
+      <span class="feat-hint">Upcoming festivals & celebrations near you</span>
+      <span class="feat-cta">View events →</span>
+    </a>
+  </div>
+
+  <div class="feature-slide" data-feat="4">
+    <a href="language.html" class="feature-inner">
+      <span class="feat-num">05 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <path d="M4 21V8l8-5 8 5v13" />
+          <path d="M9 21v-6h6v6" />
+          <path d="M3 11l9-7 9 7" />
+          <circle cx="12" cy="13" r="1" />
+        </svg></span>
+      <span class="feat-name">Language Translation</span>
+      <span class="feat-hint">Translate & learn native Indian regional languages and phrases</span>
+      <span class="feat-cta">Start translating →</span>
+    </a>
+  </div>
+
+  <div class="feature-slide" data-feat="5">
+    <a href="community.html" class="feature-inner">
+      <span class="feat-num">06 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M2 12h20" />
+          <path d="M12 2a16 16 0 0 1 4 10 16 16 0 0 1-4 10" />
+          <path d="M12 2a16 16 0 0 1-4 10 16 16 0 0 0 4 10" />
+        </svg></span>
+      <span class="feat-name">Community</span>
+      <span class="feat-hint">Share your experiences with fellow explorers</span>
+      <span class="feat-cta">Join →</span>
+    </a>
+  </div>
+
+  <div class="feature-slide" data-feat="6">
+    <a href="report.html" class="feature-inner">
+      <span class="feat-num">07 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg></span>
+      <span class="feat-name">Report Problem</span>
+      <span class="feat-hint">Report monument damage & alert heritage officials instantly</span>
+      <span class="feat-cta">Report now →</span>
+    </a>
+  </div>
+
+  <div class="feature-slide" data-feat="7">
+    <a href="profile.html" class="feature-inner">
+      <span class="feat-num">08 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" />
+        </svg></span>
+      <span class="feat-name">Profile</span>
+      <span class="feat-hint">Your personal journey dashboard</span>
+      <span class="feat-cta">View profile →</span>
+    </a>
+  </div>
+
+  <div class="feature-slide" data-feat="8">
+    <a href="vr.html" class="feature-inner">
+      <span class="feat-num">09 / 09</span>
+      <span class="feat-icon"><svg viewBox="0 0 24 24">
+          <path d="M2 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-4.5l-2.5 3-2.5-3H4a2 2 0 0 1-2-2V8z" />
+          <circle cx="7.5" cy="12" r="2.5" />
+          <circle cx="16.5" cy="12" r="2.5" />
+        </svg></span>
+      <span class="feat-name">VR Monument Explorer</span>
+      <span class="feat-hint">360° virtual tours, Chronos Lens time travel & AI guides</span>
+      <span class="feat-cta">Explore VR →</span>
+    </a>
+  </div>
+
+  <!-- Scroll progress dots -->
+  <div class="scroll-progress" id="scrollProgress">
+    <div class="prog-dot" data-dot="0"></div>
+    <div class="prog-dot" data-dot="1"></div>
+    <div class="prog-dot" data-dot="2"></div>
+    <div class="prog-dot" data-dot="3"></div>
+    <div class="prog-dot" data-dot="4"></div>
+    <div class="prog-dot" data-dot="5"></div>
+    <div class="prog-dot" data-dot="6"></div>
+    <div class="prog-dot" data-dot="7"></div>
+    <div class="prog-dot" data-dot="8"></div>
+  </div>
+
+  <div class="bg-wrap">
+    <canvas id="canvasA" class="canvas-layer"></canvas>
+    <canvas id="canvasB" class="canvas-layer"></canvas>
+  </div>
+
+  <!-- Cinematic overlays -->
+  <div class="vignette"></div>
+  <div class="grain"></div>
+  <div class="letterbox-top"></div>
+  <div class="letterbox-bottom"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      /* 155 frames of the palace fly-through (gate → gardens → doors), served
+         as 1280x720 WebP from assets/frames/mysuru. With this many frames the
+         step between neighbours is tiny, so the sky is drawn as the nearest
+         frame — no cross-fade. The old 50-frame version blended two quite
+         different frames on a second canvas, and that blend was the visible
+         "overlapping" ghost image. */
+      const FRAME_COUNT = 155;
+      // Fraction of the remaining distance covered per 60fps frame. Applied
+      // time-corrected below, so the feel is identical on 60/90/144Hz displays.
+      const LERP_PER_FRAME = 0.16;
+      // Source frames are 1280x720, so a backing store above 1x CSS pixel only
+      // costs fill-rate — there is no extra detail to reveal by upscaling more.
+      const MAX_DPR = 1;
+
+      const framePath = i => `assets/frames/mysuru/frame_${String(i).padStart(3, "0")}.webp`;
+
+      const canvasA = document.getElementById("canvasA");
+      const canvasB = document.getElementById("canvasB");
+      const ctxA = canvasA ? canvasA.getContext("2d", { alpha: false }) : null;
+      const ctxB = null;
+      if (canvasB) canvasB.style.display = "none";   // cross-fade layer retired
+      const loader = document.getElementById("loader");
+      const loaderBar = document.getElementById("loaderBar");
+
+      const hero = document.getElementById("hero");
+      const featureSlides = document.querySelectorAll(".feature-slide");
+      const scrollProgress = document.getElementById("scrollProgress");
+      const progDots = document.querySelectorAll(".prog-dot");
+      const TOTAL_FEATURES = featureSlides.length || 9;
+
+      const mainLogoEl = document.getElementById("mainLogo");
+      const mainLogoTitleEl = document.getElementById("mainLogoTitle");
+      const heroPlaceholderEl = document.getElementById("heroLogoPlaceholder");
+
+      const HERO_END = 0.10;
+      const FEAT_ZONE = (1 - HERO_END) / TOTAL_FEATURES;
+
+      const images = new Array(FRAME_COUNT);
+      let currentFrame = 0;
+      let targetFrame = 0;
+      let imagesReady = false;
+      let lastDrawnA = -1;
+      let lastDrawnB = -1;
+      let prevBlendVal = -1;
+
+      /* ── Cached layout metrics ───────────────────────────────────────────
+         These used to be read inside the scroll handler, which forced a
+         synchronous layout on every scroll event. They only change on resize
+         (or when webfonts swap in), so they are measured there instead. */
+      let scrollMax = 0;
+      let logoStartX = 0;
+      let logoStartY = 0;
+      let logoScaleRatio = 3.5;
+      const LOGO_TARGET_X = 36;
+      const LOGO_TARGET_Y = 28;
+
+      function measureLayout() {
+        scrollMax = document.body.scrollHeight - window.innerHeight;
+
+        if (!heroPlaceholderEl || !mainLogoTitleEl) return;
+        // Measure the placeholder with the hero un-transformed, otherwise the
+        // hero's own scroll-driven scale feeds back into the logo position.
+        const prevTransform = hero ? hero.style.transform : "";
+        if (hero) hero.style.transform = "none";
+        const pRect = heroPlaceholderEl.getBoundingClientRect();
+        const logoWidthAtRest = mainLogoTitleEl.offsetWidth || 110;
+        if (hero) hero.style.transform = prevTransform;
+
+        logoStartX = pRect.left;
+        logoStartY = pRect.top;
+        logoScaleRatio = (pRect.width > 0 && logoWidthAtRest > 0)
+          ? (pRect.width / logoWidthAtRest)
+          : 3.5;
+      }
+
+      /* ── Cover-fit draw ── */
+      function coverDraw(ctx, img) {
+        if (!ctx || !img) return;
+        const cw = window.innerWidth;
+        const ch = window.innerHeight;
+        const imgR = img.naturalWidth / img.naturalHeight;
+        if (!imgR) return;
+        const canR = cw / ch;
+        let dw, dh, dx, dy;
+        if (canR > imgR) { dw = cw; dh = cw / imgR; }
+        else { dh = ch; dw = ch * imgR; }
+        dx = (cw - dw) / 2;
+        dy = (ch - dh) / 2;
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.drawImage(img, dx, dy, dw, dh);
+      }
+
+      /* ── Render with cross-fade ── */
+      /* Nearest frame that has actually arrived. While the sequence is still
+         streaming in, scrolling ahead shows the closest decoded frame instead
+         of freezing on the last one, then snaps to the exact frame as it lands. */
+      function nearestLoaded(idx) {
+        if (images[idx]) return idx;
+        for (let d = 1; d < FRAME_COUNT; d++) {
+          if (idx - d >= 0 && images[idx - d]) return idx - d;
+          if (idx + d < FRAME_COUNT && images[idx + d]) return idx + d;
+        }
+        return -1;
+      }
+
+      function render(frame) {
+        if (!ctxA) return;
+        const want = Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(frame)));
+        const idx = nearestLoaded(want);
+        if (idx < 0 || idx === lastDrawnA) return;
+        coverDraw(ctxA, images[idx]);
+        lastDrawnA = idx;
+      }
+
+      let lastLogoT = -1;
+
+      function updateMorphingLogo(progress) {
+        if (!mainLogoEl || !mainLogoTitleEl) return;
+
+        const t = Math.max(0, Math.min(1, progress / HERO_END));
+        const q = Math.round(t * 500);
+        if (q === lastLogoT) return;
+        lastLogoT = q;
+
+        const easedT = t * t * (3 - 2 * t);
+        const inv = 1 - easedT;
+
+        const dx = (logoStartX - LOGO_TARGET_X) * inv;
+        const dy = (logoStartY - LOGO_TARGET_Y) * inv;
+        const currentScale = 1 + (logoScaleRatio - 1) * inv;
+        const currentLetterSpacing = 3 + 9 * inv;
+
+        mainLogoEl.style.transform =
+          `translate3d(${dx.toFixed(2)}px, ${dy.toFixed(2)}px, 0) scale(${currentScale.toFixed(4)})`;
+        mainLogoTitleEl.style.letterSpacing = `${currentLetterSpacing.toFixed(2)}px`;
+      }
+
+      /* ── Hero fade ── */
+      let heroOff = false;
+
+      function updateHero(progress) {
+        if (!hero) return;
+        const heroFade = 1 - Math.min(1, progress / HERO_END);
+
+        if (heroFade <= 0.002) {
+          if (!heroOff) {
+            hero.style.opacity = 0;
+            hero.classList.add("hero-off");
+            heroOff = true;
+          }
+          return;
+        }
+
+        if (heroOff) {
+          hero.classList.remove("hero-off");
+          heroOff = false;
+        }
+        hero.style.opacity = heroFade.toFixed(3);
+        hero.style.transform = `scale(${(1 + (1 - heroFade) * 0.08).toFixed(4)})`;
+      }
+
+      /* ── Feature slides ──
+         Style writes are skipped whenever the computed values are unchanged,
+         which is the common case for every slide but the one on screen. */
+      const slideState = new Array(featureSlides.length);
+
+      function updateSlides(progress) {
+        for (let i = 0; i < featureSlides.length; i++) {
+          const start = HERO_END + i * FEAT_ZONE;
+          const end = start + FEAT_ZONE;
+          const fadeIn = FEAT_ZONE * 0.2;
+          const fadeOut = FEAT_ZONE * 0.2;
+
+          let opacity = 0;
+          let yOffset = 30;
+          let scale = 0.97;
+          let active = false;
+
+          if (progress >= start && progress <= end) {
+            active = true;
+            if (progress < start + fadeIn) {
+              const t = (progress - start) / fadeIn;
+              opacity = t;
+              yOffset = 30 * (1 - t);
+              scale = 0.97 + 0.03 * t;
+            } else if (progress > end - fadeOut) {
+              const t = (end - progress) / fadeOut;
+              opacity = t;
+              yOffset = -20 * (1 - t);
+              scale = 1 + 0.03 * (1 - t);
+            } else {
+              opacity = 1;
+              yOffset = 0;
+              scale = 1;
+            }
+          }
+
+          const o = Math.round(opacity * 200);
+          const y = Math.round(yOffset * 10);
+          const sc = Math.round(scale * 1000);
+
+          const prev = slideState[i];
+          if (prev && prev.o === o && prev.y === y && prev.s === sc && prev.a === active) continue;
+          slideState[i] = { o: o, y: y, s: sc, a: active };
+
+          const slide = featureSlides[i];
+          slide.classList.toggle("active", active);
+          slide.style.opacity = o / 200;
+          slide.style.transform = `translate3d(0, ${y / 10}px, 0) scale(${sc / 1000})`;
+        }
+      }
+
+      /* ── Progress dots ── */
+      let lastDotIndex = -1;
+      let progressVisible = false;
+
+      function updateProgressDots(progress) {
+        if (!scrollProgress) return;
+        if (progress > HERO_END) {
+          if (!progressVisible) {
+            scrollProgress.classList.add("visible");
+            progressVisible = true;
+          }
+          const activeIndex = Math.min(
+            TOTAL_FEATURES - 1,
+            Math.floor((progress - HERO_END) / FEAT_ZONE)
+          );
+          if (activeIndex !== lastDotIndex) {
+            lastDotIndex = activeIndex;
+            progDots.forEach((dot, i) => {
+              dot.classList.toggle("active", i === activeIndex);
+            });
+          }
+        } else if (progressVisible) {
+          scrollProgress.classList.remove("visible");
+          progressVisible = false;
+        }
+      }
+
+      /* ── Scroll → target ──
+         The listener itself does nothing but flag; all reads and writes happen
+         once per animation frame, so a burst of scroll events costs one pass. */
+      let scrollDirty = true;
+
+      function applyScroll() {
+        if (scrollMax <= 0) {
+          scrollMax = document.body.scrollHeight - window.innerHeight;
+          if (scrollMax <= 0) return;
+        }
+        const progress = Math.max(0, Math.min(1, window.scrollY / scrollMax));
+        targetFrame = progress * (FRAME_COUNT - 1);
+
+        updateMorphingLogo(progress);
+        updateHero(progress);
+        updateSlides(progress);
+        updateProgressDots(progress);
+      }
+
+      function onScroll() {
+        scrollDirty = true;
+      }
+
+      /* ── Sizing ── */
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+        if (canvasA && canvasB) {
+          [canvasA, canvasB].forEach(c => {
+            c.width = Math.round(window.innerWidth * dpr);
+            c.height = Math.round(window.innerHeight * dpr);
+          });
+          if (ctxA) {
+            ctxA.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctxA.imageSmoothingEnabled = true;
+            // "low" is a plain bilinear scale — a fraction of the cost of the
+            // mip-mapped "high" path, and indistinguishable when upscaling.
+            ctxA.imageSmoothingQuality = "low";
+          }
+          if (ctxB) {
+            ctxB.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctxB.imageSmoothingEnabled = true;
+            ctxB.imageSmoothingQuality = "low";
+          }
+        }
+        lastDrawnA = -1;
+        lastDrawnB = -1;
+        lastLogoT = -1;
+        measureLayout();
+        scrollDirty = true;
+      }
+
+      let resizeTimer = 0;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 120);
+      });
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      /* ── rAF loop ── */
+      let lastT = 0;
+
+      function tick(now) {
+        requestAnimationFrame(tick);
+
+        const dt = lastT ? Math.min(now - lastT, 100) : 16.667;
+        lastT = now;
+
+        if (scrollDirty) {
+          scrollDirty = false;
+          applyScroll();
+        }
+
+        if (!imagesReady) return;
+
+        const delta = targetFrame - currentFrame;
+        if (Math.abs(delta) < 0.0008) {
+          if (currentFrame !== targetFrame) {
+            currentFrame = targetFrame;
+            render(currentFrame);
+          }
+          return; // settled — no draw work while idle
+        }
+
+        // Frame-rate independent easing: same visual smoothing at any refresh rate.
+        const k = 1 - Math.pow(1 - LERP_PER_FRAME, dt / 16.667);
+        currentFrame += delta * k;
+        currentFrame = Math.max(0, Math.min(FRAME_COUNT - 1, currentFrame));
+        render(currentFrame);
+      }
+      requestAnimationFrame(tick);
+
+      /* ── Preload ── */
+      let loaded = 0;
+      let loaderDismissed = false;
+
+      function dismissLoader() {
+        if (loaderDismissed) return;
+        loaderDismissed = true;
+        imagesReady = true;
+        if (loader) loader.classList.add("hidden");
+        // Paint the opening frame now. With no scroll yet, current and target
+        // frame are both 0, so the rAF loop's "settled" branch would otherwise
+        // never draw and the hero stayed black until the first scroll.
+        lastDrawnA = -1;
+        render(currentFrame);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const slideParam = urlParams.get('slide') || urlParams.get('feat') || window.location.hash.replace('#', '');
+        const FEAT_SLIDE_MAP = {
+          'explore': 0, '0': 0,
+          'scan': 1, '1': 1,
+          'marketplace': 2, '2': 2,
+          'events': 3, '3': 3,
+          'language': 4, '4': 4,
+          'community': 5, '5': 5,
+          'report': 6, '6': 6,
+          'profile': 7, '7': 7,
+          'vr': 8, '8': 8
+        };
+
+        if (slideParam in FEAT_SLIDE_MAP) {
+          const featIndex = FEAT_SLIDE_MAP[slideParam];
+          measureLayout();
+          const targetProgress = HERO_END + featIndex * FEAT_ZONE + FEAT_ZONE * 0.5;
+          window.scrollTo({ top: targetProgress * scrollMax, behavior: 'instant' });
+          // Jump straight to the frame instead of easing 40 frames on load.
+          currentFrame = targetProgress * (FRAME_COUNT - 1);
+        }
+
+        scrollDirty = true;
+      }
+
+      // Enough of the opening to start scrolling; the rest streams behind it.
+      const READY_AFTER = 12;
+
+      function onImageReady(index, img) {
+        if (images[index]) return;
+        // A failed request still counts as settled (so the stream keeps
+        // moving) but is never drawn — nearestLoaded() skips it.
+        if (img && img.naturalWidth > 0) images[index] = img;
+        loaded++;
+        if (loaderBar) loaderBar.style.width = ((loaded / FRAME_COUNT) * 100) + "%";
+        if (loaded >= READY_AFTER) dismissLoader();
+        // A frame arriving for the position we're on — or nearer to it than
+        // whatever is currently painted — is drawn immediately.
+        if (imagesReady && img && img.naturalWidth > 0) {
+          const want = Math.round(currentFrame);
+          if (lastDrawnA < 0 || Math.abs(index - want) < Math.abs(lastDrawnA - want)) {
+            lastDrawnA = -1;
+            render(currentFrame);
+          }
+        }
+      }
+
+      // Safety timeout: never hold the page on a slow connection.
+      setTimeout(dismissLoader, 2500);
+
+      resize();
+
+      // Re-measure once webfonts swap in, since the logo width drives the morph.
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => { lastLogoT = -1; measureLayout(); scrollDirty = true; });
+      }
+
+      /* Stream the sequence in scroll order, a few at a time. Firing all 155
+         requests at once made the browser queue them arbitrarily, so the frame
+         you were looking at could be the last to arrive. */
+      const CONCURRENCY = 6;
+      let nextToLoad = 0;
+      function loadFrame(i) {
+        started++;
+        const img = new Image();
+        img.decoding = "async";
+        const done = () => {
+          // Decode up front so the first draw of a frame never stalls the
+          // rAF loop mid-scroll.
+          const finish = () => { onImageReady(i, img); pump(); };
+          if (img.decode) img.decode().then(finish, finish); else finish();
+        };
+        img.onload = done;
+        img.onerror = () => { onImageReady(i, img); pump(); };
+        img.src = framePath(i + 1);
+      }
+      function pump() {
+        while (nextToLoad < FRAME_COUNT && inFlight() < CONCURRENCY) loadFrame(nextToLoad++);
+      }
+      let started = 0;
+      function inFlight() { return started - loaded; }
+      pump();
+
+    })();
+  </script>
+
+  <!-- Persistent Floating AI Chatbot (Bottom-Left Corner) -->
+  <div class="ai-chatbot-trigger" id="aiChatTrigger">
+    <div class="ai-bot-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2a8 8 0 0 1 8 8c0 5.33-8 12-8 12S4 15.33 4 10a8 8 0 0 1 8-8z" />
+        <circle cx="12" cy="10" r="2.5" />
+        <path d="M9 18l-2 3" />
+        <path d="M15 18l2 3" />
+      </svg>
+    </div>
+    <span class="ai-trigger-label">VIRASAT MITR AI</span>
+    <div class="ai-pulse-dot"></div>
+  </div>
+
+  <!-- Chatbot Window -->
+  <div class="ai-chatbot-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <div class="ai-chat-title-group">
+        <div class="ai-bot-icon" style="width:28px;height:28px;">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;">
+            <path d="M12 2a8 8 0 0 1 8 8c0 5.33-8 12-8 12S4 15.33 4 10a8 8 0 0 1 8-8z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+        </div>
+        <div>
+          <div class="ai-chat-title">Virasat Mitr AI</div>
+          <div class="ai-chat-sub">Cultural Guide & Budget Planner</div>
+        </div>
+      </div>
+      <button class="ai-close-btn" id="aiChatClose">&times;</button>
+    </div>
+
+    <!-- Dual Tabs: Q&A vs Budget Planner -->
+    <div class="mitr-tabs-bar">
+      <button class="mitr-tab-btn active" id="tabBtnQA" onclick="switchMitrTab('qa')">
+        💬 Regional Q&A
+      </button>
+      <button class="mitr-tab-btn" id="tabBtnBudget" onclick="switchMitrTab('budget')">
+        🧮 Budget Planner
+      </button>
+    </div>
+
+    <div class="mitr-tab-content-container">
+      <!-- Tab 1: Q&A -->
+      <div class="mitr-tab-pane active" id="paneQA">
+        <div class="ai-chat-body" id="aiChatBody">
+          <div class="chat-msg bot">
+            <div class="msg-bubble">
+              Namaste! I am your <strong>Virasat Mitr AI</strong>. Ask me anything about Indian heritage places, hidden stepwells, and regional foods!
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Action Chips -->
+        <div class="ai-chips-wrapper">
+          <div class="ai-chip" onclick="askAiQuestion('Tell me about Amber Fort history')">🏛️ Amber Fort</div>
+          <div class="ai-chip" onclick="askAiQuestion('Tell me about Panna Meena Stepwell')">✨ Panna Meena Story</div>
+          <div class="ai-chip" onclick="askAiQuestion('Varanasi Ganga Aarti timing and guide')">🕉️ Ganga Aarti</div>
+          <div class="ai-chip" onclick="askAiQuestion('Best traditional food in Jaipur')">🍲 Jaipur Food</div>
+        </div>
+
+        <div class="ai-chat-input-row">
+          <input type="text" id="aiUserInput" placeholder="Ask about monuments, history, or culture..." autocomplete="off">
+          <button class="ai-send-btn" id="aiSendBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Budget Planner -->
+      <div class="mitr-tab-pane" id="paneBudget">
+        <div class="budget-planner-pane">
+          <div class="budget-form-row">
+            <div class="budget-field-group" style="flex:1;">
+              <label for="userBudgetInput">Your Budget (₹):</label>
+              <input type="number" id="userBudgetInput" value="10500" step="500" min="1000">
+            </div>
+            <div class="budget-field-group" style="width:90px;">
+              <label for="budgetDaysInput">Days:</label>
+              <input type="number" id="budgetDaysInput" value="3" min="1" max="30">
+            </div>
+          </div>
+
+          <div class="budget-field-group">
+            <label for="budgetCitySelect">Destination City:</label>
+            <select id="budgetCitySelect">
+              <!-- populated from assets/js/budget-data.js: every state & major UT -->
+              <option value="jaipur" selected>Jaipur (Rajasthan)</option>
+            </select>
+          </div>
+
+          <div class="budget-field-group">
+            <label for="budgetStyleSelect">Travel Style Preference:</label>
+            <select id="budgetStyleSelect">
+              <option value="Heritage Explorer" selected>Heritage Explorer (Balanced)</option>
+              <option value="Backpacker">Backpacker (Economical)</option>
+              <option value="Royal Luxury">Royal Luxury (Premium Stay & Dining)</option>
+            </select>
+          </div>
+
+          <button class="calc-budget-btn" onclick="calculateCulturalBudget()">
+            <span>✨</span>
+            <span>Plan Around My Budget</span>
+          </button>
+
+          <!-- Result Card -->
+          <div class="budget-result-card" id="budgetResultCard">
+            <div class="budget-result-hdr">
+              <span class="budget-city-title" id="resCityTitle">Jaipur (3 Days)</span>
+              <span class="res-style-badge" id="resStyleTag">Heritage Explorer</span>
+            </div>
+            <div class="res-total-highlight" id="resTotalCost">Est. Total: ₹10,500</div>
+
+            <div class="budget-breakdown-grid">
+              <div class="breakdown-item"><span>🏨 Stay:</span> <strong id="resStayCost">₹4,200</strong></div>
+              <div class="breakdown-item"><span>🎨 Crafts & Shop:</span> <strong id="resShopCost">₹2,625</strong></div>
+              <div class="breakdown-item"><span>🍲 Dining:</span> <strong id="resDiningCost">₹2,100</strong></div>
+              <div class="breakdown-item"><span>🚗 Transit & Passes:</span> <strong id="resTransitCost">₹1,575</strong>
+              </div>
+              <div style="font-size:11px;font-weight:700;color:#c9a84c;text-transform:uppercase;margin-top:4px;">
+                Must-Visit Heritage Spots:</div>
+              <p id="resKeySpots" style="font-size:11.5px;color:rgba(255,255,255,0.85);margin-top:2px;line-height:1.4;">
+              </p>
+
+              <div id="resBudgetRecommendation" style="font-size:11.5px;color:#c9a84c;margin-top:4px;">
+                🎯 <strong>AI Smart Allocation:</strong> Optimized for ₹3,500/day in Jaipur.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* ── AI Integration (Groq via the local proxy) ──
+         No API key here: the browser posts to server.js, which holds the
+         key server-side. Start it with: node server.js */
+      const AI_CONFIG = {
+        proxyEndpoints: [
+          "/api/chat",
+          "/api/chat"
+        ],
+        model: "openai/gpt-oss-120b"
+      };
+
+      function generateAiResponse(query) {
+        if (!query) return "Hello! How can I assist your Indian heritage journey today?";
+        const q = query.toLowerCase();
+        if (q.includes("budget") || q.includes("cost") || q.includes("plan") || q.includes("price")) {
+          setTimeout(() => { if (window.switchMitrTab) switchMitrTab('budget'); }, 400);
+          return "🧮 <b>Budget Planning:</b> For customized trip budget calculations and cost allocations, please use the dedicated <b>Budget Planner</b> tab right above! You can enter your duration, budget, and travel style for an instant smart breakdown.";
+        }
+        if (q.includes("jaipur") || q.includes("amber") || q.includes("hawa")) {
+          return "<b>Jaipur Heritage Highlights:</b><br>• <b>Amber Fort:</b> Iconic hilltop fortress built in 1592.<br>• <b>Hawa Mahal:</b> Palace of Winds with 953 jharokhas.<br>• <b>Panna Meena Kund:</b> 16th-century stepwell near Amber.<br><br>💡 <i>Tip: Composite tickets cost ₹300 for 2 days!</i>";
+        }
+        if (q.includes("varanasi") || q.includes("kashi") || q.includes("ghat")) {
+          return "<b>Varanasi Spiritual & Cultural Guide:</b><br>• <b>Dashashwamedh Ghat:</b> Famous evening Ganga Aarti.<br>• <b>Sarnath:</b> Buddha's first sermon site (10km away).<br>• <b>Kashi Vishwanath:</b> One of 12 Jyotirlingas.<br><br>🍲 <i>Must-try food: Malaiyyo, Kachori Jalebi, & Banarasi Paan!</i>";
+        }
+        if (q.includes("craft") || q.includes("shop") || q.includes("saree") || q.includes("artisan")) {
+          return "<b>GI-Tagged Craft Highlights:</b><br>• <b>Bagru Block Printing</b> (Rajasthan)<br>• <b>Banarasi Silk Weaving</b> (Varanasi)<br>• <b>Pachikari Inlay Work</b> (Agra)<br><br>🛍️ <i>Support local master artisans directly via our Marketplace tab!</i>";
+        }
+        return `<b>⚠️ Live AI is offline.</b> I can only give stored answers right now, and I don't have one for <b>${query}</b>.<br><br>To enable real answers, run <code>node server.js</code> in the project folder (or start the site with <code>node static_server.js</code>, which launches it automatically), then ask again.`;
+      }
+
+      async function getAiBotReply(userQuery) {
+        try {
+          if (AI_CONFIG.proxyEndpoints.length) {
+            const sysPrompt = "You are Virasat Mitr AI (Virasat Mitra), an expert Indian cultural guide, heritage historian, and monument consultant. Answer questions accurately and concisely about Indian heritage, monuments, history, architecture, crafts, food, and culture using clean HTML formatting (<b> for bold, <br> for line breaks). Do NOT calculate trip budget allocations or money breakdowns in this Q&A chat; if the user asks about budget calculation or trip costs, briefly answer any cultural aspect and direct them to use the dedicated 'Budget Planner' tab in this window.";
+            const endpoints = AI_CONFIG.proxyEndpoints;
+
+            for (const url of endpoints) {
+              try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
+                const res = await fetch(url, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                    model: AI_CONFIG.model,
+                    messages: [
+                      { role: "system", content: sysPrompt },
+                      { role: "user", content: userQuery }
+                    ],
+                    temperature: 0.6,
+                    max_tokens: 1024
+                  }),
+                  signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                if (res.ok) {
+                  const data = await res.json();
+                  if (data.choices && data.choices.length > 0) {
+                    let text = data.choices[0].message.content;
+                    return text.replace(/\n\n/g, "<br><br>").replace(/\n/g, "<br>").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+                  }
+                }
+              } catch (err) {
+                console.warn("AI proxy endpoint attempt failed:", url, err);
+              }
+            }
+          }
+        } catch (outerErr) {
+          console.warn("AI Bot Reply Outer Exception:", outerErr);
+        }
+        return generateAiResponse(userQuery);
+      }
+
+      /* ── Virasat Mitr AI Chatbot Window Logic ── */
+      const aiChatTrigger = document.getElementById('aiChatTrigger');
+      const aiChatWindow = document.getElementById('aiChatWindow');
+      const aiChatClose = document.getElementById('aiChatClose');
+      const aiChatBody = document.getElementById('aiChatBody');
+      const aiUserInput = document.getElementById('aiUserInput');
+      const aiSendBtn = document.getElementById('aiSendBtn');
+
+      if (aiChatTrigger && aiChatWindow) {
+        aiChatTrigger.addEventListener('click', () => {
+          aiChatWindow.classList.toggle('open');
+        });
+
+        if (aiChatClose) {
+          aiChatClose.addEventListener('click', () => {
+            aiChatWindow.classList.remove('open');
+          });
+        }
+
+        async function sendUserMessage() {
+          const text = aiUserInput.value.trim();
+          if (!text) return;
+
+          // The Virasat Mitr chatbot is free and unlimited. Scans and the
+          // Royal Pass benefits are still metered by VirasatSub.
+
+          appendChatMessage(text, 'user');
+          aiUserInput.value = '';
+
+          const typingId = 'typing_' + Date.now();
+          const typingDiv = document.createElement('div');
+          typingDiv.className = 'chat-msg bot';
+          typingDiv.id = typingId;
+          typingDiv.innerHTML = `<div class="msg-bubble" style="font-style:italic;color:rgba(201,168,76,0.8);">⚡ Virasat Mitr AI is thinking...</div>`;
+          aiChatBody.appendChild(typingDiv);
+          aiChatBody.scrollTop = aiChatBody.scrollHeight;
+
+          const botReply = await getAiBotReply(text);
+          document.getElementById(typingId)?.remove();
+          appendChatMessage(botReply, 'bot');
+        }
+
+        if (aiSendBtn) aiSendBtn.addEventListener('click', sendUserMessage);
+        if (aiUserInput) {
+          aiUserInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') sendUserMessage();
+          });
+        }
+
+        window.askAiQuestion = function (q) {
+          aiUserInput.value = q;
+          sendUserMessage();
+        };
+      }
+
+      window.switchMitrTab = function (tabName) {
+        document.getElementById('tabBtnQA')?.classList.toggle('active', tabName === 'qa');
+        document.getElementById('tabBtnBudget')?.classList.toggle('active', tabName === 'budget');
+
+        document.getElementById('paneQA')?.classList.toggle('active', tabName === 'qa');
+        document.getElementById('paneBudget')?.classList.toggle('active', tabName === 'budget');
+      };
+
+      function appendChatMessage(htmlContent, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-msg ${sender}`;
+        msgDiv.innerHTML = `<div class="msg-bubble">${htmlContent}</div>`;
+        aiChatBody.appendChild(msgDiv);
+        aiChatBody.scrollTop = aiChatBody.scrollHeight;
+      }
+
+      // Shared destination table (all states): assets/js/budget-data.js
+      const CITIES_BUDGET_DATA = window.VIRASAT_BUDGET_CITIES;
+
+      window.calculateCulturalBudget = function () {
+        const userEnteredBudget = Math.max(1000, parseInt(document.getElementById('userBudgetInput').value) || 10500);
+        const days = parseInt(document.getElementById('budgetDaysInput').value) || 3;
+        const style = document.getElementById('budgetStyleSelect').value;
+        const cityKey = document.getElementById('budgetCitySelect')?.value || 'jaipur';
+        const city = CITIES_BUDGET_DATA[cityKey] || CITIES_BUDGET_DATA.jaipur;
+
+        let pStay = 0.40, pShop = 0.25, pDining = 0.20, pTransit = 0.15, tagLabel = "Heritage Explorer";
+
+        if (style === 'Backpacker') {
+          pStay = 0.30; pShop = 0.15; pDining = 0.35; pTransit = 0.20;
+          tagLabel = "Backpacker";
+        } else if (style === 'Royal Luxury') {
+          pStay = 0.50; pShop = 0.25; pDining = 0.15; pTransit = 0.10;
+          tagLabel = "Royal Luxury";
+        }
+
+        const stayCost = Math.round(userEnteredBudget * pStay);
+        const shopCost = Math.round(userEnteredBudget * pShop);
+        const diningCost = Math.round(userEnteredBudget * pDining);
+        const transitCost = Math.round(userEnteredBudget * pTransit);
+        const dailyAverage = Math.round(userEnteredBudget / days);
+
+        document.getElementById('resCityTitle').textContent = `${city.name} (${days} Days)`;
+        document.getElementById('resStyleTag').textContent = tagLabel;
+        document.getElementById('resTotalCost').textContent = `Est. Total: ₹${userEnteredBudget.toLocaleString('en-IN')}`;
+
+        document.getElementById('resStayCost').textContent = `₹${stayCost.toLocaleString('en-IN')}`;
+        document.getElementById('resShopCost').textContent = `₹${shopCost.toLocaleString('en-IN')}`;
+        document.getElementById('resDiningCost').textContent = `₹${diningCost.toLocaleString('en-IN')}`;
+        document.getElementById('resTransitCost').textContent = `₹${transitCost.toLocaleString('en-IN')}`;
+
+        document.getElementById('resKeySpots').textContent = city.places;
+
+        document.getElementById('resBudgetRecommendation').innerHTML = `
+        🎯 <strong>AI Smart Allocation:</strong> Optimized for ₹${dailyAverage.toLocaleString('en-IN')}/day in ${city.name}.
+      `;
+      };
+
+
+
+      window.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('userBudgetInput')) {
+          calculateCulturalBudget();
+          document.getElementById('userBudgetInput').addEventListener('input', calculateCulturalBudget);
+          document.getElementById('budgetDaysInput').addEventListener('input', calculateCulturalBudget);
+          document.getElementById('budgetStyleSelect').addEventListener('change', calculateCulturalBudget);
+          if (document.getElementById('budgetCitySelect')) {
+            document.getElementById('budgetCitySelect').addEventListener('change', calculateCulturalBudget);
+          }
+        }
+
+      });
+    </script>
+<script src="assets/js/guide.js" defer></script>
+</body>
+
+</html>
